@@ -1,0 +1,48 @@
+# size of map
+61, 36,-11, 26
+# location: latitude, longitude (data is only approx. correct)
+FRA, 49.3,  8.4
+NUE, 48.7, 11.1
+HEL, 61.1, 24.8
+LHR, 50.8, -0.37
+AMS, 51.6,  4.8
+DUB, 52.8, -6.7
+MAD, 40.0, -4.0
+CDG, 48.0,  2.1
+FCO, 41.6, 12.2
+ATH, 38.0, 23.8
+# distances
+   , LHR, CDG, AMS, FRA, MAD, FCO, DUB, HEL, ATH, NUE
+LHR,   0,    , 371,    ,1247,    ,    ,1847,    ,    
+CDG,    ,   0,    ,    ,1065,    ,    ,    ,    , 620
+AMS,    ,    ,   0, 365,    ,    ,    ,    ,    ,    
+FRA,    ,    ,    ,   0,    , 960,1087,    ,    , 190
+MAD,    ,    ,    ,    ,   0,1332,    ,    ,    ,    
+FCO,    ,    ,    ,    ,    ,   0,    ,    ,1086,    
+DUB,    ,    ,    ,    ,    ,    ,   0,2023,2877,    
+HEL,    ,    ,    ,    ,    ,    ,    ,   0,    ,1489
+ATH,    ,    ,    ,    ,    ,    ,    ,    ,   0,    
+NUE,    ,    ,    ,    ,    ,    ,    ,    ,    ,   0
+# IATA airport code, busiest first
+LHR, London Heathrow Airport, United Kingdom
+CDG, Paris Charles de Gaulle Airport, France
+AMS, Amsterdam Airport Schiphol, Netherlands
+FRA, Frankfurt Airport, Germany
+MAD, Madrid Barajas Airport, Spain
+FCO, Rome Fiumicino Airport, Italy
+DUB, Dublin Airport, Ireland
+HEL, Helsinki Vantaa Airport, Finland
+ATH, Athens Airport, Greece
+NUE, Nürnberg Airport, Germany
+# all distances
+#   , LHR, CDG, AMS, FRA, MAD, FCO, DUB, HEL, ATH, NUE
+#LHR,   0, 349, 371, 654,1247,1445, 449,1847,2427, 849
+#CDG,    ,   0, 399, 448,1065,1100, 787,1895,2108, 620
+#AMS,    ,    ,   0, 365,1462,1298, 751,1520,2182, 542
+#FRA,    ,    ,    ,   0,1424, 960,1087,1536,1818, 190
+#MAD,    ,    ,    ,    ,   0,1332,1455,2948,2379,1524
+#FCO,    ,    ,    ,    ,    ,   0,1887,2234,1086, 860
+#DUB,    ,    ,    ,    ,    ,    ,   0,2023,2877,1275
+#HEL,    ,    ,    ,    ,    ,    ,    ,   0,2492,1489
+#ATH,    ,    ,    ,    ,    ,    ,    ,    ,   0,1646
+#NUE,    ,    ,    ,    ,    ,    ,    ,    ,    ,   0

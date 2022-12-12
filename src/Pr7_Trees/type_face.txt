@@ -1,0 +1,23 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# So you need a TypeFace?, www.julianhansen.com/#/zimmer/
+Do you want to write a book? {
+ Are you completely in doubt? {
+  Casion,
+  A champion of usability? {
+   Minion,
+   Everybody loves Garamond? {
+    But perhaps one would want a larger eye? {
+     Sabon,
+     Garamond
+    }
+    ,
+    So you want a SansSerif? {
+     Optima,
+     Joanna
+    }
+   }
+  }
+ }
+ ,
+ Arial
+}

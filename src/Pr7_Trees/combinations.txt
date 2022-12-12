@@ -1,0 +1,18 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# list all combinations recursively
+4;2;'';'abcd' {
+ 3;2;'';'bcd' {
+  2;2;'';'cd'  {'cd'},
+  2;1;'b';'cd' {
+   1;1;'b';'d'  {'bd'},
+   1;0;'bc';'d' {'bc'}
+  }
+ },
+ 3;1;'a';'bcd' {
+  2;1;'a';'cd' {
+   1;1;'a';'d'  {'ad'},
+   1;0;'ac';'d' {'ac'}
+  }, 
+  2;0;'ab';'cd' {'ab'}
+ }
+}

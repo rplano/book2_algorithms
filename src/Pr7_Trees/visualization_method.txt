@@ -1,0 +1,55 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# What visualization methods should you use? Data Points, Nathan Yau, p.137
+# choices are: bar chart, pie chart, tree map, line plot, scatter plot
+# what kind of data do you have:
+Do you have categorial data? {
+ Is it category? {
+  bar graph or symbol plot,
+  Is it part of a whole? {
+   pie chart or stacked bar chart,
+   Does it have sub categories? {
+    tree map or mosaic plot,
+    pie chart or stacked bar chart
+   }
+  }
+ }
+ ,
+ Is it time series? {
+  Is it cyclic? {
+   radial plot,
+   bar graph or line chart
+  }
+  ,
+  Is it spacial data? {
+   Is it locations? {
+    location map or connections,
+    Is it regions? {
+     choropleth map or contour map,
+     Is it cartograms? {
+      circular cartogram or diffusion-based cartogram,
+      not sure
+     }
+    }
+   }
+   ,
+   Is it multiple variables? {
+    Is it a few variables? {
+     scatter plot,
+     heat map or parallel coordinates plot or star plots
+    }
+    ,
+    Is it distributions? {
+     Is it distribution summary? {
+      box plot or violin plot,
+      Is it distribution of one variable? {
+       histogram or density plot,
+       heat map or surface plot
+      }
+     }
+     ,
+     not sure
+    }
+   }
+  }
+ }
+}

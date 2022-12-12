@@ -1,0 +1,71 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# Abraham's family tree, https://en.wikipedia.org/wiki/Abraham%27s_family_tree
+Abraham {
+ Ishmael {
+  Nebaioth,
+  Basemath,
+  Jetur,
+  Naphish,
+  Mibsam,
+  Dumah,
+  Mishma,
+  Hadad,
+  Tema,
+  Massa,
+  Adbeel,
+  Kedar,
+  Kedemah
+ }
+ ,
+ Isaac {
+  Jacob {
+   Joseph,
+   Judah,
+   Benjamin,
+   Levi,
+   Reuben,
+   Simeon,
+   Asher,
+   Issachar,
+   Dinah,
+   Zebulun,
+   Gad,
+   Naphtali,
+   Dan
+  }
+  ,
+  Esau {
+   Eliphaz,
+   Jeush,
+   Jaalam,
+   Korah,
+   Reuel
+  }
+  
+ }
+ ,
+ Zimran,
+ Jokshan {
+  Sheba,
+  Dedan {
+   Asshurim,
+   Letushim,
+   Leummim
+  }
+  
+ }
+ ,
+ Medan,
+ Midian {
+  Ephah,
+  Epher,
+  Hanok,
+  Abida,
+  Eldaah
+ }
+ ,
+ Ishbak,
+ Shuah
+}
+
+

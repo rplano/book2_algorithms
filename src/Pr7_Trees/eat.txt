@@ -1,0 +1,6 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# what to eat?
+Are you vegetarian? {
+ Eat vegetables!,
+ Eat meat!
+}

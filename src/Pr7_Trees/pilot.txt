@@ -1,0 +1,13 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# decision tree for a pilot, should be checked before take-off
+Wings attached? {
+ Wheels attached? {
+  Fly!,
+  Water plane? {
+   Fly!,
+   Don't fly!
+  }
+ }
+ ,
+ Don't fly!
+}

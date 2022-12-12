@@ -1,0 +1,6 @@
+hallway > kitchen
+hallway > room of the dead
+hallway > bath room
+kitchen > hallway
+bath room > hallway
+bath room > kitchen

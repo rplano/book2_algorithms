@@ -1,0 +1,5 @@
+# first column is from, second column is to, and last column (optional) is distance, elements are separated by ','
+# a few flight connections
+ORD, DFW, 802
+DFW, LAX, 1235
+ORD, LAX, 2866

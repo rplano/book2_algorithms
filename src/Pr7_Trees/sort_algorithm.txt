@@ -1,0 +1,12 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# Which sort algorithm to use?
+You have time? {
+ BubbleSort,
+ Do you need to minimize the number of swaps? {
+  SelectionSort,
+  Data is almost sorted? {
+   InsertionSort,
+   QuickSort
+  }
+ }
+}

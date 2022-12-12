@@ -1,0 +1,26 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# hierarchy of a university
+president {
+ dean_A {
+  prof_A {
+   tutor_A
+  }
+  ,
+  prof_B {
+   tutor_B,
+   tutor_C
+  }
+ }
+ ,
+ dean_B {
+  prof_C {
+   tutor_D,
+   tutor_E,
+   tutor_F,
+   tutor_G
+  }
+  ,
+  prof_D,
+  prof_E
+ }
+}

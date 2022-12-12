@@ -1,0 +1,26 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# phylogenetic relationships between mammals, p.31, Introduction to Bioinformatics, A.M. Lesk, Oxford University Press, 2005
+. {
+ camels,
+ . {
+  . {
+   pigs,
+   peccaries
+  }
+  ,
+  . {
+   . {
+    chevrotains,
+    pecorans
+   }
+   ,
+   . {
+    hippopotamuses,
+    . {
+     toothed whales,
+     baleen whales
+    }
+   }
+  }
+ }
+}

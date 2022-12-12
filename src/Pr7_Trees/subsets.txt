@@ -1,0 +1,24 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# list all subsets recursively
+'';'abc' {
+ 'a';'bc' {
+  'ab';'c' {
+   'abc';'',
+   'ab';''
+  },
+  'a';'c' {
+   'ac';'',
+   'a';''
+  }
+ },
+ '';'bc' {
+  'b';'c' {
+   'bc';'',
+   'b';''
+  },
+  '';'c' {
+   'c';'',
+   '';''
+  }
+ }
+}

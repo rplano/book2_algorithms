@@ -1,0 +1,13 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# an Java program
+class Karel {
+ run() {
+  move();
+  move();
+  turnAround();
+ }
+ turnAround() {
+  turnLeft();
+  turnLeft();
+ }
+}

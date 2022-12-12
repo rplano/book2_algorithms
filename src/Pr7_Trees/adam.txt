@@ -1,0 +1,15 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# according to the Book of Jubilees, the first family
+Adam {
+ Cain {
+  Enoch
+ }
+ ,
+ Abel,
+ Seth {
+  Enos (ancestor of Jesus)
+ }
+ ,
+ Awan,
+ Azura
+}

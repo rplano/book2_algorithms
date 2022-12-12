@@ -1,0 +1,8 @@
+# first column is from, second column is to, and last column (optional) is distance, elements are separated by ','
+# digraph: a list of lectures, lecture one is pre-requisite for lecture two
+L69, L22, 1
+L22, L15, 1
+L15, L16, 1
+L31, L16, 1
+L41, L31, 1
+L41, L32, 1

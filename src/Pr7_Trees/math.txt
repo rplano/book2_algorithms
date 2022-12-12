@@ -1,0 +1,16 @@
+# the root element is first, there must be a root element, '{' indicates children, elements are separated by ','
+# an arithmetic expression
++ {
+ * {
+  2,
+  - {
+   a,
+   1
+  }
+ }
+ ,
+ * {
+  3,
+  b
+ }
+}
