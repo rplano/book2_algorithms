@@ -1,0 +1,599 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html" class="active">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/Cards.png" style="display: block; margin-left: auto; margin-right: auto; width: 155px; height: 151px;" /></p>
+<h1>
+	Sorting</h1>
+<p>
+	Schon Aschenputtel wußte wie wichtig es ist schnell sortieren zu können: &quot;die guten ins Töpfchen, die schlechten ins Kröpfchen&quot; [7].&nbsp; Und auch der damalige Präsidentschaftskandidat und spätere Präsident, Barack Obama, wusste bei einem Interview mit Google&#39;s Eric Schmidt [8], dass Bubble Sort kein besonders guter Sortieralgorithmus ist.&nbsp; Aber was ist denn ein guter Sortieralgorithmus?&nbsp; Darum geht es in diesem Kapitel: wir stellen die vier wichtigsten Sortieralgorithmen vor, und zeigen deren jeweilgen Stärken und Schwächen.&nbsp; Wir werden auch sehen wie man gut mischt, sozusagen das Gegenstück zum Sortieren.&nbsp; Und schließlich werden wir sehen welche Verbindung zwischen Suche und Sortierung besteht.</p>
+<p>
+	.</p>
+<h2>
+	Shuffle</h2>
+<p>
+	Bevor wir uns mit dem Sortieren beschäftigen können, müssen wir uns erst einmal kurz mit dem Mischen auseinandersetzen.&nbsp; Sonst haben wir ja nichts zum sortieren.&nbsp; Das richtige Mischen ist gar nicht so einfach und man muss sich da schon ein paar Gedanken machen.&nbsp; Gott sei Dank hat das schon jemand gemacht: die Herren Fisher und Yates [1]. Der sogenannte Fisher-Yates Algorithmus wird heutzutage am häufigsten verwendet.&nbsp; Sehen wir ihn uns mal an: wir wollen ein gegebenes Array von Ganzzahlen mischen:</p>
+<pre style="margin-left: 40px;">
+private void shuffle(int[] arr) {
+&nbsp;&nbsp; &nbsp;int n = arr.length;
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; n; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int j = (int)(Math.random() * n);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int tmp = arr[i];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[i] = arr[j];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[j] = tmp;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Eigentlich ganz einfach: wir gehen durch das ganze Array, beginnend mit dem ersten Element, und tauschen eines nach dem anderen mit einem anderen zufällig ausgewählten Element aus.</p>
+<p>
+	Eine etwas schnellere Version des gleichen Algorithmus [2] erinnert sich, dass der erste Teil des Arrays bereits gemischt ist und daher die Zufallszahl eigentlich nur aus der hinteren Hälfte kommen muss:</p>
+<pre style="margin-left: 40px;">
+private static void shuffleFast(int[] arr) {
+&nbsp;&nbsp; &nbsp;int n = arr.length;
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; n; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int j = <span style="color:#0000ff;">i+ (int)(Math.random() * (n-i))</span>;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int tmp = arr[i];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[i] = arr[j];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[j] = tmp;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Diese zweite Version ist ein klein wenig schneller, aber beide Algorithmen führen das Shuffling in linearer Zeit durch, also O(n).&nbsp; Obwohl das Mischen wie eine triviale Übung erscheinen mag, kann überraschend viel dabei schief gehen, z.B. beim Generieren der Zufallszahlen [1].</p>
+<p>
+	.</p>
+<h2>
+	Sorting</h2>
+<p>
+	Kommen wir endlich zum Sortieren.&nbsp; Nehmen wir an wir haben ein Array von Ganzzahlen, das wir gerne sortiert hätten.&nbsp; Wie macht man das?&nbsp; Nun in Java ist das ganz einfach:</p>
+<pre style="margin-left: 40px;">
+int[] arrOfInts = { 5, 55, 2, 7, 45, 3, 1, 8, 23, 12 };
+Arrays.sort(arrOfInts);</pre>
+<p>
+	Wir verwenden einfach die Methode <em>sort()</em> der Klasse Arrays, die macht das. Ganz einfach, Kapitel zu Ende. &nbsp;</p>
+<p>
+	Nun das hier wäre kein Buch über Algorithmen wenn wir nicht auch etwas über Sortieralgorthmen erfahren würden.&nbsp; Deswegen, was macht denn <em>Arrays.sort()</em> eigentlich?</p>
+<p>
+	.</p>
+<h2>
+	Selection Sort</h2>
+<p>
+	Sortieralgorithmen gibt es wie Sand am Meer, im Duzent sind sie billiger. Wir fangen aber mit dem einfachsten an, dem <em>Selection Sort</em>.&nbsp; Im Prinzip kennt jeder den Selection Sort der schon mal Karten gespielt hat: man nimmt seinen Stapel, sucht nach der kleinsten und setzt die an den Anfang.&nbsp; Dann sucht man nach der nächst kleinsten und setzt die daneben.&nbsp; Das macht man solange bis man den Stapel durch hat.&nbsp; Das übersetzen wir jetzt so, dass es auch der Computer kapiert:</p>
+<ol>
+	<li>
+		suche nach der kleinsten Zahl und setze sie an den Anfang;</li>
+	<li>
+		suche nach der nächst kleinsten und setze sie daneben;</li>
+	<li>
+		mach das solange bis du alle Zahlen durch hast.</li>
+</ol>
+<p>
+	In Java sieht das Ganze dann so aus:</p>
+<pre style="margin-left: 40px;">
+ 1.&nbsp; public void sort(int arr[])&nbsp; {
+ 2. &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; arr.length - 1; i++) {
+ 3. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int min = i;
+ 4. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int j = i + 1; j &lt; arr.length; j++) {
+ 5. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (arr[j] &lt; arr[min]) {
+ 6. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;min = j;
+ 7. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+ 8. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+ 9. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;swap(arr, i, min);
+10. &nbsp;&nbsp;&nbsp; &nbsp;}
+11. &nbsp;}</pre>
+<p>
+	Dabei tauscht die <em>swap()</em> Methode einfach zwei Elemente in dem Array:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void swap(int arr[], int i, int j) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int tmp = arr[i];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[i] = arr[j];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[j] = tmp;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	So schwer war das gar nicht.&nbsp; Die Frage die uns jetzt interessiert, wie lange dauert das denn?&nbsp; Betrachten wir die verschiedenen Teile:</p>
+<ol>
+	<li>
+		die swap() Methode ist einfach, sie benötigt immer 3 Instruktionen;</li>
+	<li>
+		Zeilen 5 und 6 sind ein Vergleich und evtl. eine Zuweisung, also im Schnitt 1.5 Instruktionen;</li>
+	<li>
+		die innere for-Schleife, Zeilen 4 bis 8, besteht aus einem Vergleich und einem Inkrement, die bei jedem Schleifendurchlauf ausgeführt werden (2 Instruktionen), zusätzlich kommen noch die Zeilen 5 und 6 dazu.&nbsp; Insgesamt besteht also die innere Schleife aus 3.5 Instruktionen. Wie oft die Schleife durchlaufen wird hängt von der Größe des Arrays ab.&nbsp; Wenn man kurz darüber nachdenkt, dann ist das so im Schnitt n/2 mal, wobei <em>n</em> die Größe des Arrays ist.&nbsp; Das macht dann 3.5 * n/2 Instruktionen;</li>
+	<li>
+		die äußere Schleife besteht wieder aus einem Vergleich und einem Inkrement (2 Instruktionen), dazu kommt die Zuweisung in Zeile 3, und natürlich kommt noch die innere Schleife dazu (3.5 * n/2 Instruktionen), dann noch der Swap (3 Instruktionen), macht dann insgesamt 6 + 3.5*n/2 Instruktionen pro Durchlauf;</li>
+</ol>
+<p>
+	Da die Schleife n-mal ausgeführt wird, kommt die Summe grob auf</p>
+<pre style="margin-left: 40px;">
+# of instructions = n * ( 6 + 3.5*n/2 ) = 6*<span style="color:#0000ff;">n</span> + 1.75*<span style="color:#0000ff;">n&sup2;</span> ~ <span style="color:#0000ff;">n&sup2;</span></pre>
+<p>
+	Was wir hier also haben, ist ein Algorithmus mit quadratischer Laufzeit, O(n&sup2;), da der <em>n&sup2;</em> Term zum dominanten Term für große <em>n</em> wird. Quadratische Laufzeit ist schlecht.&nbsp; Eigentlich immer wenn man zwei for-Schleifen sieht deutet das auf O(n&sup2;) hin.</p>
+<p>
+	.</p>
+<h2>
+	Insertion Sort</h2>
+<p>
+	Kommen wir zur zweiten Sortiermethode, dem <em>Insertion Sort</em>. Der funktioniert so: man nimmt einfach die oberste Karte vom Stapel.&nbsp; Dann nimmt man die nächste Karte vom Stapel, und fügt die vor die erste Karte wenn sie kleiner ist, oder hinter die erste wenn sie größer ist.&nbsp; Dann kommt die nächste Karte vom Stapel, und die wird dann an die richtige Stelle &quot;einsortiert&quot;.&nbsp; Wir übersetzen das wieder für den Computer:</p>
+<ol>
+	<li>
+		nimm die erste Zahl vom Array, die ist sortiert;</li>
+	<li>
+		dann nimm die zweite Zahl, wenn die kleiner als die erste ist, setze sie davor, ansonsten dahinter;</li>
+	<li>
+		mach das mit den anderen Zahlen aus dem Array, eine nach der anderen, und füge sie in dem neuen Array jeweils an der richtigen Stelle ein.</li>
+</ol>
+<p>
+	Daraus wird dann der folgende Code:</p>
+<pre style="margin-left: 40px;">
+ 1.  public void sort(int arr[]) {
+ 2. &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 1; i &lt; arr.length; i++) {
+ 3. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int cur = arr[i];
+ 4. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int j = i - 1;
+ 5. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (j &gt;= 0 &amp;&amp; arr[j] &gt; cur) {
+ 6. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[j + 1] = arr[j];
+ 7. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[j] = cur;
+ 8. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;j--;
+ 9. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+10. &nbsp;&nbsp;&nbsp; &nbsp;}
+11. &nbsp;}</pre>
+<p>
+	Wie schnell ist denn der Insertion Sort?&nbsp; Wir schauen uns die verschiedenen Teile des Codes an:</p>
+<ol>
+	<li>
+		Zeile 6 ist ein Inkrement und eine Zuweisung, also 2 Instruktionen;</li>
+	<li>
+		Zeilen 7 und 8 sind jeweils 1 Instruktion;</li>
+	<li>
+		Zeile 5 besteht aus zwei Vergleichen und einer &amp;&amp; Operation, macht 3 Instruktionen;</li>
+	<li>
+		die innere while-Schleife, Zeilen 5 bis 9, wird im Schnitt n/2 mal augeführt, damit benötigt die innere Schleife 7 * n/2 Instruktionen;</li>
+	<li>
+		Zeile 3 ist 1 Instruktion und Zeile 4 ist 2 Instruktionen;</li>
+	<li>
+		Zeile 2 ist eine Instruktion und ein Vergleich, macht 2 Instruktionen.</li>
+</ol>
+<p>
+	Da die Schleife wieder n-mal ausgeführt wird, kommt das grob auf</p>
+<pre style="margin-left: 40px;">
+# of instructions = n * ( 5 + 7*n/2 ) = 6*<span style="color:#0000ff;">n</span> + 3.5*<span style="color:#0000ff;">n&sup2;</span> ~ <span style="color:#0000ff;">n&sup2;</span></pre>
+<p>
+	Also auch der Insertion Sort hat quadratische Laufzeit, O(n&sup2;).</p>
+<p>
+	.</p>
+<h2>
+	MergeSort</h2>
+<p>
+	Bisher haben wir zwei Sortieralgorithmen gesehen, beide haben quadratische Laufzeit.&nbsp; Das bedeutet, wenn wir die Größe unseres Arrays verdoppeln, dann vervierfacht sich die Zeit die das dauert.&nbsp; Nun hat sich ein schlauer Mensch (John von Neumann) gedacht, wenn wir ein Array nehmen das nur halb so groß ist, dann würde es nur ein Viertel der Zeit dauern.&nbsp; Und genau das ist die Idee hinter dem <em>Merge Sort</em> Algorithmus:</p>
+<ul>
+	<li>
+		teile das Array in zwei Hälften;</li>
+	<li>
+		rekursiv, sortiere jede Hälfte;</li>
+	<li>
+		am Ende füge jeweils beide Hälften zusammen.</li>
+</ul>
+<p>
+	Man nennt den Merge Sort auch &rsquo;<b>easy-split, hard-join</b>&rsquo;, denn das Aufspalten ist sehr einfach, die Arrays werden einfach halbiert.&nbsp; Die eigentliche Arbeit (also das Sortieren) erfolgt beim Zusammenfügen.</p>
+<p>
+	Schauen wir uns den Code an:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void sort(int arr[]) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mergeSort(arr);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	dabei ist die <em>mergeSort()</em> Methode rekursiv:</p>
+<pre style="margin-left: 40px;">
+ 1.&nbsp; private void <span style="color:#0000ff;">mergeSort</span>(int[] arr) {
+ 2. &nbsp;&nbsp;&nbsp; &nbsp;if (arr.length &gt; 1) {
+ 3. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int middle = arr.length / 2;
+ 4. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int[] left = Arrays.copyOfRange(arr, 0, middle);
+ 5. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int[] right = Arrays.copyOfRange(arr, middle, arr.length);
+ 6. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">mergeSort</span>(left);
+ 7. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">mergeSort</span>(right);
+ 8. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;merge(arr, left, right);
+ 9. &nbsp;&nbsp;&nbsp; &nbsp;}
+10. &nbsp;}</pre>
+<p>
+	Wie gesagt, die harte Arbeit steckt in der <em>merge()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void merge(int[] arr, int[] left, int[] right) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int pos = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int leftPos = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int rightPos = 0;
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// main merge loop
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (leftPos &lt; left.length &amp;&amp; rightPos &lt; right.length) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (left[leftPos] &lt; right[rightPos]) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[pos] = left[leftPos];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;leftPos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[pos] = right[rightPos];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rightPos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// copy rest of left half, if needed
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (leftPos &lt; left.length) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[pos] = left[leftPos];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;leftPos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// copy rest of right half, if needed
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (rightPos &lt; right.length) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[pos] = right[rightPos];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rightPos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pos++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Und wie lange dauert das? Das ist ein bisschen knifflig, aber fangen wir langsam an. Die Zeit, die in der Methode <em>merge()</em> verbracht wird, ist proportional zur Größe des Arrays. Um das zu sehen, gehen wir mal davon aus, dass die linken und rechten Arrays so sind, dass nach dem &quot;main merge loop&quot; beide leer sind. Dann sind die Zuweisungen in den ersten drei Zeilen 3 Instruktionen.&nbsp; Der innere Teil der while-Schleife ist ein Vergleich, eine Zuweisung und zwei Inkrements, d.h. 4 Befehle. Der Vergleich der while-Schleife selbst besteht aus zwei Vergleichen und einem &amp;&amp;, also 3 Instruktionen, also zusammen beinhaltet die while-Schleife 7 * n Instruktionen. Das bedeutet,</p>
+<pre style="margin-left: 40px;">
+# of instructions for merge() = 3 + 7*n</pre>
+<p>
+	Was bleibt ist die <em>mergeSort()</em> Methode: Zeile 2 ist ein Vergleich, 1 Instruktion. Zeile 3 ist eine Division und eine Zuordnung, 2 Instruktionen. Zeile 4 und 5 sind interessant: In Java müssen wir eine Kopie machen, aber in C oder C++ wäre es mit Zeiger Arithmetik einfach, ein Array zu halbieren. Da wir uns nur für den Algorithmus interessieren und nicht für Probleme die mit Java oder irgendeiner anderen Sprache zu tun haben, nehmen wir an, dass jede dieser Zeilen nur eine Instruktion ist.</p>
+<p>
+	Was bleibt ist der rekursive Aufruf.&nbsp; Das ist nicht ganz einfach, aber im letzten Kapitel hatten wir mit der <em>powerDC()</em> Methode ein ganz ähnliches Problem. Dort haben wir, um ein Gefühl für das Problem zu bekommen, einfach mal geschaut wie lange es dauert für verschieden große Arrays.&nbsp; Beginnen wir mit einem Array, das nur ein Element hat, also n=1:</p>
+<ul>
+	<li>
+		<strong>n=1:</strong> es gibt keinen rekursiven Aufruf, nur einen Vergleich in Zeile 2, also insgesamt 1 Instruktion;</li>
+	<li>
+		<strong>n=2:</strong> Zeilen 2 bis 5 entsprechen 5 Instruktionen, Zeilen 6 und 7 benötigen je 1 Instruktion, und der merge() in Zeile 8 entspricht 3+7*n = 17 Instruktionen, zusammen also 5+2*1+17 = 24 Instruktionen;</li>
+	<li>
+		<strong>n=4:</strong> hier wird n=2 zweimal rekursiv aufgerufen, macht 2*24 Instruktionen, der merge in Zeile 8 entspricht 3+7*n= 31 Instruktionen, was insgesamt zu 5+2*24+31 = 84 Instruktionen führt;</li>
+	<li>
+		<strong>n=8:</strong> hier wird n=4 zweimal rekursiv aufgerufen, macht 2*84 Instruktionen, der merge in Zeile 8 entspricht 3+7*n= 59 Instruktionen, was insgesamt 5+2*84+59 = 232 Instruktionen bedeutet;</li>
+	<li>
+		<strong>n=16:</strong> hier wird n=8 zweimal rekursiv aufgerufen, macht 2*232 Instruktionen, der merge in Zeile 8 entspricht 3+7*n= 115 Instruktionen, was insgesamt 5+2*232+115 = 584 Instruktionen bedeutet.</li>
+</ul>
+<p>
+	Wir könnten jetzt zwar so weitermachen, aber was wir haben genügt schon. Wir tragen unsere Ergebnisse mal in eine Tabelle ein, und vergleichen sie mit <em>n</em>, mit <em>n*log(n)</em> und mit <em>n&sup2;</em>:</p>
+<table border="1" cellpadding="1" cellspacing="1" height="101" width="473">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">
+				&nbsp;log(n)</td>
+			<td align="center">
+				n</td>
+			<td align="center">
+				n * log(n)</td>
+			<td align="center">
+				n&sup2;</td>
+			<td align="center">
+				10* n * log(n)</td>
+			<td align="center">
+				<span style="color:#0000ff;">merge()</span></td>
+			<td align="center">
+				4* n&sup2;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				1</td>
+			<td align="center">
+				2</td>
+			<td align="center">
+				2</td>
+			<td align="center">
+				4</td>
+			<td align="center">
+				20</td>
+			<td align="center">
+				<span style="color:#0000ff;">24</span></td>
+			<td align="center">
+				16</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				2</td>
+			<td align="center">
+				4</td>
+			<td align="center">
+				8</td>
+			<td align="center">
+				16</td>
+			<td align="center">
+				80</td>
+			<td align="center">
+				<span style="color:#0000ff;">84</span></td>
+			<td align="center">
+				64</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				3</td>
+			<td align="center">
+				8</td>
+			<td align="center">
+				24</td>
+			<td align="center">
+				64</td>
+			<td align="center">
+				240</td>
+			<td align="center">
+				<span style="color:#0000ff;">232</span></td>
+			<td align="center">
+				256</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				4</td>
+			<td align="center">
+				16</td>
+			<td align="center">
+				64</td>
+			<td align="center">
+				256</td>
+			<td align="center">
+				640</td>
+			<td align="center">
+				<span style="color:#0000ff;">584</span></td>
+			<td align="center">
+				1024</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				5</td>
+			<td align="center">
+				32</td>
+			<td align="center">
+				160</td>
+			<td align="center">
+				1024</td>
+			<td align="center">
+				1600</td>
+			<td align="center">
+				<span style="color:#0000ff;">1400</span></td>
+			<td align="center">
+				4096</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Das ist jetzt kein exakter mathematischer Beweis, aber wenn man sich die Tabelle ansieht, dann ist ziemlich klar, dass sich merge() am ehesten wie <em>n*log(n)</em> verhält und nicht wie <em>n&sup2;</em>.&nbsp; Man kann tatsächlich beweisen, dass das der Fall ist.&nbsp; Dies ist das erste Mal, dass wir auf einen Algorithmus stoßen, der ein <em>linearithmisches</em> Laufzeitverhalten hat, d.h. O(n*log(n)). Und das ist eine gute Sache.&nbsp; Merge Sort gehört auch zur Klasse der <em>divide and conquer</em> Algorithmen.</p>
+<p>
+	.</p>
+<h2>
+	QuickSort</h2>
+<p>
+	So wie Merge Sort ist auch <em>Quick Sort</em> ein <em>divide and conquer</em> Algorithmus.&nbsp; Die Grundidee ist folgende:</p>
+<ul>
+	<li>
+		teile das Array in zwei Hälften, eine mit den niedrigeren Zahlen und eine mit den höheren;</li>
+	<li>
+		sortiere jede Hälfte, rekursiv;</li>
+	<li>
+		am Ende füge die beiden Hälften einfach aneinander.</li>
+</ul>
+<p>
+	Man nennt diese Methode auch &rsquo;<span style="font-weight: bold;">hard</span><b>-split, easy-join</b>&rsquo;.&nbsp; Hier ist das Aufspalten der schwierige Teil, dafür ist das Zusammenfügen einfach. In Bezug auf den Code sieht das so aus:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void sort(int arr[]) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;quickSort(arr);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	wobei die <em>quickSort()</em> Methode rekursiv ist und sich selbst aufruft:</p>
+<pre style="margin-left: 40px;">
+   &nbsp; private void <span style="color:#0000ff;">quickSort</span>(int[] arr) {
+    &nbsp;&nbsp;&nbsp; &nbsp;if (arr.length &gt; 1) {
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int pivot = arr[arr.length / 2];
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int[] low = getLowerHalf(arr, pivot);
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int[] high = getUpperHalf(arr, pivot);
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">quickSort</span>(low);
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">quickSort</span>(high);
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;join(arr, low, high);
+    &nbsp;&nbsp;&nbsp; &nbsp;}
+    &nbsp;}</pre>
+<p>
+	Wir wollen uns hier nicht mit den Details langweilen, aber man kann auch zeigen, dass Quick Sort linearithmisches Laufzeitverhalten hat. Der einfache Quick Sort hat ein paar kleine Macken, aber die kann man alle beheben.</p>
+<p>
+	So, nun zurück zu unserer ursprünglichen Frage: welchen Algorithmus verwendet denn Arrays.sort()?&nbsp; Wenn wir in der Java Dokumentation der Klasse Arrays nachschlagen, finden wir, dass ein modifizierter und optimierter Quick Sort Algorithmus verwendet wird [3].</p>
+<p>
+	.</p>
+<h2>
+	Which one is the best?</h2>
+<p>
+	Normalerweise ist ein linearithmischer Algorithmus immer besser als ein quadratischer.&nbsp; Aber es gibt Ausnahmen, z.B.:</p>
+<ul>
+	<li>
+		Insertion Sort ist sehr schnell, wenn die Ausgangsdaten bereits fast sortiert sind.&nbsp; Interessanterweise passiert das relativ häufig in der realen Welt.</li>
+	<li>
+		Selection Sort minimiert die Anzahl der Swaps. Also für den Fall, dass ein Swap eine sehr teure Operation ist (z.B. schwere Möbel verschieben), dann kann der&nbsp; Selection Sort die bessere Wahl sein.</li>
+</ul>
+<p>
+	Es gibt auch Fälle, in denen z.B. Quick Sort nicht so gut ist. Bleibt die Frage, geht es vielleicht noch schneller als linearithmisch?&nbsp; Die Antwort liefert die Theorie: man kann zeigen, dass es keinen Sortieralgorithmus gibt der schneller als O( n * log(n) ) ist.&nbsp; Das ist o.k.&nbsp; Wie bereits angedeutet, gibt es noch ein paar mehr Sortieralgorithmen, falls Interesse besteht kann man sich die im Internet ansehen [4], die werden auch alle mit einer schönen Animation verglichen, wirklich hübsch.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Wir haben kurz gesehen wie man richtig mischt, danach haben wir uns aber hauptsächlich mit dem Sortieren beschäftigt.&nbsp; Wir haben vier Sortieralgorithmen näher kennen gelernt, and the winner is: QuickSort.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	In diesem Kapitel gibt es nur wenige Projekte, was nicht heißen soll, dass sie unwichtig sind.&nbsp; Suche ist nämlich ein sehr wichtiges Thema.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Search.png" style="width: 200px; height: 85px; float: right;" />Searching</h2>
+<p>
+	Suchen und Sortieren gehen Hand in Hand.&nbsp; Um das zu zeigen schauen wir uns mehrere verschiedene Möglichkeiten an zu suchen.&nbsp; Als Beispiel verwenden wir folgendes Array von Ganzzahlen:</p>
+<pre style="margin-left: 40px;">
+int[] arr = { 44, 88, 17, 32, 97, 65, 28, 82, 29, 76, 54, 80 };</pre>
+<p>
+	Darin wollen wir nach der Zahl 17 suchen, die an Position 2 ist, und nach der Zahl 42, die gar nicht in dem Array ist.</p>
+<h3>
+	Sequential Search</h3>
+<p>
+	Als erstes versuchen wir es mal mit der <em>Sequential Search</em>: das ist ein Brute-Force Algorithmus, der einfach alle Einträge des Arrays durchläuft, bis die Zahl die wir suchen, gefunden wird:</p>
+<pre style="margin-left: 40px;">
+private int sequentialSearch(int key, int[] arr) {
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; arr.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (arr[i] == key)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return i;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return -1;
+}</pre>
+<p>
+	Manchmal wird die Zahl die wir suchen, eher am Anfang des Arrays sein, manchmal eher am Ende.&nbsp; Im Durchschnitt müssen wir also ca. durch die Hälfte des Arrays gehen, wenn die gesuchte Zahl im Array ist, oder wenn sie gar nicht im Array ist, durch das ganze Array. Wir erwarten also ein Laufzeitverhalten, das linear zur Größe des Arrays ist, d.h. O(n).</p>
+<h3>
+	Sequential Search2</h3>
+<p>
+	In einem zweiten Versuch nehmen wir an, dass unser Array sortiert ist:</p>
+<pre style="margin-left: 40px;">
+int[] arr = { 17, 28, 29, 32, 44, 54, 65, 76, 80, 82, 88, 97 };</pre>
+<p>
+	Wenn wir aber kurz nachdenken, ändert das gar nichts.&nbsp; Das Laufzeitverhalten bleibt bei O(n).</p>
+<h3>
+	Binary Search</h3>
+<p>
+	Aber wir geben nicht so schnell auf: wie wäre es mit einem <em>divide and conquer</em> Ansatz? Angenommen, wir suchen die Zahl 17 und das Array ist sortiert. Dann folgt der <em>Binary Search</em> Algorithmus diesen Schritten:</p>
+<ol>
+	<li>
+		nimm die Zahl in der Mitte des Arrays (das ist die 54);</li>
+	<li>
+		vergleiche sie mit der gesuchten 17;</li>
+	<li>
+		sind die beiden gleich, sind wir fertig, wir haben die Zahl gefunden;</li>
+	<li>
+		ist 17 kleiner als die Mitte, dann wissen wir, dass 17 unmöglich in der rechten Hälfte des Arrays sein kann, weil es ja sortiert ist, können dort nur Zahlen größer als 54 sein.&nbsp; Also müssen wir für unsere weitere Suche nur in der linken Hälfte suchen.&nbsp; Unser Problem hat sich gerade um die Hälfte reduziert;</li>
+	<li>
+		jetzt gehen wir wieder zurück zum ersten Schritt, allerdings nur mit der linken Hälfte. Das machen wir so lange bis wir entweder die Zahl gefunden haben, oder bis das Array nur noch ein Element hat.</li>
+</ol>
+<p>
+	In Java sieht der Binary Search Algorithmus wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+private static int binarySearch(int key, int[] arr, int start, int stop) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (start &gt; stop)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return -1;
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;int mid = (start + stop) / 2;
+&nbsp;&nbsp; &nbsp;if (key == arr[mid]) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return mid;
+&nbsp;&nbsp; &nbsp;} else if (key &lt; arr[mid]) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return binarySearch(key, arr, start, mid - 1);
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return binarySearch(key, arr, mid + 1, stop);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Das Laufzeitverhalten des binären Suchalgorithmus ist O(log(n)), also deutlich besser als die sequentielle Suche. Das ist einer der Gründe, warum Sortieren so wichtig ist, weil es die Suchzeiten drastisch reduzieren hilft.</p>
+<h3>
+	Hash Search</h3>
+<p>
+	Ist die binäre Suche wirklich die schnellste? Und ist die Sortiererei wirklich nötig?&nbsp; Dauert ja auch.&nbsp; Zweimal Nein.&nbsp; Das Sortieren ist nicht unbedingt nötig, und binäre Suche ist auch nicht die schnellste.&nbsp; <em>Hash-based Search</em> ist die schnellste.&nbsp; Wie funktioniert sie?&nbsp; Wir brauchen zwei Schritte: im ersten speichern wir unser Array in einem HashSet:</p>
+<pre style="margin-left: 40px;">
+Integer[] arr = { 17, 28, 29, 32, 44, 54, 65, 76, 80, 82, 88, 97 };
+HashSet&lt;Integer&gt; hs = new HashSet(Arrays.asList(arr));</pre>
+<p>
+	und im zweiten verwenden wir einfach die <em>contains()</em> Methode des HashSets für die Suche:</p>
+<pre style="margin-left: 40px;">
+boolean b = hs.contains(key);</pre>
+<p>
+	Die Suche selbst hat konstantes Laufzeitverhalten, also O(1).&nbsp; Das ist also noch schneller als O(log(n)).&nbsp; Ausserdem muss unser Array nicht sortiert werden, also wir sparen uns die O(n log(n)) Strafe für das Sortieren.&nbsp; Aber wir müssen unser Array in das HashSet einfügen, und das kostet uns O(n).&nbsp; Trotzdem am Ende noch deutlich schneller!</p>
+<pre style="margin-left: 40px;">
+sequential search unsorted array: 273830 ms
+sequential search sorted array:&nbsp;&nbsp; 245650 ms
+binary search sorted array:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 41 ms
+hash search:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 18 ms</pre>
+<p>
+	Obwohl Hash-based Search doppelt so schnell wie Binäre Suche ist, macht es fast keinen Unterschied wenn man beide mit sequentieller Suche vergleicht.</p>
+<h3>
+	Binary Search Tree</h3>
+<p>
+	Es gibt noch eine Suchmethode, die wir in diesem Zusammenhang erwähnen wollen: der binäre Suchbaum. Wir werden sie im Kapitel über Bäume kennenlernen. Sie hat auch logarithmische Suchzeiten, d.h. O(log (n)), und hat auch noch einige andere Vorteile. Dennoch, wenn es um rohe Suchkraft geht: hash is the best!</p>
+<p>
+	.</p>
+<h2>
+	TreeMap</h2>
+<p>
+	In Kapitel drei haben wir bereits in zwei Projekten Bekanntschaft mit der TreeMap gemacht: in Languages und in BuildIndex.&nbsp; Das ist eine ganz normale Map bei der allerdings die Schlüssel automatisch sortiert sind.&nbsp; Welchen Sortieralgorithmus verwendet denn die TreeMap?&nbsp; Interessanterweise keinen der hier behandelten.&nbsp; Anstelle verwendet es einen <em>Red-Black Tree</em> als interne Datenstruktur, der für die Sortierung sorgt.&nbsp; Wir werden mehr dazu im nächsten Kapitel erfahren.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	Ein Thema das wir in diesem Buch komplett ausgelassen haben ist der Heap, auch eine interessante Datenstruktur.</p>
+<p>
+	.</p>
+<h2>
+	HeapSort</h2>
+<p>
+	Basierend auf dem Heap gibt es auch ein Sortierverfahren, den HeapSort.&nbsp; Wir sollten vielleicht erst mal nachlesen was denn überhaupt ein Heap ist und danach könnten wir uns mal den HeapSort näher ansehen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Bitte erläutern Sie, wie der SelektionSort und der InsertionSort funktionieren.<br />
+		&nbsp;</li>
+	<li>
+		Wie gut ist QuickSort bei der Sortierung bereits sortierter Daten?&nbsp; Wie gut ist InsertionSort beim Sortieren bereits sortierter Daten?<br />
+		&nbsp;</li>
+	<li>
+		Sie haben eine Gruppe von Studenten, die zufällig im Wohnheim auf Zimmer verteilt wurden.&nbsp; Da die Zimmerhöhe aber von hinten nach vorne im Wohnheim abnimmt, wollen Sie die Räume neu zuordnen, so dass die kleineren Studenten in den hinteren Räumen sind, während die größeren in den vorderen. Jeder Student hat eine Menge persönliches Zeug zu schleppen, deswegen sollte die Anzahl der Umzüge minimiert werden.&nbsp; Würden Sie eher einen InsertionSort oder einen SelektionSort Algorithmus verwenden?&nbsp; Warum?</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Zwei hervorragende Bücher wenn es um Suche geht sind das Buch von Roberts und Zelenski [5], sowie das von Sedgewick and Wayne [2].&nbsp; Das Buch von Goodrich und Tamassia [6] steigt etwas tiefer in die Materie ein, ist auch sehr zu empfehlen.</p>
+<p>
+	[1] Fisher&ndash;Yates shuffle, <a href="https://en.wikipedia.org/wiki/Fisher–Yates_shuffle#The_modern_algorithm">https://en.wikipedia.org/wiki/Fisher&ndash;Yates_shuffle#The_modern_algorithm</a></p>
+<p>
+	[2] Introduction to Programming in Java, Robert Sedgewick and Kevin Wayne</p>
+<p>
+	[3] Arrays (Java Platform SE 7 ) - Oracle, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html">https://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html</a></p>
+<p>
+	[4] Sorting Algorithms Animations, <a href="http://www.sorting-algorithms.com/">http://www.sorting-algorithms.com/</a></p>
+<p>
+	[5] Programming Abstractions in C++, Eric S. Roberts and Julie Zelenski</p>
+<p>
+	[6] Data Structures and Algorithms in Java, M.T. Goodrich and R. Tamassia</p>
+<p>
+	[7] Aschenputtel, <a href="https://de.wikipedia.org/wiki/Aschenputtel_(1989)">https://de.wikipedia.org/wiki/Aschenputtel_(1989)</a></p>
+<p>
+	[8] Barack Obama | Candidates at Google, <a href="https://www.youtube.com/watch?v=m4yVlPqeZwo">https://www.youtube.com/watch?v=m4yVlPqeZwo</a>, (about 23 minutes into the talk)</p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

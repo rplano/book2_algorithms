@@ -1,0 +1,959 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html" class="active">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/AsymptoticGrowth.png" style="display: block; margin-left: auto; margin-right: auto; width: 227px; height: 228px;" /></p>
+<h1>
+	Algorithmic Analysis</h1>
+<p>
+	Wir haben jetzt schon einige Algorithmen gesehen, und u.a. festgestellt, dass es sehr häufig mehr als einen Algorithmus gibt um ein gegebenes Problem zu lösen.&nbsp; Die Frage stellt sich, welchen soll ich denn verwenden?&nbsp; In diesem Kapitel beschäftigen wir uns damit welcher denn der schnellste ist, und wie man das vorhersagt oder misst.&nbsp; Geschwindigkeit ist aber nicht das einzige Kriterium das für die Wahl entscheidend sein kann: manchmal ist es Speicherplatz, manchmal ist es Zuverlässigkeit, und manchmal Einfachheit.&nbsp; Aber in aller Regel hilft es einem wenig, wenn eine Algorithmus Jahre braucht bis er fertig ist, deswegen ist das häufigste Optimierungskriterium die Zeit.&nbsp; Außerdem stellen wir auf den folgenden Seiten auch ein paar neue Techniken vor: Approximation, Dynamische Programmierung und Divide and Conquer.</p>
+<p>
+	.</p>
+<h2>
+	Approximation</h2>
+<p>
+	Als wir Leute in einem Stadium zählen wollten, haben wir das erste Mal gesehen, dass es u.U. genügt nur ungefähr zu wissen wieviel Leute es sind.&nbsp; Also eine grobe <em>Abschätzung</em> oder eine Annäherung an den genauen Wert.&nbsp; Das ist eine Technik die nicht selten verwendet wird, vor allem wenn es schnell gehen muss.&nbsp;</p>
+<p>
+	Wenn wir die Fakultät einer Zahl berechnen wollen, also <em>n!</em>, dann haben wir im letzte Kapitel schon zwei Methoden gesehen, und zwar Iteration und Rekursion.&nbsp; Eine dritte ist Approximation.&nbsp; In der Regel muss man da einen Mathematiker als Kumpel haben, die kennen sich mit so Sachen nämlich gut aus.&nbsp; Für die Fakultät gibt es nämlich eine Formel die sehr gute Näherungswerte für große Fakultäten liefert die sogenannte Stirling-Formel [1]:</p>
+<p style="margin-left: 40px; text-align: center;">
+	<img alt="" src="images/Stirling.png" style="margin-left: 10px; margin-right: 10px; width: 125px; height: 35px;" /></p>
+<p>
+	Wobei man bei den Mathematikern immer aufpassen muss: was heisst denn groß? Manchmal bedeutet das riesengroß, also total nutzlos eigentlich.&nbsp; Aber hier heisst groß so ab drei, und das ist eigentlich gar nicht so groß.&nbsp; Deswegen ist das eine Superformel um Fakultäten auszurechnen (genauer anzunähern) sobald n größer als drei ist.</p>
+<p>
+	.</p>
+<h2>
+	Dynamic Programming</h2>
+<p>
+	Kommen wir zur Technik der <em>Dynamischen Programmierung</em> [2,3]. Der Name ist wohl der dümmste der einem einfallen kann, denn die Technik ist eigentlich nicht besonders dynamisch, noch hat sie irgendetwas mit Programmierung zu tun.&nbsp; Wenn man unbedingt will, dann wäre dynamische Nachschlagetabelle, also <em>dynamic lookup table</em>, schon beschreibender.</p>
+<p>
+	Worum geht es? Wenn wir die Fakultät von 11 berechnen wollen, dann brauchen wir ja die Fakultät von 10 erstmal, weil ja</p>
+<pre style="margin-left: 40px;">
+11! = 11 * 10!</pre>
+<p>
+	So was wäre wenn wir irgendwann schon mal 10! ausgerechnet hätten und uns das gemerkt hätten?&nbsp; Das ist Dynamischen Programmierung: einfach merken was man schon mal ausgerechnet hat.&nbsp; Oder genauer, das wiederverwenden was man schon mal ausgerechnet hat.</p>
+<p>
+	Schauen wir uns mal an wie man das in Java macht.&nbsp; Das &quot;Merken&quot; machen wir in einem Array:</p>
+<pre style="margin-left: 40px;">
+public long[] factorialLookupTable;</pre>
+<p>
+	Dann berechnen wir einfach mal die ersten zwanzig Fakultäten im Voraus:</p>
+<pre style="margin-left: 40px;">
+public void initFactorialLookupTable() {
+&nbsp;&nbsp;&nbsp; factorialLookupTable = new long[20+1];
+&nbsp;&nbsp;&nbsp; for (int i = 1; i &lt; factorialLookupTable.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; factorialLookupTable[i] = factorialIterative(i);
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	Wenn uns jetzt irgendjemand nach einer Fakultät fragt, schauen wir einfach in unserem Array nach:</p>
+<pre style="margin-left: 40px;">
+public long factorialLookupTable(int n) {
+&nbsp;&nbsp;&nbsp; return factorialLookupTable[n];
+}
+</pre>
+<p>
+	und das geht super-schnell.&nbsp; Technisch gesehen schummeln wir hier ein bischen, weil wir die ganzen Werte im Voraus berechnen.&nbsp; Aber das Kernprinzip der Dynamischen Programmierung ist es das wieder zu verwenden was wir schon ausgerechnet haben.</p>
+<p>
+	.</p>
+<h2>
+	Fastest</h2>
+<p>
+	Wir haben ja schon angedeutet, dass es in diesem Kapitel um Geschwindigkeit geht und wie man sie misst. Wir haben inzwischen schon vier verschiedene Algorithmen um die Fakultät einer Zahl zu berechnen:</p>
+<ul>
+	<li>
+		Iteration</li>
+	<li>
+		Rekursion</li>
+	<li>
+		Dynamischen Programmierung</li>
+	<li>
+		Abschätzung</li>
+</ul>
+<p>
+	Welcher ist nun der schnellste? Zeitmessungen in Java machen wir mit der <em>System.currentTimeMillis()</em> Methode, die gibt uns die Zeit die seit dem 01.01.1970 vergangen ist in Millisekunden.&nbsp; Wir nehmen also die Zeit bevor wir mit unserer Berechnung beginnen und ziehen dann die Zeit danach davon ab:</p>
+<pre style="margin-left: 40px;">
+long start = <span style="color:#0000ff;">System.currentTimeMillis()</span>;
+for (int i = 0; i &lt; NR_OF_ITERATIONS; i++) {
+&nbsp;&nbsp; &nbsp;x = Factorial.factorialIterative(20);
+}
+long duration = <span style="color:#0000ff;">System.currentTimeMillis()</span> - start;
+System.out.println(&quot;time iterative: &quot; + duration);</pre>
+<p>
+	Wenn eine Berechnung sehr kurz ist, also im Milli- oder Nanosekunden Bereich, dann sollten wir diese Berechnung mehrmals (so hundertmillionenmal) ausführen, sonst sind die gewonnen Resultate nicht besonders aussagekräftig.&nbsp; Überhaupt kann bei Zeitmessungen recht viel schief gehen.</p>
+<p>
+	Und, wer ist der Gewinner?</p>
+<pre style="margin-left: 40px;">
+iteration:           1262ms
+recursion:           2524ms
+dynamic programming:    4ms
+approximation:          6ms</pre>
+<p>
+	Der Unterschied ist schon ziemlich massiv: Dynamischen Programmierung und Abschätzung schlagen die Iteration und Rekusion um Längen!&nbsp; Analysieren wir die Ergebnisse aber etwas genauer:</p>
+<ul>
+	<li>
+		Abschätzung ist zwar schnell aber nicht genau.&nbsp; Man muss schon wissen ob man mit einer Abschätzung leben kann, aber sie ist schnell und braucht wenig Speicher.</li>
+	<li>
+		Dynamischen Programmierung ist genau und schnell.&nbsp; Aber auch hier gibt es zu bedenken: einmal muss ich die Nachschlagtabelle ja ausrechnen, und das dauert Zeit.&nbsp; Und die Nachschlagtabelle benötigt Speicher, teilweise sehr viel Speicher.&nbsp;</li>
+	<li>
+		Iteration ist zwar nicht so schnell, ist aber sehr effektiv was den Speicher angeht.&nbsp; Und sie ist immer noch doppelt so schnell wie die Rekursion (aber nicht immer).</li>
+	<li>
+		Rekursion ist eigentlich so das schlimmste was man machen kann: sie ist langsam und braucht viel Speicher.&nbsp; Sehr häufig sind rekursive Lösungen aber sehr elegant, und bekanntlich ist Eleganz ja teuer.&nbsp; Man fragt sich natürlich warum wir uns dann das ganze letzte Kapitel damit rumgeschlagen haben... die Antwort kommt gleich.</li>
+</ul>
+<p>
+	Zusammenfassend kann man allerdings sagen, wenn ein Algorithmus schnell ist, dann geht er meist nicht sehr effektiv mit Speicher um, und umgekehrt.</p>
+<p>
+	.</p>
+<h2>
+	Divide and Conquer</h2>
+<p>
+	Ist Rekursion immer am langsamsten?&nbsp; Meistens ja, aber es gibt Ausnahmen.&nbsp; Schauen wir uns mal das Berechnen von Potenzen an.&nbsp; Nehmen wir an wir wollen zwei hoch acht berechnen:</p>
+<pre style="margin-left: 40px;">
+2^8 = 2*2*2*2*2*2*2*2 = 256</pre>
+<p>
+	Eine Möglichkeit ist mittels Iteration:</p>
+<pre style="margin-left: 40px;">
+int powerIt(int x, int n) {
+    int power = 1;
+    for (int i = 0; i &lt; n; i++) {
+&nbsp;&nbsp;&nbsp;     power *= x;
+    }
+    return power;
+}
+</pre>
+<p>
+	Eine zweite ist mittels Rekursion.&nbsp; Erinnern wir uns, dass</p>
+<pre style="margin-left: 40px;">
+2^8 = 2 * 2^7</pre>
+<p>
+	dann sehen wir hier sofort eine rekursive Beziehung.&nbsp; Mit dem <em>base case</em> dass 2<sup>0</sup> = 1, können wir das folgendermaßen in Java umsetzen:</p>
+<pre style="margin-left: 40px;">
+int powerRe(int x, int n) {
+&nbsp;&nbsp; &nbsp;if (n == 0)
+&nbsp;&nbsp; &nbsp;    return 1;
+&nbsp;&nbsp; &nbsp;else
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return x * powerRe(x, n-1);
+}</pre>
+<p>
+	Interessanterweise ist das aber nicht die einzige rekursive Lösung.&nbsp; Es gibt nämlich noch eine andere:</p>
+<pre style="margin-left: 40px;">
+2^8 = 2^4 * 2^4</pre>
+<p>
+	Das sieht jetzt ganz unscheinbar aus, ist es aber nicht.&nbsp; Es ist das erste Mal dass wir einem Algorithmus aus der Kategorie <em>divide and conquer</em> begegnen.&nbsp; Die haben&#39;s in sich.&nbsp; Zunächst setzen wir das in Java um:</p>
+<pre style="margin-left: 40px;">
+int powerDC(int x, int n) {
+&nbsp;&nbsp; &nbsp;if (n == 0)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 1;
+&nbsp;&nbsp; &nbsp;else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int temp = powerDC(x, n/2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (n % 2 == 0)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return temp * temp;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;else
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return x * temp * temp;
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	Jetzt stellt sich natürlich wieder die Frage, welcher ist denn der schnellste? Wir lassen unsere Stoppuhren laufen und stellen fest:</p>
+<pre style="margin-left: 40px;">
+iteration:             6ms
+recursion:           778ms
+divide &amp; conquer:     89ms
+approximation:         3ms</pre>
+<p>
+	Wie erwartet, ist die Approximation die schnellste.&nbsp; Iteration ist auch verflucht schnell, aber die Überraschung kommt wenn wir Rekusion mit Divide and Conquer vergleichen:&nbsp; Divide and Conquer ist fast zehnmal schneller!&nbsp; Es kommt sogar noch besser: je größer die Zahlen werden, desto besser wird Divide and Conquer, am Ende schlägt er sogar die Iteration.&nbsp; Wie wir in späteren Kapiteln noch sehen werden, Divide and Conquer ist unser Freund.</p>
+<p>
+	.</p>
+<h2>
+	Algorithm Analysis</h2>
+<p>
+	Wie bewertet man denn einen Algorithmus?&nbsp; Bisher haben wir einfach die Stoppuhr ausgepackt und gemessen.&nbsp; Das funktioniert, aber es ist nicht sehr wissenschaftlich, und wir wissen eigentlich auch nicht warum ein Algorithmus besser ist als ein anderer.&nbsp; Darum geht es in der algorithmischen Analyse, man versucht Algorithmen mathematisch zu untersuchen, zu bewerten und einzuordnen.&nbsp; Da wir keine ausgebildeten Mathematiker sind, werden wir das ganze etwas vereinfachen: im Prinzip was wir im Folgenden machen ist nichts anderes als zählen.</p>
+<h3>
+	Constant Performance: O(1)</h3>
+<p>
+	Wir beginnen ganz einfach, wir nutzen die Tatsache, dass die meisten modernen CPUs die Potenz einer Zahl direkt berechnen können:</p>
+<pre style="margin-left: 40px;">
+int powerApprox(int x, int n) {
+&nbsp;&nbsp; &nbsp;return (int) Math.pow(x, n);
+}
+</pre>
+<p>
+	Dies dauert eine feste Anzahl von CPU-Zyklen (etwa 28 CPU-Zyklen) und egal, was die Werte von x oder n sind, wird es immer die gleiche Zeit in Anspruch nehmen. Wir nennen dies konstante Performanz, weil sich die Zeit nicht ändert, auch wenn wir x oder n ändern.&nbsp; In Kurzform: O(1).</p>
+<h3>
+	Linear Performance, Iteration: O(n)</h3>
+<p>
+	Als nächstes betrachten wir unsere iterative Lösung:</p>
+<pre style="margin-left: 40px;">
+1.  int powerIt(int x, int n) {
+2.      int power = 1;
+3.      <span style="color:#0000ff;">for (int i = 0; i &lt; n; i++)</span> {
+4.  &nbsp;&nbsp;&nbsp;     power *= x;
+5.      }
+6.      return power;
+7.  }
+</pre>
+<p>
+	Wir wollen ermitteln, wieviele CPU-Zyklen für diese Berechnung notwendig sind. Bei modernen CPUs dauern die meisten Anweisungen etwa 2 bis 3 Zyklen. Damit kann man dann ausrechnen wie lange es dauert.&nbsp; Deshalb genügt es für uns eigentlich zu wissen wieviele Anweisung für eine gewisse Berechnung nötig sind.&nbsp; Also analysieren wir den Code oben Zeile für Zeile:</p>
+<ol>
+	<li>
+		die Werte von x und n müssen wir in den CPU-Registern speichern, das benötigt 2 Anweisungen;</li>
+	<li>
+		eine einfache Zuweisung, braucht 1 Anweisung;</li>
+	<li>
+		Schleifen sind etwas knifflig:
+		<ol>
+			<li>
+				einmal haben wir eine Zuordnung, int i = 0, das ist 1 Anweisung, wird nur einmal ausgeführt;</li>
+			<li>
+				dann haben wir einen Vergleich, i &lt; n, auch 1 Anweisung, wird u.U. mehrmal ausgeführt;</li>
+			<li>
+				schließlich haben wir noch ein Inkrement, i++, auch 1 Anweisung, wird u.U. mehrmal ausgeführt;</li>
+		</ol>
+	</li>
+	<li>
+		eine einfache Multiplikation, dauert 1 Anweisung;</li>
+	<li>
+		eine geschloßene geschweifte Klammer benötigt natürlich keine Zeit, aber wenn die Schleife mehrmals durchlaufen wird, bedeutet sie, dass wir wieder zurück zur Zeile 3 gehen;</li>
+	<li>
+		return heißt soviel wie &quot;schreibe es irgendwo in den Speicher&quot;, d.h. 1 Anweisung.</li>
+</ol>
+<p>
+	Also, wielange dauert es?&nbsp; Dass hängt von <em>n</em> ab.&nbsp; Je größer <em>n</em> ist, desto länger dauert es. Um genau zu sein</p>
+<pre style="margin-left: 40px;">
+# of instructions = 2+1+1 + n*( 1+1+1) + 1 = 5 + 3*n ~ n</pre>
+<p>
+	D.h. je größer <em>n</em> wird, desto länger dauert es.&nbsp; Man nennt das auch lineare Performanz, linear in <em>n</em>. Oder in Kurzform: O(n).</p>
+<h3>
+	Linear Performance, Recursion: O(n)</h3>
+<p>
+	Auch Rekursion kann lineare Performanz haben.&nbsp; Unsere erste rekursive Lösung war wie folgt:</p>
+<pre style="margin-left: 40px;">
+1.  int powerRe(int x, int n) {
+2.  &nbsp;&nbsp; &nbsp;if (n == 0)
+3.  &nbsp;&nbsp; &nbsp;    return 1;
+4.  &nbsp;&nbsp; &nbsp;else
+5.  &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return x * <span style="color:#0000ff;">powerRe(x, n-1)</span>;
+6.  }
+</pre>
+<p>
+	Wir analysieren wieder Zeile für Zeile:</p>
+<ol>
+	<li>
+		wir müssen x und n in den CPU-Registern speichern, das sind 2 Anweisungen;</li>
+	<li>
+		ein einfacher Vergleich, 1 Anweisung;</li>
+	<li>
+		return schreibt etwas in den Speicher, d.h. 1 Anweisung;</li>
+	<li>
+		<em>else</em> zählt nicht als Anweisung, ist Teil von <em>if</em>, also 0 Anweisungen;</li>
+	<li>
+		das ist jetzt wieder etwas komplizierter, gehen wir von rechts nach links vor:
+		<ol>
+			<li>
+				wir subtrahieren 1 von n, 1 Anweisung;</li>
+			<li>
+				wir rufen uns selbst auf: keine Ahnung wie lange das dauert, also ? Anweisungen</li>
+			<li>
+				eine Multiplikation, 1 Anweisung;</li>
+			<li>
+				wir geben etwas zurück, das ist 1 Anweisung.</li>
+		</ol>
+	</li>
+</ol>
+<p>
+	Heiklig ist der rekursive Aufruf. Wie kann man den abschätzen?&nbsp; Um ein Gefühl dafür zu bekommen was passiert, wählen wir einfach mal verschiedene <em>n</em>, beginnend mit n = 0:</p>
+<ul>
+	<li>
+		<strong>n=0:</strong> es gibt gar keinen rekursiven Anruf, wir kommen nur zur Zeile 3, macht insgesamt 4 Anweisungen;</li>
+	<li>
+		<strong>n=1:</strong> hier gibt es einen rekursiven Anruf, der benötigt 4 Anweisungen (d.h. n = 0), womit wir insgesamt bei 2 + 1 +1 + <span style="color:#0000ff;">4</span> + 1 + 1 = <span style="color:#0000ff;">4</span> + 6 = 10 Anweisungen wären;</li>
+	<li>
+		<strong>n=2:</strong> hier gibt es einen rekursiven Aufruf zu n = 1, der 9 Anweisungen benötigt, wie wir gerades festgestellt haben, also in Summe 2 + 1 + 1 + <span style="color:#0000ff;">9</span> + 1 + 1 = <span style="color:#0000ff;">9</span> + 6 = 15 Anweisungen.</li>
+</ul>
+<p>
+	Wie wir sehen, fügen wir mit jedem weiteren Schritt weitere 6 Anweisungen hinzu. Damit können wir die Anzahl der Anweisungen für ein beliebiges <em>n</em> vorhersagen:</p>
+<pre style="margin-left: 40px;">
+# of instructions = 4 + 6*n ~ n</pre>
+<p>
+	Das sieht fast genauso aus wie bei der Iteration, nur mit einem anderen Faktor.&nbsp; Wieder, je größere <em>n</em> wird, desto länger dauert es. Auch hier haben wir es mit linearer Performanz zu tun. In Kurzform: O(n).</p>
+<h3>
+	Logarithmic Performance, Divide and Conquer: O(log(n))</h3>
+<p>
+	Kommen wir zu unserem zweiten rekursiven Ansatz, der <em>Divide and Conquer</em> Lösung:</p>
+<pre style="margin-left: 40px;">
+1.  int powerDC(int x, int n) {
+2.  &nbsp;&nbsp; &nbsp;if (n == 0)
+3.  &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 1;
+4.  &nbsp;&nbsp; &nbsp;else {
+5.  &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int temp = powerDC(x, n/2);
+6. &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return temp * temp;
+7.  &nbsp;&nbsp; &nbsp;}
+8.  }
+</pre>
+<p>
+	Wir haben eine etwas einfachere Version des Algorithmus ausgewählt, die nur für Potenzen von 2 funktioniert, also n = 1, 2, 4, 8, 16, .... Wir könnten auch die genaue Lösung von vorher nehmen, aber es wäre ein bischen komplizierter. Wir analysieren wieder jede Zeile:</p>
+<ol>
+	<li>
+		wir speichern wieder x und n in den Registern der CPU, also 2 Anweisungen;</li>
+	<li>
+		ein einfacher Vergleich, 1 Anweisung;</li>
+	<li>
+		return speichert in den Speicher, d.h., 1 Anweisung;</li>
+	<li>
+		<em>else</em> zählt wieder nicht, 0 Anweisungen;</li>
+	<li>
+		hier wird es wieder etwas komplizierter:
+		<ol>
+			<li>
+				erst mal dividieren wir durch 2, bei Ganzzahlen ist das ein einfacher Shift, also 1 Anweisung;</li>
+			<li>
+				dann rufen wir uns selbst auf: hängt von <em>n</em> ab wie lange das dauert, ? Anweisungen;</li>
+			<li>
+				und zu letzt, noch ein Zuweisung, macht 1 Anweisung;</li>
+		</ol>
+	</li>
+	<li>
+		hier haben wir eine Multiplikation und ein <em>return</em> Statement, sollten 2 Anweisungen sein.</li>
+</ol>
+<p>
+	Wie vorher ist auch hier der rekursive Aufruf den wir uns genauer ansehen müssen.&nbsp; Wie oben, nehmen wir einfach mal ein paar verschiedene <em>n</em>, beginnend mit 0:</p>
+<ul>
+	<li>
+		<strong>n=0:</strong> es gibt keinen rekursiven Anruf, wir kommen nur zur Zeile 3, also insgesamt 4 Anweisungen;</li>
+	<li>
+		<strong>n=1:</strong> es gibt einen rekursiven Anruf, der 4 Befehle benötigt (d.h. n=0), in Summe also: 2 + 1 + 1 + <span style="color:#0000ff;">4</span> + 1 + 2 = <span style="color:#0000ff;">4</span> + 7 = 11 Anweisungen;</li>
+	<li>
+		<strong>n=2:</strong> es gibt einen rekursiven Aufruf zu n=2, der 11 Befehle benötigt, in Summe also: 2+1+1+<span style="color:#0000ff;">11</span>+1+2 = <span style="color:#0000ff;">11</span> + 7 = 18 Anweisungen;</li>
+	<li>
+		<strong>n=4:</strong> es gibt einen rekursiven Aufruf zu n=4, der 18 Befehle benötigt, in Summe also: 2+1+1+<span style="color:#0000ff;">18</span>+1+2 = <span style="color:#0000ff;">18</span> + 7 = 25 Anweisungen.</li>
+</ul>
+<p>
+	Also keine große Sache, oder?&nbsp; Vergleichen wir mal Äpfel mit Birnen, soll heißen, vergleichen wir mal den einfachen rekursiven Ansatz mit der Divide and Conquer Lösung:</p>
+<table border="1" cellpadding="1" cellspacing="1" style="width: 400px; height: 64px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">
+				&nbsp;log_2(n)</td>
+			<td align="center">
+				n</td>
+			<td align="center">
+				recursion</td>
+			<td align="center">
+				divide &amp; conquer</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				0</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				9</td>
+			<td align="center">
+				11</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				1</td>
+			<td align="center">
+				2</td>
+			<td align="center">
+				14</td>
+			<td align="center">
+				18</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				2</td>
+			<td align="center">
+				4</td>
+			<td align="center">
+				24</td>
+			<td align="center">
+				25</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				3</td>
+			<td align="center">
+				8</td>
+			<td align="center">
+				44</td>
+			<td align="center">
+				32</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				4</td>
+			<td align="center">
+				16</td>
+			<td align="center">
+				84</td>
+			<td align="center">
+				39</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				5</td>
+			<td align="center">
+				32</td>
+			<td align="center">
+				164</td>
+			<td align="center">
+				46</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				6</td>
+			<td align="center">
+				64</td>
+			<td align="center">
+				324</td>
+			<td align="center">
+				53</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Solange <em>n</em> klein ist, ist kaum ein Unterschied festzustellen. Aber sobald <em>n</em> ein bischen größer wird, z.B. 64, dann beginnt man einen Unterschied festzustellen.&nbsp; Und je größer <em>n</em> wird, desto größer wird auch der Unterschied.&nbsp; Wir können ganz einfach sehen, dass für den Divide and Conquer Algorithmus die Anzahl der Anweisungen gegeben ist durch</p>
+<pre style="margin-left: 40px;">
+# of instructions = 11 + 7* Log_2( n )</pre>
+<p>
+	Dabei ist <em>log_2()</em> der Logarithmus zu Basis zwei.&nbsp; Dies ist das erste Mal, dass wir einem Algorithmus begegnen der logarithmisch in seiner Performanz ist, in Kurzform: O(log(n)). &nbsp; Logarithmisch ist gut, weil es schnell bedeutet!</p>
+<p>
+	.</p>
+<h2>
+	Comparing Algorithms and Big-O Notation</h2>
+<p>
+	Für die vier Algorithmen die wir bisher genauer analysiert haben, haben wir folgendes herausgefunden:</p>
+<table border="1" cellpadding="1" cellspacing="1" style="width: 400px; height: 64px;">
+	<tbody>
+		<tr>
+			<td>
+				&nbsp;</td>
+			<td align="center">
+				# of instructions</td>
+			<td align="center">
+				Big-O</td>
+		</tr>
+		<tr>
+			<td>
+				powerApprox()</td>
+			<td align="center">
+				28</td>
+			<td align="center">
+				O( 1 )</td>
+		</tr>
+		<tr>
+			<td>
+				powerIt()</td>
+			<td align="center">
+				5 + 3 * n</td>
+			<td align="center">
+				O( n )</td>
+		</tr>
+		<tr>
+			<td>
+				powerRe()</td>
+			<td align="center">
+				4 + 5 * n</td>
+			<td align="center">
+				O( n )</td>
+		</tr>
+		<tr>
+			<td>
+				powerDC()</td>
+			<td align="center">
+				4 + 7 * log( n )</td>
+			<td align="center">
+				O( log(n) )</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Wenn die <em>n</em> sehr groß werden, dann spielen konstante Faktoren eigentlich nur eine sehr geringe Rolle, weswegen wir sie vernachlässigen.&nbsp; Wir benutzen dann etwas, das wir als Big-O Notation bezeichnen: uns interessiert nur wie das Laufzeitverhalten, die Performanz, von <em>n</em> abhängt.&nbsp; Noch genauer, uns interessiert eigentlich nur das Verhalten für den schlimmsten Fall, deswegen ignorieren wir alle Faktoren die für große <em>n</em> unwichtig werden:</p>
+<pre style="margin-left: 40px;">
+Time  =  2 * n + 4      -&gt;  O(n)
+Time  =  4 * n - 1      -&gt;  O(n)
+Time  =  1/4 * n&sup2; - n   -&gt;  O(n&sup2;)
+Time  =  2n + n&sup2;       -&gt;  O(2n)
+</pre>
+<p>
+	Der Grund warum Big-O so nützlich ist, hat damit zu tun, dass es uns erlaubt abzuschätzen wie lange eine Berechnung dauern wird.&nbsp;</p>
+<p>
+	Nehmen wir an wir hätten drei Algorithmen, einen der linear ist, O(n), einen der quadratisch ist, O(n&sup2;), und einen der exponentiell ist, O(2<sup>n</sup>).&nbsp; Bei ersten Tests konnten wir messen, dass die Berechnung für n=1 ungefähr 1 Millisekunde gedauet hat.&nbsp; Die Frage ist wie lange wird es wohl dauern für n=100?</p>
+<ul>
+	<li>
+		<strong>O(n):</strong> da der Algorithmus linear ist, wird er proportional zu n sein, d.h. er wird ca. 100 Millisekunden benötigen, das ist eine Zehntelsekunde. Das ist ok.</li>
+	<li>
+		<strong>O(n&sup2;):</strong> der Algorithmus ist quadratisch, d.h., wir müssen die n=100 quadrieren, also 10000, d.h. es dauert ca. 10 Sekunden, das ist auch noch o.k.</li>
+	<li>
+		<strong>O(2<sup>n</sup>):</strong> der Algorithmus ist exponentiell, d.h., wir müssen 2 hoch 100 nehmen, was in etwa 10<sup>30</sup> Millisekunden oder 10<sup>27</sup> Sekunden sind.&nbsp;</li>
+</ul>
+<p>
+	Ist das viel oder wenig?&nbsp; Nun das Alter des Universum ist ungefähr 10<sup>17</sup> Sekunden.&nbsp; Wir werden also das Ende der Rechnung nicht mehr erleben.</p>
+<p>
+	.</p>
+<h2>
+	Best-Worst-Average Case</h2>
+<p>
+	Häufig hängt das Laufzeitverhalten eines Algorthmus von der Eingabe ab.&nbsp; Als Beispiel betrachten wir die Suche in einem Array von Strings:</p>
+<pre style="margin-left: 40px;">
+boolean search(String[] names, String key) {
+&nbsp;&nbsp;&nbsp; for (int i=0; i &lt; names.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (names[i] == key) return true;
+    }
+&nbsp;&nbsp;&nbsp; return false;
+}
+</pre>
+<p>
+	Wie lange dauert es, wenn der gesuchte String am Anfang, in der Mitte, am Ende oder vielleicht gar nicht im Array ist?</p>
+<ul>
+	<li>
+		Best case:<br />
+		Wenn der gesuchte String am Anfang ist, dann ist das super-schnell.&nbsp; Ein Vergleich und wir sind fertig.<br />
+		&nbsp;</li>
+	<li>
+		Worst case:<br />
+		Ist der gesuchte String am Ende oder vielleicht gar nicht im Array, dann dauert das am längsten: wir müssen durch das gesamte Array suchen.&nbsp; Das ist also der schlimmste Fall.<br />
+		&nbsp;</li>
+	<li>
+		Average case:<br />
+		Der gesuchte String ist irgendwo in der Mitte.&nbsp; Das ist der Durchschnittsfall.&nbsp; Der ist allerdings sehr häufig gar nicht so einfach zu berechnen.</li>
+</ul>
+<p>
+	Deswegen interessiert uns eigentlich in der Regel der schlimmste Fall, und das ist was uns die Big-O Notation gibt.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	In diesem Kapitel haben wir mehrere neue Konzepte kennengelernt, dazu gehören Approximation, Dynamische Programmierung und der Divide and Conquer Ansatz.&nbsp; Im Allgemeinen gilt, dass es sehr häufig mehrere Algorithmen gibt ein bestimmtes Problem zu lösen.&nbsp; Wir haben gesehen, wie man die Performanz eines Algorithmus messen kann, aber auch wie man mittels detailierter Analyse auch die Performanz eines Algorithmus vorhersagen kann.&nbsp; Dabei war aber auch wichtig festzuhalten, dass nicht immer Geschwindigkeit das Kriterium sein muss nach dem man einen bestimmten Algorithmus auswählt.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	In den Projekten wollen wir das jetzt ein bischen durch Beispiele vertiefen.&nbsp; Wir sollten dabei auch ein Gefühl dafür bekommen welches Laufzeitverhalten, O(...), vertretbar ist, und welches für alle praktischen Anwendungen nutzlos ist, weil es einfach zu lange dauert.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/MinimumMaximumAndAverage.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Minimum, Maximum and Average</h2>
+<p>
+	Nehmen wir an wir haben ein Array mit den folgenden Ganzzahlen gegeben:</p>
+<pre style="margin-left: 40px;">
+int[] arrOfInts = { 5, 55, 2, 7, 45, 3, 1, 8, 23, 12 };</pre>
+<p>
+	Wir wollen nun drei Methoden schreiben,</p>
+<ol>
+	<li>
+		eine, die das kleinste Element findet,</li>
+	<li>
+		eine, die das größte Element findet,</li>
+	<li>
+		und eine Methode die den Durchschnitt berechnet.</li>
+</ol>
+<p>
+	Dabei wollen wir das Laufzeitverhalten dieser drei Algorithmen bestimmen, entweder über Messungen oder über eine algorithmische Analyse wie wir es oben getan haben.</p>
+<p>
+	Die Frage die sich stellt, ist der Algorithmus den wir gefunden haben der einzige oder gibt es auch andere? Und ist er der schnellste?&nbsp; Was wäre denn wenn unser Array sortiert wäre?&nbsp; Könnten wir dann einen anderen Algorithmus finden, und wie wäre sein Laufzeitverhalten?</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/rabbits.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Rabbits</h2>
+<p>
+	Jeder der schon mal Kaninchen hatte weiß, dass diese eine interessante Eigenschaft haben: sie vermehren sich und zwar rasant.&nbsp; Wir wollen also ein Programm schreiben welches berechnet wie sich unsere Kaninchen-Population über die Monate entwickelt.&nbsp; Wir folgen dazu dem Modell von Fibonacci [6]:</p>
+<ul>
+	<li>
+		&quot;Jedes Paar Kaninchen wirft pro Monat ein weiteres Paar Kaninchen.</li>
+	<li>
+		Ein neugeborenes Paar bekommt erst im zweiten Lebensmonat Nachwuchs (die Austragungszeit reicht von einem Monat in den nächsten).</li>
+	<li>
+		Die Tiere befinden sich in einem abgeschlossenen Raum, sodass kein Tier die Population verlassen und keines von außen hinzukommen kann.&quot;</li>
+</ul>
+<p>
+	Wenn wir die Simulation richtig schreiben, dann müsste dabei die Fibonacci-Folge, also</p>
+<pre style="margin-left: 40px;">
+1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...</pre>
+<p>
+	herauskommen.&nbsp; Interessant ist vielleicht zu beobachten, dass jede Zahl die Summe ihrer zwei Vorgängerzahlen ist.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/FibonacciGraphics.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />FibonacciGraphics</h2>
+<p>
+	Die Fibonacci Zahlen kann man sehr schön visualisieren, eine davon ist die Fibonacci-Spirale [6].&nbsp; Schauen wir uns die Zahlen noch einmal an:</p>
+<pre style="margin-left: 40px;">
+1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...</pre>
+<p>
+	Wir wollen daraus ein Kachelmuster aus Quadraten generieren, deren Kantenlängen den Fibonacci Zahlen entspricht.&nbsp; Wir gehen wie folgt vor:</p>
+<ol>
+	<li>
+		lege in die Mitte das ersten Quadrat, rechts daneben legen wir das zweite Quadrat;</li>
+	<li>
+		dann machen wir eine 90 Grad Drehung gegen den Uhrzeigersinn, und legen dort das nächste Quadrat hin;</li>
+	<li>
+		wir wiederholen Schritt 2.</li>
+</ol>
+<p>
+	Obwohl der Algorithmus total trivial aussieht, kann man bei der Umsetzung verzweifeln.&nbsp; Man darf sich die Lösung anschauen!</p>
+<p>
+	.</p>
+<h2>
+	Fibonacci</h2>
+<p>
+	Bisher haben wir nur Fakultät und Potenzen ausführlich behandelt.&nbsp; Ein anderes sehr schönes Beispiel das mit vielen unterschiedlichen Algorithmen gelöst werden kann ist die Berechnung der Fibonacci-Folge.</p>
+<h3>
+	Iteration</h3>
+<p>
+	Für den iterativen Algorithmus muss man lediglich wissen, dass jede Zahl die Summe ihrer zwei Vorgängerzahlen ist.&nbsp; Man beginnt dann einfach mit den ersten beiden, die ja bekannt sind, und berechnet dann eine nach der anderen, bis man diejenige hat die gewünscht war.</p>
+<h3>
+	Recursion</h3>
+<p>
+	Die rekursive Version ist sehr elegant:</p>
+<pre style="margin-left: 40px;">
+public static long fibonacciRecursive(int n) {
+&nbsp;&nbsp; &nbsp;switch (n) {
+&nbsp;&nbsp; &nbsp;case 0:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 0;
+&nbsp;&nbsp; &nbsp;case 1:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 1;
+&nbsp;&nbsp; &nbsp;default:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	aber auch ätzend langsam.&nbsp; Sobald n größer als 40 wird ist die rekursive Version nicht zu gebrauchen.</p>
+<h3>
+	Divide and Conquer</h3>
+<p>
+	Es gibt auch eine Divide and Conquer Version zur Berechnung der Fibonacci-Folge, die kann man bei Referenz [7] auf Seite 457 finden.</p>
+<h3>
+	Dynamic Programming</h3>
+<p>
+	Die Fibonacci-Folge ist eigentlich eine sehr schöne Anwendung um Dynamische Programmierung richtig zu machen.&nbsp; Sie basiert auf der rekursiven Version, aber anstelle immer und immer wieder die gleichen Zahlen auszurechnen, merkt sie sich wenn sie etwas schon mal ausgerechnet hat:</p>
+<pre style="margin-left: 40px;">
+public static long[] fibonacciDynamicProgrammingTable = new long[91 + 1];
+
+private static long fibonacciDynamicProgramming(int n) {
+&nbsp;&nbsp; &nbsp;if (n == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 0;
+&nbsp;&nbsp; &nbsp;} else if (fibonacciDynamicProgrammingTable[n] &gt; 0) {
+        // we have done this calculation before
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return fibonacciDynamicProgrammingTable[n];
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long result = 1;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;switch (n) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case 1:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;default:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;result = fibonacciDynamicProgramming(n - 1)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;+ fibonacciDynamicProgramming(n - 2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+        // remember for future use, in case we need it again
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fibonacciDynamicProgrammingTable[n] = result;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return result;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Diese Version ist extrem schnell.</p>
+<h3>
+	Lookup Table</h3>
+<p>
+	Klar Lookup Tables haben wir schon mal gesehen.&nbsp; Aber in diesem Beispiel sehen wir auch den Unterschied zwischen Lookup Tables und Dynamischer Programmierung: Bei Lookup Tables werden alle Werte vorausberechnet.&nbsp; Bei Dynamischer Programmierung werden nur die Werte berechnet die wirklich benötigt werden.</p>
+<h3>
+	Approximation</h3>
+<p>
+	Auch für die Fibonacci Zahlen gibt es eine Näherungsformel [6]:</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="images/FibonacciApproximation.png" style="margin-left: 10px; margin-right: 10px; width: 163px; height: 53px;" /></p>
+<p>
+	wobei</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="images/FibonacciPhi.png" style="margin-left: 10px; margin-right: 10px; width: 265px; height: 47px;" /></p>
+<p>
+	die <em>Goldene Zahl</em> ist.</p>
+<h3>
+	Results</h3>
+<p>
+	Hier sind meine Resultate:</p>
+<pre style="margin-left: 40px;">
+time iterative:           268ms
+time divide and conquer: 2418ms
+time dynamic programming:   3ms
+time lookup table:          3ms
+time approximation:        11ms</pre>
+<p>
+	Interessant ist hier die Dynamische Programmierung: sie ist super-schnell, aber sie hat die Eleganz des rekursiven Algorithmus, macht aber keine unnötigen Berechnungen so wie der Lookup Table Algorithmus, wo ja alles im Voraus berechnet werden muss.&nbsp; (Direkte Rekursion ist nicht dabei, weil sie zu lange dauert, das Buch muss ja irgendwann in den Druck).</p>
+<p>
+	.</p>
+<h2>
+	Exponential vs. Factorial Time</h2>
+<p>
+	Bisher haben wir uns eigentlich nur mit &quot;schnellen&quot; Algorithmen beschäftigt, also solchen deren Laufzeitverhalten O(n), O(log(n) oder O(1) waren.&nbsp; Jetzt wollen wir uns mal kurz mit Algorithmen beschäftigen, deren Laufzeitverhalten eher schlecht ist.&nbsp; Im nächsten Kapitel sehen wir welche mit O(n&sup2;) deswegen beschränken wir uns hier auf die mit exponentiellem Laufzeitverhalten oder noch schlimmer faktoriellem.</p>
+<p>
+	Im letzten Kapitel haben wir vier interessante rekursive Algorithmen kennen gelernt:</p>
+<ul>
+	<li>
+		Subsets,</li>
+	<li>
+		Combinationen,</li>
+	<li>
+		Permutationen</li>
+	<li>
+		und das Tower of Hanoi Problem.</li>
+</ul>
+<p>
+	Die Frage die wir hier beantworten wollen, wie ist ihr Laufzeitverhalten?&nbsp; Es gibt zwei Möglichkeiten das zu tun:</p>
+<ol>
+	<li>
+		den Code für verschieden große Inputs ausführen und die Zeit zu messen;</li>
+	<li>
+		eine asymptotische Analyse wie oben ausführen, in der man für verschiedene n zählt oder abschätzt wieviele Anweisungen notwendig sein werden.</li>
+</ol>
+<p>
+	Viel Spaß!</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/HowMany.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />How Many</h2>
+<p>
+	Bevor wir mit dieser Übung beginnen, sollten wir uns erst einmal ausrechnen wieviele Sekunden hat ein Tag, hat ein Jahr, macht ein durchschnttliches Menschenleben aus, und wie alt ist das Universum in Sekunden.</p>
+<p>
+	In der Übung geht es darum einfach mal die Werte der mathematischen Funktionen</p>
+<ul>
+	<li>
+		log(n)</li>
+	<li>
+		n</li>
+	<li>
+		n * log(n)</li>
+	<li>
+		n&sup2;</li>
+	<li>
+		2<sup>n</sup></li>
+	<li>
+		n!</li>
+</ul>
+<p>
+	für verschiedene <em>n</em> tabellarisch auszugeben. Dabei wollen wir uns aber auf die folgenden <em>n</em> beschränken: 2, 4, 8, 16, 32, 64, 128, 256, 512 und 1024.&nbsp; Das Ganze machen wir mit einem ConsoleProgram. (log(n) ist hier der Logarithmus zur Basis zwei).</p>
+<p>
+	Wenn wir jetzt einfach mal annehmen, dass die Zahlen in der Tabelle proportional zur Anzahl der CPU Zyklen sind, und ein CPU Zyklus typisch im 100 Nanosekunden (10<sup>-7</sup> Sekunden) Bereich liegt, können wir abschätzen wielange die entsprechenden Algorithmen benötigen würden um fertig zu werden.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/algorthmic_growth.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 225px; float: right;" />FunctionPlot</h2>
+<p>
+	Vielleicht noch besser als die tabellarische Darstellung ist die graphische. Die meiste Arbeit haben wir in der vorhergehenden Übung schon gemacht, jetzt geht es nur noch darum das in ein GraphicsProgram zu verpacken.&nbsp; Dabei lassen wir die x-Werte von 0.1 bis 40 variieren, berechnen die jeweiligen y-Werte für die verschiedenen Funktionen von oben, und zeichnen dieses.&nbsp; Z.B. die Methode die die lineare Funktion zeichnet, könnte wie folgt aussehen:</p>
+<pre style="margin-left: 40px;">
+private void plotLinear() {
+&nbsp;&nbsp; &nbsp;double x0 = 0;
+&nbsp;&nbsp; &nbsp;double y0 = SIZE;
+&nbsp;&nbsp; &nbsp;for (double x = 0; x &lt; SIZE; x++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double x1 = 0 + x * SCALE;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double y = (SIZE - x1 / SCALE);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (y &lt; 0)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x0, y0, x, y, Color.BLUE);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;x0 = x;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;y0 = y;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	dabei zeichnet die Methode <em>drawLine()</em> einfach eine GLine zwischen zwei Punkten:</p>
+<pre style="margin-left: 40px;">
+private void drawLine(double x0, double y0, double x, double y, Color col) {
+&nbsp;&nbsp; &nbsp;GLine line = new GLine(x0, y0, x, y);
+&nbsp;&nbsp; &nbsp;line.setColor(col);
+&nbsp;&nbsp; &nbsp;add(line);
+}</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/rabbits.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Lookup Table</h2>
+<p>
+	Wenn wir den Sinus einer Zahl berechnen wollen verwenden wir normalerweise die Taylorreihen Entwicklung [4]:</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="images/SineTaylorSeries.png" style="margin-left: 10px; margin-right: 10px; width: 269px; height: 48px;" /></p>
+<p>
+	wobei hier <em>x</em> im Bogenmaß ist.&nbsp;</p>
+<p>
+	Als erstes wollen wir eine Methode namens <em>sineTaylor(double x)</em> schreiben die den Sinus einer beliebigen Zahl mittels der Taylorreihen Entwicklung berechnet.&nbsp;</p>
+<p>
+	Als zweites, benutzen wir die in Java gegebenen Methode <em>Math.sin()</em> zum Vergleich, ob unsere Methode auch taugt.</p>
+<p>
+	Als drittes, verwenden wir Lookup-Tables, also Nachschlagetabellen.&nbsp; Dazu schreiben wir eine Methode <em>sineLookup(double x)</em>, die eine vorher berechnete Lookup-Table verwendet um den Sinus &quot;zu berechnen&quot;.&nbsp; Übrigens, moderne GPUs verwenden genau diesen Ansatz [5].</p>
+<p>
+	Jetzt ist die Frage, welcher der drei Ansätze ist der schnellste? Wir können hier auch wieder einfach Zeitmessungen machen, oder wir können eine algorithmische Analyse durchführen.&nbsp; Dieses mal machen wir ein Zeitmessung.</p>
+<h3>
+	Careful!</h3>
+<p>
+	Eine kurze Anmerkung: wenn man Performanztests macht, muss man immer sehr vorsichtig sein nicht einer Compiler-Optimierung zum Opfer zu fallen.&nbsp; Der Test könnte erst mal naiv so aussehen:</p>
+<pre style="margin-left: 40px;">
+long start = System.currentTimeMillis();
+for (int i = 0; i &lt; NR_OF_ITERATIONS; i++) {
+&nbsp;&nbsp; &nbsp;<span style="color:#ff0000;">int x = Math.sin(1.2);</span>
+}
+long duration = System.currentTimeMillis() - start;
+System.out.println(&quot;time Math.sin(): &quot; + duration);</pre>
+<p>
+	Ganz kritisch ist dabei was genau in der Schleife steht.&nbsp; Wenn wir das so schreiben wie oben, erkennt der Compiler nämlich dass <em>x</em> eine lokale Variable ist, und dass danach gar nichts mehr mit ihr passiert.&nbsp; D.h. er ist schlau genug zu wissen, dass er <em>x</em> gar nicht ausrechnen muss.&nbsp; Deswegen macht er es auch nicht.&nbsp;</p>
+<p>
+	Deswegen rüsten wir auf, und deklarieren x als Instanz- oder Klassenvariable:</p>
+<pre style="margin-left: 40px;">
+x = Math.sin(1.2);</pre>
+<p>
+	Jetzt kann der Compiler nicht wissen ob wir evtl. <em>x</em> irgendwo anders brauchen, und muss es daher ausrechnen. Aber der Compiler ist immer noch schlauer als wir: er sieht nämlich, dass 1.2 eine Konstante ist.&nbsp; Also warum soll er das denn zig-millionenmal ausrechnen, kommt ja doch immer dasselbe raus.&nbsp; Deswegen müssen wir noch einen drauflegen:</p>
+<pre style="margin-left: 40px;">
+x = Math.sin(Math.random());</pre>
+<p>
+	Erst jetzt kann man mit den Zeiten die rauskommen etwas anfangen.&nbsp; Und da stellt sich folgendes heraus:</p>
+<pre style="margin-left: 40px;">
+time Math.sin():   6473ms
+time sineTaylor(): 3324ms
+time sineLookup(): 2476ms  </pre>
+<p>
+	Unsere selbstgeschriebe <em>sineTaylor()</em> Methode ist ungefähr doppelt so schnell wie die Java native (unsere ist aber viel ungenauer) und die <em>sineLookup()</em> Methode ist noch mal 30% schneller, allerdings auch ungenauer.&nbsp; Man kann mit ein paar Tricks die Genauigkeit der Lookup Methode aber so erhöhen, dass es sich einfach nicht rentiert Taylor loszuschicken [5].</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	Diesem Kapitel war ziemlich anstrengend, deswegen wollen wir hier nicht ganz so viel forschen.</p>
+<p>
+	.</p>
+<h2>
+	Why is recursion so slow?</h2>
+<p>
+	Wenn wir unsere algorithmische Analyse z.B. für das Power Problem betrachten, wo wir ja die Iteration mit der Rekursion vergleichen, dann würde man naiv erwarten, dass die Rekursion etwa zweimal langsamer ist als die Iteration. In Wirklichkeit sieht der Unterschied eher wie ein Faktor Tausend aus. Warum ist das?&nbsp; Um der Sache auf die Spur zu kommen, müssen wir uns erkundigen was denn auf der Maschinesprach-Ebene alles passiert wenn eine Methode aufgerufen wird.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Kommt es bei Permutationen auf die Reihenfolge an?<br />
+		&nbsp;</li>
+	<li>
+		Geben Sie ein Beispiel für einen <em>Divide and Conquer</em> Algorithmus.<br />
+		&nbsp;</li>
+	<li>
+		Betrachten Sie den folgenden Code:<br />
+		<pre style="margin-left: 40px;">
+boolean search(List&lt;String&gt; names, String key) {
+    for (int i=0; i &lt; names.size(); i++) {
+        if (names[i] == key) return true;
+    }
+    return false;
+}</pre>
+		Wie ist sein Laufzeitverhalten im besten Fall, im schlimmsten Fall und was ist das durchschnittliche Laufzeitverhalten?<br />
+		&nbsp;</li>
+	<li>
+		Hat das &quot;Tower of Hanoi&quot; -Problem exponentielles oder faktorielles Laufzeitverhalten? Welches ist schlimmer? (Hinweis: Stirling&#39;s Formel)<br />
+		&nbsp;</li>
+	<li>
+		Algorithmen können präzise oder ungenau sein. Geben Sie ein Beispiel für einen ungenauen Algorithmus.<br />
+		&nbsp;</li>
+	<li>
+		Welche Art von asymptotischem Laufzeitverhalten (d.h. Big-O-Notation) hat der folgende Algorithmus?<br />
+		<pre style="margin-left: 40px;">
+double celsiusToFahrenheit(double temp) {
+    return temp*9.0/5.0 + 32;
+}</pre>
+	</li>
+	<li>
+		Geben Sie einen Algorithmus zur Schätzung der Anzahl der Personen in einem Fußballstadion, der von Ordnung O(log (n)) ist.<br />
+		&nbsp;</li>
+	<li>
+		Wann würden Sie einen Algorithmus als effizient bezeichnen?<br />
+		&nbsp;</li>
+	<li>
+		Schätzen Sie das Laufzeitverhalten (große O-Notation) für die folgenden Algorithmen:
+		<ul>
+			<li>
+				f(n) = 24*n + 14</li>
+			<li>
+				f(n) = 54333*n</li>
+			<li>
+				f(n) = 3*n&sup2; + 4<br />
+				&nbsp;</li>
+		</ul>
+	</li>
+	<li>
+		Betrachten Sie den folgenden Code.&nbsp; Nehmen Sie an, dass eine Anweisung ca. 1ms dauert.&nbsp; Geben Sie zunächst eine grobe Formel, um die Laufzeit in Bezug auf n zu abzuschätzen.&nbsp; Dann nehmen Sie an, dass n = 1000 ist und dass eine Anweisung ca. 1ms dauert.&nbsp; Wie lange dauert es bis die Methode fertig ist?<br />
+		<pre style="margin-left: 40px;">
+public void selectionSortFast(int[] arr) {
+	for (int i = 0; i &lt; arr.length - 1; i++) {
+		int minIndex = i;
+		for (int j = i + 1; j &lt; arr.length; j++) {
+			if (arr[j] &lt; arr[minIndex]) {
+				minIndex = j;
+			}
+		}
+	}
+}</pre>
+	</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Die Referenzen für dieses Kapitel sind etwas speziell.&nbsp; Es lohnt sich aber auf jeden Fall einen genaueren Blick auf das Buch von Bruno R. Preiss [7] zu werfen.</p>
+<p>
+	[1] Stirling&#39;s approximation, <a href="https://en.wikipedia.org/wiki/Stirling's_approximation">https://en.wikipedia.org/wiki/Stirling&#39;s_approximation</a></p>
+<p>
+	[2] Dynamic programming, <a href="https://en.wikipedia.org/wiki/Dynamic_programming">https://en.wikipedia.org/wiki/Dynamic_programming</a></p>
+<p>
+	[3] Wikibook Algorithms, R.Impagliazzo, Ma.Shonle, M.Wilson, M.Krischik, <a href="https://en.wikibooks.org/wiki/Algorithms/Dynamic_Programming">https://en.wikibooks.org/wiki/Algorithms/Dynamic_Programming</a></p>
+<p>
+	[4] Sine, <a href="https://en.wikipedia.org/wiki/Sine">https://en.wikipedia.org/wiki/Sine</a></p>
+<p>
+	[5] Nvidia, Cg 3.1 Toolkit Documentation, <a href="http://http.developer.nvidia.com/Cg/sin.html">http://http.developer.nvidia.com/Cg/sin.html</a></p>
+<p>
+	[6] Fibonacci number, <a href="https://en.wikipedia.org/wiki/Fibonacci_number">https://en.wikipedia.org/wiki/Fibonacci_number</a></p>
+<p>
+	[7] Data Structures and Algorithms, Bruno R. Preiss, <a href="https://www.brpreiss.com/books/opus4/html/page457.html">https://www.brpreiss.com/books/opus4/html/page457.html</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

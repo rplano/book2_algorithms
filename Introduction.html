@@ -1,0 +1,644 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+		<p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+		<li><a href="Introduction.html" class="active">Introduction</a></li>
+		<li><a href="Lists.html">Lists</a></li>
+		<li><a href="Maps.html">Maps</a></li>
+		<li><a href="Recursion.html">Recursion</a></li>
+		<li><a href="Algorithms.html">Algorithms</a></li>
+		<li><a href="Sorting.html">Sorting</a></li>
+		<li><a href="Trees.html">Trees</a></li>
+		<li><a href="Graphs.html">Graphs</a></li>
+		<li><a href="Text.html">Text</a></li>
+		<li><a href="Techniques.html">Techniques</a></li>
+	  </ul>	
+<div class="content"><p>
+	<img src="images/Pi2.png" style="display: block; margin-left: auto; margin-right: auto; width: 221px; height: 211px;" /></p>
+<h1>
+	Introduction</h1>
+<p>
+	Algorithmen sind überall.&nbsp; Algorithmen bestimmen unser tägliches Leben.&nbsp; Beim Zusammenbauen von IKEA Möbeln, beim Backen eines Kuchens oder beim Spielen mit Lego folgen wir einem Algorithmus.&nbsp; Hinter selbstfahrenden Autos, Gesichtserkennung und Fingerabdrucksensoren stecken Algorithmen.&nbsp; Die Verschlüsselung, die künstlichen Intelligenz und auch die moderne Genetik verwenden Algorithmen.&nbsp; Es gibt Algorithmen die sind sehr alt, es gibt Algorithmen die sind sehr schön.&nbsp; Algorithmen können trivial sein, aber es gibt auch sehr komplexe Algorithmen.&nbsp; Es gibt sogar Algorithmen die produzieren Kunst.&nbsp; Auf den folgenden Seiten wollen wir uns ein wenig mit der Welt der Algorithmen vertraut machen, und wir beginnen ganz einfach.</p>
+<p>
+	.</p>
+<h2>
+	Introduction</h2>
+<p>
+	Das Wort Algorithmus ist eigentlich die latinisierte Version des Nachnamens des persischen Mathematikers Abu Dscha&#39;far Muhammad ibn Musa al-Chwarizmi (ca. 780 - ca. 850).&nbsp; Er ist u.a. verantwortlich für die Verbreitung des indischen Zahlensystems, einschließlich der Zahl Null.&nbsp; Er hat auch das Buch &quot;Das kurzgefasste Buch über die Rechenverfahren durch Ergänzen und Ausgleichen&quot; geschrieben, welches allgemein als Beginn der Algebra angesehen wird [3].</p>
+<p>
+	Laut Wikipedia ist ein Algorithmus eine effektive Methode etwas innerhalb einer begrenzten Zeit und mit begrenztem Raum zu berechnen, das man in einer wohl definierten Sprache ausdrücken kann.&nbsp; Diese Sprache beschreibt wie man von einem Anfangszustand, mit einer begrenzte Anzahl von Schritten, über wohl-definierte Zwischenzustände, schließlich einen finalen Endzustand erreicht [2].&nbsp;</p>
+<p>
+	Schauen wir uns einfach mal ein paar Beispiele an.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Pi2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 191px; float: right;" />Pi</h2>
+<p>
+	Es gibt viele Arten die Kreiszahl Pi auszurechnen, aber die einfachste ist wahrscheinlich die grafische: Wir zeichnen einfach ein Quadrat, und darin einen Viertelkreis.&nbsp; Dann malen wir einfach zufällig Punkte, möglichst gleichmäßig. Wir zählen die Punkte die innerhalb des Viertelkreises liegen, also <em>n_innerhalb = 18</em>, und die Gesamtzahl der Punkte, also <em>n_gesamt =28</em>.&nbsp; Pi ist dann einfach</p>
+<pre style="margin-left: 40px;">
+Pi = 4 * n_innerhalb / n_gesamt = 2.6</pre>
+<p>
+	Das ist jetzt nicht sehr genau, grob stimmt das aber.&nbsp; Wenn wir nämlich ganz viele Punkte machen, und die Punkte auch wirklich zufällig verteilt sind, dann kommt da wirklich Pi raus.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/b63f8aaa-c348-42b5-b144-eb5784d499a0.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 226px; float: right;" />Longest Common Substring</h2>
+<p>
+	DNA-Analyse hört sich jetzt an wie wenn es etwas super-kompliziertes wäre.&nbsp; Teilweise ist es das natürlich auch, speziell bis zu dem Schritt wo man die Buchstaben, also die Reihenfolge der Aminosäuren, hat.&nbsp; Hat man die aber, dann ist es ganz einfach.&nbsp; Nehmen wir an Bart&#39;s DNA sieht so aus:</p>
+<pre style="margin-left: 40px;">
+Bart = &quot;GTTCCTAATA&quot;</pre>
+<p>
+	und die von Homer so</p>
+<pre style="margin-left: 40px;">
+Homer = &quot;CGATAATTGAGA&quot;.</pre>
+<p>
+	Alles was man dann machen muss, um z.B. festzustellen ob Bart wirklich Homer&#39;s Sohn ist, die beiden DNA Sequenzen entlang der X- und Y-Achsen auf einem karierten Papier aufzutragen, und die Stellen an denen beide übereinstimmen, markiert man einfach mit einem Kreuzchen.&nbsp; Wenn man sich das dann ansieht findet man Kreuzchen die sich zu einer Diagonale verbinden.&nbsp; Je länger die Diagonelen, desto mehr Übereinstimmung zwischen den beiden DNAs [4].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/EuclidGraphics.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 106px; float: right;" />Greatest Common Divisor (GCD)</h2>
+<p>
+	Einer der ältesten Algorithmen der immer noch benutzt wird, stammt von Euclid [5].&nbsp; Er beschreibt wie man den größten gemeinsamen Teiler zweier Zahlen findet.&nbsp; Die Anleitung wie man das macht, also der Algorithmus geht wie folgt:</p>
+<ol>
+	<li>
+		ziehe die kleinere Zahl von der größeren solange ab, bis es nicht mehr geht;</li>
+	<li>
+		ist die Zahl die übrig bleibt null sind wir fertig, die kleinere Zahl ist der größte gemeinsame Teiler;</li>
+	<li>
+		falls die Zahl nicht null ist, dann machen wir aus der übrig gebliebenen Zahl die kleine Zahl und aus der kleinen Zahl die große und beginnen von vorne.</li>
+</ol>
+<p>
+	Am besten probiert man das einfach mal mit einem Beispiel aus: nehmen wir an die große Zahl ist 299, und die kleine Zahl ist 115. Verkürzt ergeben sich dann folgende Schritte:</p>
+<pre style="margin-left: 40px;">
+299 = 115*2 + 69
+115 = 69*1 + 46
+ 69 = 46*1 + 23
+ 46 = 23*2 + 0</pre>
+<p>
+	Das bedeutet, dass 23 der größte gemeinsame Teiler von 299 und 115 ist.</p>
+<p>
+	Der Algorithmus hört sich ausgeschrieben etwas kompliziert an, aber wenn man ihn in Java übersetzt, dann ist er verblüffend einfach:</p>
+<pre style="margin-left: 40px;">
+private int gcd(int a, int b) {
+&nbsp;&nbsp;&nbsp; while (b != 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (a &gt; b)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a = a - b;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b = b - a;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return a;
+}</pre>
+<p>
+	Der Algorithmus lässt sich übrigens auch sehr schön visualisieren.</p>
+<p>
+	.</p>
+<h2>
+	Counting People</h2>
+<p>
+	Wohl noch älter als Euclid&#39;s Algorithmus ist das Zählen.&nbsp; Man sollte meinen das ist ja eigentlich eine ganz einfach Angelegenheit.&nbsp; Aber sobald es sich um größere Mengen handelt wird es schon etwas schwieriger: wie zählt man denn die Anzahl der Zuschauer in einem etwas größeren Fußballstadium?</p>
+<p>
+	Wir könnten die Leute zählen wie sie ins Stadium kommen, einen nach dem anderen.&nbsp; Oder wir könnten einfach durchzählen lassen, wobei das in einem Stadium nicht ganz so einfach ist.&nbsp; Wir könnten auch ein Foto machen, und dann könnte einer die Leute auf dem Foto zählen.&nbsp; Auf die Art und Weise würden wir die genaue Anzahl der Leute wissen, solange wir uns nicht verzählen.&nbsp; Interessant ist die Frage wie lange das dauert: Nehmen wir an wir haben 20000 Leute im Stadium, und das Zählen einer Person dauert eine Sekunde.&nbsp; Dann dauert es knapp sechs Stunden bis wir fertig sind!&nbsp; Bis wir also fertig mit dem Zählen sind, ist das Spiel schon vorbei.</p>
+<p>
+	Stellt sich die Frage, geht das auch schneller? Wir könnten das Zählen &quot;parallelisiseren&quot;: wenn unser Stadium sechs Eingänge hätte, und wir würden an jedem Eingang zählen, dann würde es nur ein sechstel der Zeit in Anspruch nehmen.&nbsp; Wir wären also in einer Stunde fertig.&nbsp; Wenn wir 20000 Eingänge hätten, dann würde das Ganze nur eine Sekunde dauern!</p>
+<p>
+	Gibt es weitere Möglichkeiten Leute in einem Stadium zu zählen?&nbsp; Interessanterweise sehr viele.&nbsp; Vor allem wenn wir nur eine ungefähre Anzahl benötigen.&nbsp; Wir könnten z.B. durch den Stadiumsprecher bitten, dass die Leute deren Nachnahme mit &#39;A&#39; losgeht aufstehen sollen.&nbsp; Die zählen wir dann und multiplizieren die Zahl mit 26. Schon 26 mal schneller.&nbsp; Wir könnten uns auch einen kleinen Teil des Stadiums suchen, von dem wir wissen wieviele Sitzplätze es dort gibt.&nbsp; Dann zählen wir wieviel Prozent der Sitzplätze dort besetzt sind.&nbsp; Wenn wir annehmen, dass im Schnitt die Leute gleichmässig verteilt sind, können wir damit ausrechnen wieviele Leute ungefähr im Stadium sind.&nbsp; Wir könnten auch alle Sitze weiß anmalen, und den Leuten beim Eintritt rote Mützen geben.&nbsp; Dann machen wir ein Foto und messen einfach wie rot das Bild ist.&nbsp; Je roter desto mehr Leute.&nbsp; Oder wir fragen jemanden der sich mit Menschenmassen auskennt und wenn der dann sagt, &quot;Oh, ich denke das sind so 20000&quot;, dann wäre das auch eine Möglichkeit zu zählen, aber eben nur eine Schätzung.</p>
+<p>
+	Worauf wir hinaus wollen: Sehr häufig gibt es mehr als nur einen Weg ein Problem zu lösen.&nbsp; Dabei sind manche Wege schneller als andere, andere sind dafür wieder genauer.&nbsp; Wenn wir also nach einem Algorithmus suchen, dann müssen wir zunächst entscheiden was uns wichtig ist, damit wir dann den passenden Algorithmus wählen können.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/gameOfLife.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />GameOfLife</h2>
+<p>
+	Das größte Genie des letzten Jahrhunderts, John von Neumann, versuchte eine hypothetische Maschine zu konstruieren, die Kopien von sich selbst anfertigen konnte.&nbsp; Dies gelang ihm auch, allerdings hatte das mathematische Modell seiner Maschine sehr komplizierte Regeln.&nbsp; Dem britischen Mathematiker John Horton Conway schaffte es anfang der 70er von Neumann&#39;s Ideen drastisch zu vereinfachen, heute bekannt unter dem Namen Conway&#39;s <em>Game of Life</em> [6].</p>
+<p>
+	Das Universum des Spiel des Lebens ist ein zweidimensionales Gitter aus quadratischen Zellen (GRects), von denen jede in einer von zwei möglichen Zuständen sein kann: lebend (schwarz) oder tot (weiß).&nbsp; Jede Zelle hat acht Nachbarn, und abhängig vom Zustand der Nachbarn entscheidet sich der eigene Zustand in der nächsten Runde nach folgenden Regeln:</p>
+<ul>
+	<li>
+		jede lebende Zelle mit weniger als zwei lebenden Nachbarn stirbt (Unter-Bevölkerung)</li>
+	<li>
+		jede lebende Zelle mit zwei oder drei lebenden Nachbarn lebt</li>
+	<li>
+		jede lebende Zelle mit mehr als drei lebenden Nachbarn stirbt (Über-Bevölkerung)</li>
+	<li>
+		jede tote Zelle mit genau drei lebenden Nachbarn wird eine lebende Zelle (Fortpflanzung)</li>
+</ul>
+<p>
+	Das Resultat dieser einfachen Regeln ist durchaus überraschend.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	In der Einführung haben wir uns ein paar einfache, teilweise sehr alte Algorithmen angesehen.&nbsp; Wir haben auch gesehen, dass es Algorithmen gibt die&nbsp; nützlich sind und andere die nur eine Spielerei sind.&nbsp; Es gibt Algorithmen die schnell sind, und es gibt welche die langsam sind.&nbsp; Es gibt genaue und ungenaue Algorithmen.&nbsp; Und meistens gibt es mehr als einen Algorithmus ein bestimmtes Problem zu lösen.&nbsp; Das Wichtigste was allerdings hoffentlich rüberkommt: Algorithms are fun!</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	Algorithmen sind so alt wie die Menschheit. Im Prinzip sind es einfach Kochrezepte, und genau wie diese sind die meisten Algorithmen auch intuitiv.&nbsp; Womit wir uns manchmal etwas schwer tun, ist sie dem Computer beizubringen.&nbsp; Aber wie mit allem, Übung macht den Meister.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/EuclidSimple.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />EuclidSimple</h2>
+<p>
+	Wir beginnen mit der einfach Version, einem ConsoleProgram.&nbsp; Wir fragen den Nutzer nach zwei Zahlen,</p>
+<pre style="margin-left: 40px;">
+int a = readInt(&quot;Enter width (e.g. 299): &quot;);
+int b = readInt(&quot;Enter height (e.g. 115): &quot;);
+println( gcd(a, b) );</pre>
+<p>
+	und berechnen dann mit der Methode <em>gcd()</em> von oben den größten gemeinsamen Teiler.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/EuclidGraphics.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 106px; float: right;" />EuclidGraphics</h2>
+<p>
+	Als nächstes wollen wir den Euclidschen Algorithmus visualisieren.&nbsp; Dazu verwenden wir ein GraphicsProgram.&nbsp; Zunächst fragne wir wieder den Nutzer nach zwei Zahlen.&nbsp; Da es sich um ein GraphicsProgram handelt, verwenden wir die Klasse <em>IODialog</em>,</p>
+<pre style="margin-left: 40px;">
+IODialog dialog = getDialog();
+int w = dialog.readInt(&quot;Enter width (e.g. 299): &quot;);
+int h = dialog.readInt(&quot;Enter height (e.g. 115): &quot;);
+int x = gcd(w, h);</pre>
+<p>
+	Mit dieser Klasse kann man auch Dinge ausgeben, z.B. mittels</p>
+<pre style="margin-left: 40px;">
+dialog.println(&quot;GCD is:&quot; + x);</pre>
+<p>
+	Der Algorithmus selbst bleibt fast identisch</p>
+<pre style="margin-left: 40px;">
+private int gcd(int a, int b) {
+&nbsp;&nbsp; &nbsp;while (b != 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (a &gt; b) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;a = a - b;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">drawRect(a, 0, b, b)</span>;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;b = b - a;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">drawRect(0, b, a, a)</span>;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pause(1000);
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return a;
+}</pre>
+<p>
+	Wir müssen lediglich noch die Methode <em>drawRect()</em> implementieren. Die zeichnet einfach ein GRect mit zufälliger Farbe an den vorgegebenen Koordinaten:</p>
+<pre style="margin-left: 40px;">
+private void drawRect(int a, int b, int w, int h) {
+&nbsp;&nbsp; &nbsp;GRect rect = new GRect(a, b, w, h);
+&nbsp;&nbsp; &nbsp;rect.setFilled(true);
+&nbsp;&nbsp; &nbsp;rect.setFillColor(rgen.nextColor());
+&nbsp;&nbsp; &nbsp;add(rect);
+}</pre>
+<p>
+	Gar nicht so schwer.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Pi.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />Pi</h2>
+<p>
+	Wie bereits angedeutet kann Pi einfach durch das Zeichnen von Punkten ermitteln. Das mag zwar nicht die schnellste Methode sein, sie lässt sich aber am einfachsten visualisieren.&nbsp; Wir schreiben ein GraphicsProgram mit drei Instanzvariablen:</p>
+<pre style="margin-left: 40px;">
+private RandomGenerator rgen = RandomGenerator.getInstance();
+private int totalPoints = 0;
+private int insidePoints = 0;</pre>
+<p>
+	einen Zufallszahlengenerator, und zwei Zählern, einen für die Gesamtzahl der Punkte und einen für die Punkte die innerhalb des Viertelkreises liegen.&nbsp; In der <em>run()</em> Methode zeichnen wir dann jeweils einen Punkt, und berechnen nach jedem Mal Pi und geben es auf der Konsole aus:</p>
+<pre style="margin-left: 40px;">
+while (true) {
+&nbsp;&nbsp; &nbsp;drawRandomPoint();
+&nbsp;&nbsp; &nbsp;double pi = 4.0 * insidePoints / totalPoints;
+&nbsp;&nbsp; &nbsp;System.out.println( &quot;Pi = &quot; + pi );
+}</pre>
+<p>
+	Die <em>drawRandomPoint()</em> Methode macht auch nicht besonders viel:</p>
+<pre style="margin-left: 40px;">
+private void drawRandomPoint() {
+&nbsp;&nbsp; &nbsp;double x = rgen.nextDouble();
+&nbsp;&nbsp; &nbsp;double y = rgen.nextDouble();
+&nbsp;&nbsp; &nbsp;totalPoints++;
+&nbsp;&nbsp; &nbsp;GRect point = new GRect(x*SIZE,SIZE-y*SIZE, 1,1);
+&nbsp;&nbsp; &nbsp;if ( <span style="color:#0000ff;">( x*x+y*y ) &lt; 1.0</span> ) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;insidePoints++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;point.setColor( Color.RED );&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;point.setColor( Color.BLUE );&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;add( point );
+}</pre>
+<p>
+	Wir holen uns zwei zufällige Werte, x und y, erhöhen unseren Punktezähler und generieren ein Punkt Objekt.&nbsp; Da es in der ACM Library keine Punkte gibt, nehmen wir einfach ein GRect, das eine Höhe und Breite von je eins hat.&nbsp; Geht auch.&nbsp; Der Trick ist, wie weiss ich ob ein Punkt nun innerhalb oder außerhalb des Viertelkreises ist?&nbsp; Falls wir das vergessen haben, schlagen wir das schnell in einem alten Mathebuch nach: Alle Punkte bei denen</p>
+<pre style="margin-left: 40px;">
+( x*x + y*y ) &lt; 1.0</pre>
+<p>
+	die sind innerhalb des Kreises.&nbsp; Und die malen wir rot an, die anderen blau. Funktioniert ganz gut.&nbsp; Falls man mehr über Pi wissen möchte, kann man sich das Buch eines Kollegen kaufen [7].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Lehmer.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Lehmer</h2>
+<p>
+	Wie wir gerade gesehen haben können Zufallszahlen ganz praktisch sein.&nbsp; Auch letztes Semester haben wir schon häufiger einen Zufallszahlengenerator, den <em>RandomGenerator</em>, verwendet.&nbsp; Nur wie funktioniert der, wo kommen denn die Zufallszahlen her?</p>
+<p>
+	Wenn man Glück hat, kommen die aus der Natur.&nbsp; Ein Computer hat jetzt aber recht wenig mit Natur zu tun, und für einen Computer ist es überraschend schwer an gute Zufallszahlen heranzukommen.&nbsp; Aber Gott sei Dank gab es den Herrn Lehmer und der hat sich da was überlegt, den Lehmer Algorithmus [8]:</p>
+<pre style="margin-left: 40px;">
+X_i+1 = ( a * X_i + c ) % m
+</pre>
+<p>
+	dabei ist &#39;%&#39; unser Freund der Modulo Operator.&nbsp; Der Lehmer Algorithmus erzeugt Pseudo-Zufallszahlen zwischen 0 und m-1, die linear kongruent sind, also gleichmäßig verteilt.&nbsp; Die Konstanten a, c und m müssen zwei Bedingungen erfüllen</p>
+<pre style="margin-left: 40px;">
+2 &lt;= a &lt; m&nbsp;   und    0 &lt;= c &lt; m
+</pre>
+<p>
+	z.B., a=13, c=1, und m=16.&nbsp; Das erste x, also x_0, kann beliebig sein, idealerweise aber auch kleiner als m.&nbsp; Man nennt dieses erste x auch das <em>Seed</em>.</p>
+<p>
+	Wenn wir den Algorithmus in Java übersetzen</p>
+<pre style="margin-left: 40px;">
+int a = 13;
+int c = 1;
+int m = 16;
+int x = 3;
+
+for (int i = 0; i &lt; 20; i++) {
+&nbsp;&nbsp; &nbsp;print(x + &quot;,&quot;);
+&nbsp;&nbsp; &nbsp;x = (a * x + c) % m;
+}
+</pre>
+<p>
+	und mal ausprobieren, dann stellen wir etwas interessantes fest: die Zahlen wiederholen sich!&nbsp; Und zwar nach m Schritten.&nbsp; Das ist der Grund warum diese Zahlen auch Pseudo-Zufallszahlen nennt.&nbsp; Es stellt sich heraus, dass alle im Computer durch Algorithmen erzeugten Zufallszahlen immer Pseudo-Zufallszahlen sind.</p>
+<p>
+	Kann man da was machen? Nein.&nbsp; Aber durch geschickte Wahl der Konstanten a, c und m kann man das Ganze erträglich machen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Randomness.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />Randomness</h2>
+<p>
+	Was ist denn ein geschickte Wahl für der Konstanten a, c und m? Man kann jetzt Mathematik studieren (durchaus empfohlen) oder man liest in schlauen Büchern nach [9].&nbsp; Wenn man relativ gute Pseudo-Zufallszahlen auf einem 32 bit Computer erzeugen will, dann sind folgende gute Werte:</p>
+<ul>
+	<li>
+		wenn man für <em>m</em> eine Primzahl wählt, dann kann man <em>c = 0</em> setzen;</li>
+	<li>
+		die Primzahl <em>m</em> sollte möglichst groß sein, und wir haben Glück: <em>2^31 - 1</em> ist eine Primzahl;</li>
+	<li>
+		und die Mathematiker erzählen uns, dass <em>a = 7*7*7*7*7 = 16807</em> eine gute Wahl für <em>a</em> ist.</li>
+</ul>
+<p>
+	Diese Wahl nennt man auch den &quot;Minimal Standard Random Number Generator&quot;.&nbsp;</p>
+<p>
+	Schauen wir mal ob er was taugt, also ob er gut genug ist.&nbsp; Es stellt sich nämlich heraus, dass unser Auge relativ gut erkennen kann ob etwas zufällig ist oder nicht.&nbsp; Es braucht nur ein klein bischen Unterstützung. Als erstes implementiern wir unseren Lehmer Algorithmus, oder genauer den &quot;Minimal Standard Random Number Generator&quot; in Java:</p>
+<pre style="margin-left: 40px;">
+private long <span style="color:#0000ff;">a = 7 * 7;</span>  // * 7 * 7 * 7; // use 7 or 7*7
+private long m = 2147483647L;
+private long x = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;
+public int nextInt() {
+&nbsp;&nbsp; &nbsp;x = a * x % m;
+&nbsp;&nbsp; &nbsp;return (int) x;
+}</pre>
+<p>
+	Für unsere Seed <em>x</em> verwenden wir einfach die Uhrzeit, damit bekommen wir jedes mal andere Zufallszahlen.&nbsp; Macht man echt so.&nbsp; Ist auch der Grund warum die NSA so einfach unsere Verschlüsselungen knacken kann.</p>
+<p>
+	Die Methode <em>nextInt()</em> erzeugt Zufallszahlen zwischen 1 und 2^31 (-2).&nbsp; Wir benötigen aber sehr häufig Zahlen zwischen 0 und einer Obergrenze <em>n</em>:</p>
+<pre style="margin-left: 40px;">
+public int nextInt(int n) {
+&nbsp;&nbsp;&nbsp; int z = nextInt();
+&nbsp;&nbsp;&nbsp; return (int) (z % n);
+}</pre>
+<p>
+	und da ist er wieder unser Freund der Modulo Operator.&nbsp;</p>
+<p>
+	Kommen wir zum Auge. Dafür schreiben wir ein GraphicsProgram in dessen <em>run()</em> Methode wir ein paar zufällige Punkte malen:</p>
+<pre style="margin-left: 40px;">
+for (int i = 0; i &lt; 10000; i++) {
+&nbsp;&nbsp; &nbsp;int x = nextInt(SIZE);
+&nbsp;&nbsp; &nbsp;int y = nextInt(SIZE);
+&nbsp;&nbsp; &nbsp;setPixel(x, y, Color.RED);
+}</pre>
+<p>
+	wobei <em>setPixel()</em> wieder wie oben beim Project Pi ein GRect mit einem Pixel Höhe und Breite malt.</p>
+<p>
+	Wenn wir uns das Resultat ansehen, und <em>a</em> auf den Wert 7*7 gesetzten haben, dann sehen wir rote Streifen!&nbsp; Unser Auge sagt uns, das sind keine guten Zufallszahlen.&nbsp; Wählen wir aber für <em>a</em> den&nbsp; Wert den uns die Mathematiker nahelegen, also 7*7*7*7*7, dann können wir keine Streifen mehr erkennen.&nbsp; Keine Streifen, oder irgendwelche Muster im Allgemeinen, sind ein Zeichen für einen guten Zufallszahlengenerator.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/CreditCard.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />CreditCard</h2>
+<p>
+	Wie weiss man ob man sich vertippt hat?&nbsp; Dafür gibt es Prüfsummen (checksum).&nbsp; Ein Beispiel ist der Luhn-Algorithmus, von dem deutsch-amerikanischen Informatiker Hans Peter Luhn [10], der z.B. bei Kreditkarten verwendet wird.&nbsp;</p>
+<p>
+	Eine Kreditkarte besteht aus 16 Zahlen.&nbsp; Dabei sind die ersten 15 die eigentliche Nummer, die letzte Zahl ist aber die sogenannte Prüfziffer.&nbsp; Wie funktioniert der Luhn-Algorithmus?</p>
+<ul>
+	<li>
+		Erst mal wird jede zweite Ziffer verdoppelt, beginnend bei der zweiten von rechts. wenn dieses Resultat größer als neun ist, wird neun abgezogen;</li>
+	<li>
+		dann werden alle Ziffern aufaddiert, also sowohl die nicht verdoppelten als auch die verdoppelten, wenn diese Summe modulo 10 die Null ergibt, ist alles in Ordnung.</li>
+</ul>
+<p>
+	Eine Implementierung in Java sieht wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+private boolean checkCreditCardNumber(String creditNumber) {
+&nbsp;&nbsp; &nbsp;int sum = 0;
+&nbsp;&nbsp; &nbsp;int len = creditNumber.length();
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; len; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int x = creditNumber.charAt(i) - &#39;0&#39;; // turn char in to int
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int y = x * (2 - (i + len) % 2);      // multiply by two every other 
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (y &gt; 9) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;y -= 9;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;sum += y;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return sum % 10 == 0;
+}</pre>
+<p>
+	Es ist interessant zu sehen wie die Anforderung &quot;die zweite Ziffer von rechts verdoppeln&quot; umgesetzt wurde:</p>
+<pre style="margin-left: 40px;">
+int y = x * (2 - (i + len) % 2);</pre>
+<p>
+	Das muss man einfach mal auf Papier ausprobiern, und dann sieht man, dass das anscheinend funktioniert.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ISBN.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />ISBN</h2>
+<p>
+	Ähnlich wie bei Kreditkarten gibt es auch bei Büchern die Internationale Standardbuchnummer (ISBN) anhand der man Bücher eindeutig identifizieren kann [11].&nbsp; Auch bei dieser Nummer gibt ist die letzte Ziffer eine Prüfziffer.&nbsp; Der Algorithmus ist sogar noch einfacher als bei den Kreditkarten:</p>
+<ul>
+	<li>
+		addiere jede Ziffer multipliziert mit ihrer Position;</li>
+	<li>
+		wenn das Resultat modulo 11 die Null ergibt stimmt die Nummer.</li>
+</ul>
+<p>
+	&nbsp;</p>
+<p>
+	In Java wird daraus:</p>
+<pre style="margin-left: 40px;">
+char[] arr = isbnNumber.toCharArray();
+for (int i = 0; i &lt; 9; i++) {
+&nbsp;&nbsp; &nbsp;t = arr[i] - &#39;0&#39;;
+&nbsp;&nbsp; &nbsp;s += t * (i + 1);
+}</pre>
+<p>
+	Eine kleine Ausnahme gibt es: die Prüfziffer könnte eine 10 sein, dann macht man einfach ein &#39;X&#39; daraus, also 111111112X:</p>
+<pre style="margin-left: 40px;">
+if (arr[9] == &#39;X&#39;) {
+&nbsp;&nbsp; &nbsp;s += 10 * 10;
+} else {
+&nbsp;&nbsp; &nbsp;t = arr[9] - &#39;0&#39;;
+&nbsp;&nbsp; &nbsp;s += t * 10;
+}
+
+if (s % 11 == 0) { ... }</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Benford.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Benford&#39;s Law</h2>
+<p>
+	Gerade haben wir gesehen wie man feststellen kann ob in Kreditkarten- oder ISBN Nummern ein Fehler ist.&nbsp; Dafür verwendet man einen Algorithmus.&nbsp; Kann man aber auch in anderen Daten Fehler finden?&nbsp; Ein interessantes Beispiel dafür ist das Benfordsche Gesetz [12].&nbsp; Eigentlich hat es zuerst ein Herr Newcomb entdeckt, und deswegen nennt man es auch manchmal <em>Newcomb-Benford&rsquo;s Law</em>.&nbsp;</p>
+<p>
+	Es geht darum, dass es in empirischen Daten eine überraschende Regelmäßigkeit gibt mit der gewisse Ziffern auftreten, speziell die erste Ziffer.&nbsp; Naiv würde man erwarten, dass alle Ziffern gleich oft dran kommen, und für zufällig verteilte Daten ist das auch der Fall.&nbsp; Aber eben nicht für die meisten empirischen Daten.&nbsp; Die folgen nämlich sehr häufig der folgenden Verteilung:</p>
+<pre style="margin-left: 40px;">
+&#39;1&#39;&nbsp;&nbsp; &nbsp;30,1 %
+&#39;2&#39;&nbsp;&nbsp; &nbsp;17,6 %
+&#39;3&#39;&nbsp;&nbsp; &nbsp;12,5 %
+&#39;4&#39;&nbsp;&nbsp; &nbsp; 9,7 %
+&#39;5&#39;&nbsp;&nbsp; &nbsp; 7,9 %
+&#39;6&#39;&nbsp;&nbsp; &nbsp; 6,7 %
+&#39;7&#39;&nbsp;&nbsp; &nbsp; 5,8 %
+&#39;8&#39;&nbsp;&nbsp; &nbsp; 5,1 %
+&#39;9&#39;&nbsp;&nbsp; &nbsp; 4,6 %</pre>
+<p>
+	(Quelle [12]).&nbsp; D.h. 30 Prozent aller Zahlen in einem empirischen Datensatz beginnen mit der Ziffer &#39;1&#39;.&nbsp; Steuerfahnder verwenden diese Gesetzmäßigkeit um Steuerbetrug aufzudecken, und auch Wahlbetrug ist schon auf diese Art und Weise entlarvt worden.</p>
+<p>
+	Im letzten Semester hatte wir schon einmal mit empirischen Daten zu tun und das waren Aktienkurse.&nbsp; Im Prinzip können wir die Klasse <em>StockDataBase</em> unverändert verwenden.&nbsp; Dann sind in der <em>stockDB</em> HashMap die ganzen Aktienkurse gespeichert.&nbsp; Die gehen wir dann einen nach dem anderen durch und zählen wie häufig sie mit einer bestimmten Ziffer beginnen.&nbsp; Das Zählen machen wir in dem Array <em>counts</em>.</p>
+<pre style="margin-left: 40px;">
+public double[] analyze() {
+&nbsp;&nbsp; &nbsp;double total = 0;
+&nbsp;&nbsp; &nbsp;double[] counts = new double[10];
+&nbsp;&nbsp; &nbsp;for (String stock : stockDB.keySet()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;StockEntry ent = stockDB.get(stock);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;List&lt;Double&gt; prices = ent.getPrices();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; prices.size(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double price = prices.get(i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char c = String.valueOf(price).charAt(0);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (Character.isDigit(c)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;counts[c - &#39;0&#39;]++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;total++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return counts;
+}</pre>
+<p>
+	Danach sollten wir noch die Daten in Prozent umrechnen, damit wir sie mit dem Benfordsche Gesetz vergleichen können.&nbsp; Und interessanterweise scheinen auch Aktienkurse grob dem Benfordsche Gesetz zu folgen.&nbsp; Ob der Unterschied vielleicht auf Insider-Trading hindeutet?</p>
+<p>
+	Das Benfordsche Gesetz ist natürlich kein Algorithmus.&nbsp; Deswegen stellt sich natürlich die Frage gehört das in dieses Buch.&nbsp; Die Frage darf jeder für sich selbst beantworten.&nbsp; Auf den Webseiten zum Buch von Sedgewick und Wayne finden sich noch eine ganze Menge anderer Datensätze über die man ähnliche Analysen laufen lassen könnte [13].</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/mandelBrot.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />Mandelbrot</h2>
+<p>
+	Die Apfelmännchen sind nach dem französischen Mathematiker Benoît Mandelbrot benannt.&nbsp; Es handelt sich dabei um sogenannte Fraktale, aber die meisten Leute finden sie einfach nur hübsch [14].&nbsp;</p>
+<p>
+	Die mathematische Gleichung die hinter der Mandelbrot Menge liegt ist sehr einfach:</p>
+<pre>
+    z_n+1 = z_n * z_n + c</pre>
+<p>
+	dabei sind <em>z</em> und <em>c</em> komplexe Zahlen.&nbsp; Es handelt sich hier um eine Iteration, d.h. wenn wir <em>z_n</em> kennen, dann können wir <em>z_n+1</em> ausrechnen.&nbsp; Die Anfangsbedingungen lauten, dass <em>z_0</em> gleich null sein soll und <em>c</em> ist der Punkt in der komplexen Ebene für den die Farbe ausgerechnet werden soll.&nbsp; Also wenn wir in x- und y-Koordinaten denken, dann ist&nbsp;</p>
+<pre>
+    c = x + i y</pre>
+<p>
+	die Anfangsbedingung.&nbsp; Alles was noch nötig ist, ist das Abbruchkriterium, wann sollen wir mit der Iteration aufhören?&nbsp; Entweder wenn z*z &gt;= 4 ist oder wenn die Anzahl der Iterationen größer als ein maximal Wert ist:</p>
+<pre>
+&nbsp;&nbsp;&nbsp; while ( (x*x + y*y &lt; 4) &amp;&amp; (iteration &lt; max_iteration) ) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;iteration++;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Damit das Ganze dann hübsch aussieht, nehmen wir die Anzahl der Iterationen und kodieren sie in Farbe:</p>
+<pre>
+    int color = RAINBOW_COLORS[iteration % RAINBOW_NR_OF_COLORS];</pre>
+<p>
+	Dabei ist <em>RAINBOW_COLORS</em> ein Farbarray, das wir beliebig initialisieren können.&nbsp; Zu guter Letzt brauchen wir noch eine <em>setPixel()</em> Methode, die es in der ACM Graphics Bibliothek eigentlich gar nicht gibt.&nbsp; Wir behelfen uns damit, dass wir kleine GRects zeichnen:</p>
+<pre>
+    private void setPixel(double x, double y, Color color) {
+        int i = (int) (((x - xMin) * WIDTH) / (xMax - xMin));
+        int j = (int) (((y - yMin) * HEIGHT) / (yMax - yMin));
+        GRect r = new GRect(1, 1);
+        r.setColor(color);
+        add(r, i, j);
+    }
+</pre>
+<p>
+	Das ist nicht gerade die schnellst und effektivste Art, aber sie funktioniert.</p>
+<p>
+	.</p>
+<h2>
+	RandomGenerator</h2>
+<p>
+	Letztes Semester haben wir häufig die Klasse RandomGenerator der ACM Bibliothek benutzt.&nbsp; Inzwischen können wir diese Klasse selbst implementieren.&nbsp; Dazu benutzen wir einfach Lehmer&#39;s Algorithmus mit den Konstanten wie sie z.B. in Referenz [8] empfohlen werden:</p>
+<pre style="margin-left: 40px;">
+public final class RandomGenerator {
+&nbsp;&nbsp;&nbsp; private int seed = 1;
+
+&nbsp;&nbsp; &nbsp;private static final int a = 16807; // = 7*7*7*7*7
+&nbsp;&nbsp; &nbsp;private static final int m = 2147483647; // = 2^31 -1
+&nbsp;&nbsp; &nbsp;private static final int q = 127773; // = m div a
+&nbsp;&nbsp; &nbsp;private static final int r = 2836; // = m mod a
+
+&nbsp;&nbsp; &nbsp;public RandomGenerator() {
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;/**
+&nbsp;&nbsp; &nbsp; * @return a random number between 0 and 2147483647
+&nbsp;&nbsp; &nbsp; */
+&nbsp;&nbsp; &nbsp;public int nextInt() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;seed = a * (seed % q) - r * (seed / q);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return seed;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp;&nbsp; /**
+&nbsp;&nbsp; &nbsp; * sets the initial seed
+&nbsp;&nbsp; &nbsp; *
+&nbsp;&nbsp; &nbsp; * @param s
+&nbsp;&nbsp; &nbsp; *&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a good idea is a changing value, such as the time, ideally it
+&nbsp;&nbsp; &nbsp; *&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is a truely random number.
+&nbsp;&nbsp; &nbsp; */
+&nbsp;&nbsp; &nbsp;public void setSeed(int s) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if ((s &lt; 1) || (s &gt;= m)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;throw new IllegalArgumentException(&quot;invalid seed&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;seed = s;
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	Was jetzt noch zu tun bleibt sind die übrigen Methoden der RandomGenerator Klasse zu implementieren, z.B.:</p>
+<ul>
+	<li>
+		<strong>int nextInt(int n):</strong> gibt eine zufällige Ganzzahl zwischen 0 &lt;= r &lt; n zurück;</li>
+	<li>
+		<strong>int nextInt(int low, int high):</strong> gibt eine zufällige Ganzzahl zwischen low &lt;= r &lt; high zurück;</li>
+	<li>
+		<strong>boolean nextBoolean():</strong> gibt einen zufällige Boolean mit einer 50/50 Wahrscheinlichkeit von true oder false zurück;</li>
+	<li>
+		<strong>double nextDouble():</strong> gibt eine zufällige Gleitkommazahl zwischen 0 &lt;= r &lt; 1 zurück;</li>
+	<li>
+		<strong>double nextDouble(double low, double high):</strong> gibt eine zufällige Gleitkommazahl zwischen low &lt;= r &lt; high zurück;</li>
+	<li>
+		<strong>Color nextColor():</strong> gibt eine zufällige Farbe zurück.</li>
+</ul>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	Natürlich können wir in diesem Buch nur die Oberfläche streifen, aber es gibt einige Themen die man noch vertiefen könnte.</p>
+<p>
+	.</p>
+<h2>
+	List of Algorithms</h2>
+<p>
+	Um eine Vorstellung davon zu bekommen, wie viele Algorithmen es da draußen gibt, werfen wir einen Blick auf die Sammlung von Algorithmen, die in der Wikipedia gelistet werden [1].</p>
+<p>
+	.</p>
+<h2>
+	Entscheidungsproblem</h2>
+<p>
+	David Hilbert&#39;s <em>Entscheidungsproblem</em> und Alan Turing&#39;s <em>Turing Machine</em> sind zwei Themen über die wir mal recherchieren sollten.</p>
+<p>
+	.</p>
+<h2>
+	Luhn vs ISBN</h2>
+<p>
+	Wenn wir den Luhn Algorithmus mit dem ISBN Algorithmus vergleichen, stellt sich die Frage:&nbsp; Welcher ist besser?&nbsp; Welcher erkennt mehr Fehler, bzw. häufiger auftretende Fehler?</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Wer hat den ersten Algorithmus geschrieben?<br />
+		&nbsp;</li>
+	<li>
+		Beschreiben Sie in Ihren eigenen Worten, wie der Größte Gemeinsame Teiler Algorithmus funktioniert.<br />
+		&nbsp;</li>
+	<li>
+		Nennen Sie zwei der wichtigsten Errungenschaften von Muhammad ibn Musa al-Chwarizmi.<br />
+		&nbsp;</li>
+	<li>
+		Was ist der Unterschied zwischen einer echten Zufallszahl und einer Pseudozufallszahl?<br />
+		&nbsp;</li>
+	<li>
+		Wie kann man die Kreiszahl Pi mit zufälligen Zahlen berechnen?<br />
+		&nbsp;</li>
+	<li>
+		Beschreiben Sie die grafische Version von Euclid&#39;s Algorithmus.<br />
+		&nbsp;</li>
+	<li>
+		Wofür wird Lehmer&#39;s Algorithmus verwendet?<br />
+		&nbsp;</li>
+	<li>
+		Wie können Sie grafisch bestimmen, ob ein Zufallszahlengenerator schlecht ist?</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Anbei finden sich die Referenzen zum ersten Kapitel.</p>
+<p>
+	[1] List of algorithms, <a href="http://en.wikipedia.org/wiki/List_of_algorithms">en.wikipedia.org/wiki/List_of_algorithms</a></p>
+<p>
+	[2] Algorithm, <a href="http://en.wikipedia.org/wiki/Algorithm">en.wikipedia.org/wiki/Algorithm</a></p>
+<p>
+	[3] Muḥammad ibn Mūsā al-Khwārizmī, <a href="https://en.wikipedia.org/wiki/Muhammad_ibn_Musa_al-Khwarizmi">https://en.wikipedia.org/wiki/Muhammad_ibn_Musa_al-Khwarizmi</a></p>
+<p>
+	[4] Longest common substring problem, <a href="https://en.wikipedia.org/wiki/Longest_common_substring_problem">https://en.wikipedia.org/wiki/Longest_common_substring_problem</a></p>
+<p>
+	[5] Euclidean algorithm, <a href="https://en.wikipedia.org/wiki/Euclidean_algorithm">https://en.wikipedia.org/wiki/Euclidean_algorithm</a></p>
+<p>
+	[6] Conways Spiel des Lebens, <a href="https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens">https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens</a></p>
+<p>
+	[7] Pi: Algorithmen, Computer, Arithmetik, Jörg Arndt, Christoph Haenel</p>
+<p>
+	[8] Lehmer random number generator, <a href="https://en.wikipedia.org/wiki/Lehmer_random_number_generator">https://en.wikipedia.org/wiki/Lehmer_random_number_generator</a></p>
+<p>
+	[9] Generating Random Numbers in Data Structures and Algorithms, Bruno R. Preiss, <a href="http://www.brpreiss.com/books/opus5/html/page465.html#33557">http://www.brpreiss.com/books/opus5/html/page465.html#33557</a></p>
+<p>
+	[10] Luhn-Algorithmus, <a href="https://de.wikipedia.org/wiki/Luhn-Algorithmus">https://de.wikipedia.org/wiki/Luhn-Algorithmus</a></p>
+<p>
+	[11] International Standard Book Number, <a href="https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digits">https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digits</a></p>
+<p>
+	[12] Benfordsches Gesetz, <a href="https://de.wikipedia.org/wiki/Benfordsches_Gesetz">https://de.wikipedia.org/wiki/Benfordsches_Gesetz</a></p>
+<p>
+	[13] Real-World Data Sets, Robert Sedgewick and Kevin Wayne, <a href="http://introcs.cs.princeton.edu/java/data/">http://introcs.cs.princeton.edu/java/data/</a></p>
+<p>
+	[14] Mandelbrot-Menge, <a href="https://de.wikipedia.org/wiki/Mandelbrot-Menge">https://de.wikipedia.org/wiki/Mandelbrot-Menge</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

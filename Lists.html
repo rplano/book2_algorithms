@@ -1,0 +1,1179 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html" class="active">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/container.png" style="display: block; margin-left: auto; margin-right: auto; width: 124px; height: 211px;" /></p>
+<h1>
+	Containers: Lists</h1>
+<p>
+	Nach unserem ersten Kontakt mit ein paar Algorithmen, wollen wir uns jetzt mit Containern, also Behältern beschäftigen.&nbsp; Mit Behältern meinen wir Behälter für Daten, also Datencontainer.&nbsp; Grundsätzlich gibt es zwei Arten:</p>
+<ul>
+	<li>
+		sequentielle Container und</li>
+	<li>
+		assoziative Container.</li>
+</ul>
+<p>
+	Beispiele für sequentielle Container sind Arrays, ArrayList und&nbsp; LinkedList, sowie die Stack und die Queue Klasse.&nbsp; Beispiele für assoziative Container sind die Maps und die Sets.&nbsp; In diesem Kapitel beschäftigen wir uns mit den sequentiellen Container.</p>
+<p>
+	.</p>
+<h2>
+	Arrays &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+<p>
+	Den einfachsten Container den wir bereits aus dem ersten Semester kennen ist das Array.&nbsp; Wenn wir z.B. ein Array für zehn Ganzzahlen anlegen wollen, dann geht das so:</p>
+<pre style="margin-left: 40px;">
+int[] eggs = new int[10];</pre>
+<p>
+	Arrays sind zwar sehr schnell, haben aber den Nachteil, dass sie ihre Größe nicht mehr ändern können.&nbsp; Wenn wir also einmal ein Array für zehn Elemente angelegt haben, dann können wir da keine elf rein tun.&nbsp; Wir verwenden Arrays eigentlich nur wenn wir es mit Binärdaten zu tun haben, z.B. Bilder-, Audio- oder Videodateien.&nbsp; Ansonsten werden wir Arrays eher meiden, denn es gibt viel bessere Datenstrukturen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/CityList.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Lists</h2>
+<p>
+	Die Liste ist wahrscheinlich der nächst einfachste Datencontainer nach dem Array. Die Liste existiert in mehreren Varianten, die beiden prominentesten sind die <em>ArrayList</em> und die <em>LinkedList</em>. Eine Liste ist ein sequentieller Container, d.h. die Elemente einer Liste haben eine Ordnung, immer beginnend bei Index 0, und es gibt keine Löcher in einer Liste. Eine Liste hat die folgenden Methoden:</p>
+<ul>
+	<li>
+		<strong>size():</strong> gibt die Größe der Liste zurück;</li>
+	<li>
+		<strong>add( object ):</strong> fügt ein Objekt am Ende der Liste an;</li>
+	<li>
+		<strong>get( i ):</strong> gibt das Objekt, das an Position i gespeichert ist;</li>
+	<li>
+		<strong>set( i, object ):</strong> ersetzt das Element an Position i mit diesem neuen Objekt;</li>
+	<li>
+		<strong>remove( i ):</strong> das Element an Position i wird entfernt;</li>
+	<li>
+		<strong>indexOf( object ):</strong> sucht nach dem Objekt in der Liste und gibt dessen Position zurück, oder -1 falls es nicht in der Liste ist. Diese Methode ist nicht die schnellste wie wir noch sehen werden.</li>
+</ul>
+<p>
+	Es gibt auch noch eine <em>contains()</em> Methode, die sollten wir aber eher selten benutzen.&nbsp;</p>
+<p>
+	Schauen wir uns mal ein Beispiel an wie man Listen im echten Leben verwendet.&nbsp; Angenommen wir hätten mehrere Städte die wir nacheinander bereisen wollten, dann wäre eine Liste eine gute Wahl:</p>
+<pre style="margin-left: 40px;">
+// init list
+List&lt;String&gt; cities = new ArrayList&lt;String&gt;();
+
+// add cities
+cities.add(&quot;Nuremberg&quot;);
+cities.add(&quot;Munich&quot;);
+cities.add(&quot;Hamburg&quot;);
+cities.add(&quot;Berlin&quot;);
+cities.add(&quot;Frankfurt&quot;);
+
+// get the third city
+println(&quot;Third city: &quot; + cities.get(2));
+
+// remove the third city
+cities.remove(2);
+
+// replace the second city by another city
+cities.set(1, &quot;Stuttgart&quot;);
+
+// search for Stuttgart
+println(&quot;Stuttgart is at position: &quot; + cities.indexOf(&quot;Stuttgart&quot;));
+
+// list all remaining cities
+println(&quot;All remaining cities:&quot;);
+for (String city : cities) {
+&nbsp;&nbsp;&nbsp; print(city + &quot;, &quot;);
+}
+println(&quot;\nThere is a total of &quot; + cities.size() + &quot; cities.&quot;);</pre>
+<p>
+	Wann sollten wir Listen verwenden? Listen können verwendet werden, wenn</p>
+<ul>
+	<li>
+		die Reihenfolge wichtig ist, z.B. wenn man von Stadt zu Stadt reist: München -&gt; Nürnberg -&gt; Berlin -&gt; Hamburg;</li>
+	<li>
+		man eine Datenstruktur benötigt, die einen Index und einen zugehörigen Wert hat;</li>
+	<li>
+		man ein Array benötigt, das dynamisch schrumpfen und wachsen kann.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	List Interface</h2>
+<p>
+	Vielleicht ist aufgefallen, dass wir oben nicht</p>
+<pre style="margin-left: 40px;">
+ArrayList&lt;String&gt; cities = new ArrayList&lt;String&gt;();</pre>
+<p>
+	verwendet haben, sondern anstelle</p>
+<pre style="margin-left: 40px;">
+<span style="color:#0000ff;">List</span>&lt;String&gt; cities = new ArrayList&lt;String&gt;();</pre>
+<p>
+	Das war absichtlich.&nbsp; Warum?&nbsp; Der Grund dafür ist, dass sowohl <em>ArrayList</em> als auch <em>LinkedList</em> das List <em>Interface</em> implementieren. Das ist sehr praktisch, denn wenn wir aus irgendeinem Grund später unsere Meinung ändern und eine <em>LinkedList</em> anstelle einer <em>ArrayList</em> verwenden wollen, gibt es nur eine Stelle die wir ändern müssen.&nbsp; Wir werden diese Verwendung von Schnittstellen später immer wieder sehen.</p>
+<p>
+	Stellt sich die Frage, wann soll ich eine <em>ArrayList</em> verwenden und wann eine <em>LinkedList</em>? Die Antwort ist ziemlich einfach:</p>
+<ul>
+	<li>
+		wenn wir viel lesen, verwenden wir die ArrayList,</li>
+	<li>
+		wenn wir aber viel schreiben (also hinzufügen, ersetzen oder entfernen), dann verwenden wir besser die LinkedList.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Stack.png" style="float: right; width: 200px; height: 99px;" /> Stack (LIFO)</h2>
+<p>
+	Kommen wir zu einer neuen Datenstruktur, dem <em>Stack</em>.&nbsp; Wenn man sich unter Stack einen Stapel Papier vorstellt, dann hat man die Datenstruktur eigentlich schon verstanden.&nbsp; Bei einem riesen Stapel Papier kann man nicht einfach ein Blatt aus der Mitte herausziehen, das geht praktisch nicht.&nbsp; Genauso ist es auch beim Stack: wir können nur auf das oberste Element zugreifen.&nbsp; Erst wenn wir das oberste Element wegnehmen, können wir sehen was darunter ist.&nbsp; Oder wenn wir neue Elemente hinzufügen, können wir die nur oben hinzufügen.&nbsp; Wir können nicht einfach zwischendrin irgend ein Blatt einfügen.&nbsp; Das führt zu der Bezeichnung Last-In-First-Out (LIFO).</p>
+<p>
+	Welche Methoden braucht man um mit dem Stack arbeiten zu können?&nbsp; Im Prinzip genügen die folgenden:</p>
+<ul>
+	<li>
+		<strong>size():</strong> gibt die Größe des Stacks zurück, also wieviel Objekte im Stack sind;</li>
+	<li>
+		<strong>push( object ):</strong> legt ein neues Objekt oben auf dem Stapel ab;</li>
+	<li>
+		<strong>pop():</strong> nimmt das oberste Element vom Stapel, das Element ist danach nicht mehr im Stapel;</li>
+	<li>
+		<strong>peek():</strong> gibt uns das oberste Element des Stapels, lässt es aber im Stapel.</li>
+</ul>
+<p>
+	<img alt="" src="images/UndoStack.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Als kleine Anwendung betrachten wir folgendes Beispiel:&nbsp; Nach unserer Reise quer durch Deutschland, wollen wir in genau umgekehrter Reihenfolge wieder zurückreisen.&nbsp; Genau dafür eignet sich der Stapel perfekt:</p>
+<pre style="margin-left: 40px;">
+// init stack
+Stack&lt;String&gt; cities = new Stack&lt;String&gt;();
+
+// add cities to the stack
+cities.push(&quot;Nuremberg&quot;);
+cities.push(&quot;Munich&quot;);
+cities.push(&quot;Hamburg&quot;);
+cities.push(&quot;Berlin&quot;);
+cities.push(&quot;Frankfurt&quot;);
+println(&quot;There is a total of &quot; + cities.size() + &quot; cities on the stack.&quot;);
+
+// whats on top of the stack?
+println(&quot;Topmost city: &quot; + cities.peek());
+println(&quot;There is a total of &quot; + cities.size() + &quot; cities on the stack.&quot;);
+
+// remove one by one the top element from the stack
+println(&quot;Traveling back the way we came:&quot;);
+println(cities.pop());
+println(cities.pop());
+println(cities.pop());
+println(cities.pop());
+println(cities.pop());
+println(&quot;There is a total of &quot; + cities.size() + &quot; cities on the stack.&quot;);</pre>
+<p>
+	Wofür sonst kann man denn die Datenstruktur Stack noch verwenden? Z.B. für:</p>
+<ul>
+	<li>
+		Browser History: man möchte die zuletzt besuchten Webseiten in umgekehrter Reihenfolge auflisten;</li>
+	<li>
+		man möchte die Reihenfolge von irgendetwas umkehren;</li>
+	<li>
+		in einem Editor (z.B. Word oder Eclipse) wird ein Stack verwendet für die Undo Aktionen;</li>
+	<li>
+		in der Mathematik oder beim Programmierung möchte man sicher stellen, dass es für jede offene Klammer wieder eine geschlossene gibt;</li>
+	<li>
+		in einer sogenannten Stack-Machine (z.B. die Java Virtual Machine ist eine Stack-Machine).</li>
+</ul>
+<p>
+	Im Deutschen findet man auch manchmal für die Datenstruktur Stack die Bezeichnung <em>Keller</em>, macht wenig Sinn, klar Dachgeschoß würde viel mehr Sinn machen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Queue.png" style="float: right; width: 200px; height: 95px;" />Queue (FIFO)</h2>
+<p>
+	Die <em>Queue</em>, auch Warteschlange genannt, ist eine Liste die dem Prinzip des First-In-First-Out folgt.&nbsp; Ähnlich dem Prinzip einer Warteschlange an der Kasse, oder wenn man in einer Telefonwarteschlange ist, erwartet man, dass die Personen die weiter vorne in der Schlange stehen zu erst dran kommen.&nbsp; Für unsere Datenstruktur bedeutet das, dass man nur auf der linken Seite (dem Ende der Schlange) neue Elemente hinzufügen kann, und nur auf der rechten Seite (dem Anfang der Schlange) Elemente entnehmen kann.</p>
+<p>
+	Die folgenden Methoden werden von der <em>Queue</em> Datenstruktur unterstützt:</p>
+<ul>
+	<li>
+		<strong>size():</strong> gibt uns die Anzahl der Elemente in der Queue;</li>
+	<li>
+		<strong>add( object ):</strong> fügt ein neues Element am Ende der Schlange hinzu;</li>
+	<li>
+		<strong>remove():</strong> entnimmt ein Element am Anfang der Schlange;</li>
+	<li>
+		<strong>peek():</strong> ähnlich wie beim Stack erlaubt uns <em>peek()</em> nachzusehen was denn am Anfang der Schlange ist, ohne das Element aber von der Schlange zu entfernen.</li>
+</ul>
+<p>
+	Ein bischen komisch ist, dass es in Java keine Klasse Queue gibt, sondern nur ein Interface. Ist aber auch nicht so schlimm.&nbsp; Zwei Klassen die dieses Interface implementieren sind die <em>LinkedList</em> und die <em>PriorityQueue</em>.</p>
+<p>
+	<img alt="" src="images/CashierQueue.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Als kleines Beispiel setzen wir eine Warteschlange vor einer Kasse um:</p>
+<pre style="margin-left: 40px;">
+// init queue
+Queue&lt;String&gt; lineOfPeople = new LinkedList&lt;String&gt;();
+
+// add people
+lineOfPeople.add(&quot;fritz&quot;);
+lineOfPeople.add(&quot;lisa&quot;);
+lineOfPeople.add(&quot;hans&quot;);
+println(&quot;There is a total of &quot; + lineOfPeople.size() + &quot; people waiting in line.&quot;);
+
+// who is in front of the queue
+println(&quot;First person in line: &quot; + lineOfPeople.peek());
+println(&quot;There is a total of &quot; + lineOfPeople.size() + &quot; people waiting in line.&quot;);
+
+// remove one by one the top element from the stack
+println(&quot;Customers checking out:&quot;);
+println(lineOfPeople.remove());
+println(lineOfPeople.remove());
+println(lineOfPeople.remove());
+println(&quot;There is a total of &quot; + lineOfPeople.size() + &quot; people waiting in line.&quot;);</pre>
+<p>
+	Auch für die Queue gibt es verschiedene Anwendungsszenarien:</p>
+<ul>
+	<li>
+		Telefonwarteschlange in einem Call Center;</li>
+	<li>
+		Druckaufträge für einen Drucker sind normalerweise in einer Warteschlange;</li>
+	<li>
+		Einchecken beim Flugzeug;</li>
+	<li>
+		die Tastenanschläge einer Tastatur.</li>
+</ul>
+<p>
+	Die <em>PriorityQueue</em> werden wir später noch ein paar mal wiedersehen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Obwohl es so aussieht wie wenn wir bisher nicht allzuviel gemacht hätten, soll das nicht darüber hinwegtäuschen, dass die Datenstrukturen <em>ArrayList</em>, <em>LinkedList</em> und <em>Stack</em> unser Brot und Butter sein werden.&nbsp; Auch die Queue werden wir ab und zu wiedersehen.&nbsp; Ähnlich wie das Ein-mal-eins, redet man da nicht groß drüber, aber man geht davon aus, dass es jeder wie aus dem &quot;Effeff&quot; kann.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	In den Projekten werden wir uns ganz kurz noch einmal das Array ansehen, dann ein paar Beispiele mit ArrayList und LinkedList sehen, und danach folgen dann Stack und Queue Beispiele.&nbsp; Das wohl interessanteste Projekt ist das ArithmeticExpression Projekt: mithilfe zweier Stacks implementieren wir einen Taschenrechner!</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/histogram.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 175px;" />Histogram</h2>
+<p>
+	Wir beginnen mit einer kleinen Anwendung die Arrays benutzt.&nbsp; Es geht darum ein Histogramm ausgeben zu lassen, als Beispieldaten dienen Punkte einer Klausur.&nbsp; Wir wissen, dass die Punkt zwischen 0 und 100 liegen, und wir möchten, dass es genau elf sogenannte <em>Bins</em> gibt, also Kategorien, in denen wir die Punkte kummulieren möchten.&nbsp; Da wir wissen, dass es genau elf gibt, nie mehr und nie weniger, bietet sich das Array als Datentyp an.&nbsp; Ansonsten müssten wir eine Liste nehmen.</p>
+<pre style="margin-left: 40px;">
+private int[] histogramData = new int[11];</pre>
+<p>
+	Das Befüllen der Bins ist relative einfach mit der Hilfe unseres Freunds Ganzzahldivision:</p>
+<pre style="margin-left: 40px;">
+private void putScoreInHistogram(int score) {
+&nbsp;&nbsp;&nbsp; histogramData[score / 10]++;
+}</pre>
+<p>
+	Die Daten selbst kommen aus der &quot;Scores.txt&quot; Datei, die wir Zeile für Zeile einlesen, und in Ganzzahlen umwandeln:</p>
+<pre style="margin-left: 40px;">
+private void readData() {
+&nbsp;&nbsp; &nbsp;try {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BufferedReader rd = new BufferedReader(new FileReader(&quot;Scores.txt&quot;));
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (true) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String line = rd.readLine();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (line == null)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int score = Integer.parseInt(line);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;putScoreInHistogram(score);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rd.close();
+&nbsp;&nbsp; &nbsp;} catch (Exception e) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;e.printStackTrace();
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Wenn wir fertig sind, gehen wir das Array durch und geben es auf der Konsole aus.&nbsp; Wir könnten einfach die Zahlen ausgeben, viel hübscher sind aber kleine Sternchen (Asterisk nicht Asterix!):</p>
+<pre style="margin-left: 40px;">
+private String convertToStars(int i) {
+&nbsp;&nbsp;&nbsp; String stars = &quot;&quot;;
+&nbsp;&nbsp;&nbsp; for (int j = 0; j &lt; i; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stars += &quot;*&quot;;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return stars;
+}</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ACMGraphics.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 146px; float: right;" />ACMGraphics</h2>
+<p>
+	Seit Beginn des letzten Semesters verwenden wir ja die ACM Graphikbibliothek <em>acm.jar</em>.&nbsp; Natürlich würde uns interessieren wie die wirklich funktioniert.&nbsp; Im Prinzip sind alle <em>Programs</em>, also <em>Program</em>, <em>ConsoleProgram</em> und <em>GraphicsProgram</em> eigentlich Unterklassen der Standard Java Klasse <em>Applet</em>.&nbsp; Das hat den angenehmen Nebeneffekt, dass alle unsere ACM Programme auch im Browser laufen (insofern der Browser Java unterstützt, was in letzter Zeit sehr wenige tun).</p>
+<p>
+	Ein Applet sieht im allgemeinen wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+public class ACMGraphics extends Applet {
+
+&nbsp;&nbsp; &nbsp;public void init() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;public void run() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;public void paint(Graphics g) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Es gibt also eine <em>init()</em> und eine <em>run()</em> Methode, und ja, das sind unsere <em>init()</em> und <em>run()</em> Methoden die wir schon die ganze Zeit verwenden.&nbsp; Außerdem gibt es auch noch die <em>paint()</em> Methode, auf die wir gleich kommen.</p>
+<p>
+	Was wir allerdings nicht sehen ist die <em>add()</em> Methode mit der wir unsere GRects und GOvals usw. hinzugefügt haben. Die Frage stellt sich wozu werden denn die GObjects hinzugefügt?&nbsp; Ja, richtig wenn das hier das Kapitel über Listen ist, dann wird es wohl einen Liste sein:</p>
+<pre style="margin-left: 40px;">
+public class ACMGraphics extends Applet {
+
+    private ArrayList&lt;GRect&gt; gObjects = new ArrayList&lt;GRect&gt;();
+
+&nbsp;&nbsp;&nbsp; private void add(GRect r) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;gObjects.add(r);
+&nbsp;&nbsp; &nbsp;}
+
+    ...
+}
+</pre>
+<p>
+	&nbsp;</p>
+<p>
+	Das war der erste Teil.&nbsp; Jetzt stellt sich die Frage, wie zeichnet man denn die GObjects?&nbsp; Das passiert in der <em>paint()</em> Methode,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void paint(Graphics g) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (GRect rect : gObjects) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rect.draw(g);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	wo wir ein GObject nach dem anderen durchgehen und ihm sagen es soll sich doch selbst zeichnen.&nbsp; Wie funktioniert das?&nbsp; Dafür definieren wir eine Klasse <em>GRect</em>,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; class GRect {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;private int x, y, w, h;
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;public GRect(int x, int y, int w, int h) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.x = x;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.y = y;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.w = w;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.h = h;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;public void draw(Graphics g) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;g.drawRect(x, y, w, h);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	und die benutzt die Standard Java Methode <em>drawRect()</em> der Graphics Klasse.&nbsp; Das war&#39;s.&nbsp; Mit einer kleinen Einschränkung: Animationen kann unsere einfache Version der ACM Library noch nicht, dafür müssen wir warten bis wir was von Multi-Threading gehört haben.</p>
+<p>
+	.</p>
+<h2>
+	<strong>Homemade ArrayList</strong></h2>
+<p>
+	Wir wollen unsere eigene ArrayList Klasse schreiben, und sie soll (fast) alles können was die normale ArrayList Klasse von Java auch kann, also die folgenden Methoden haben:</p>
+<ul>
+	<li>
+		size()</li>
+	<li>
+		add( object )</li>
+	<li>
+		get( i )</li>
+	<li>
+		set( i, object )</li>
+</ul>
+<p>
+	Die <em>remove()</em> Methode haben wir absichtlich weggelassen, da die etwas komplizierter ist.&nbsp; Der Anfang unserer HomemadeArrayList sieht wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+public class HomemadeArrayList {
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;private Object[] arr;
+&nbsp;&nbsp; &nbsp;private int capacity = 10;
+&nbsp;&nbsp; &nbsp;private int position = -1;
+
+&nbsp;&nbsp; &nbsp;public HomemadeArrayList() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr = new Object[capacity];
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;public int size() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return position + 1;
+&nbsp;&nbsp; &nbsp;}
+    ...
+</pre>
+<p>
+	Die Daten unserer HomemadeArrayList werden in dem Array von Objekten, also Object[] arr, gespeichert.&nbsp; Das hat eine anfängliche Kapazität von 10, die wir im Constructor festlegen.&nbsp; D.h. erst mal können wir in unserer ArrayList nur zehn Objekte speichern.&nbsp;</p>
+<p>
+	Dann haben wir noch einen Positionspointer, <em>position</em>, der uns sagt, wieviel von dem Array schon belegt ist.&nbsp; Am Anfang ist es leer, deswegen -1.&nbsp; Wenn wir jetzt ein Element hinzufügen,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void add(Object obj) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (position &lt; capacity-1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;position++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[position] = obj;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// we need to increase size of underlying array
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	müssen wir erst mal checken ob wir noch Platz haben, dann unseren Positionspointer um eins erhöhen, und natürlich nicht vergessen unser neues Element zu speichern.&nbsp; Wenn wir an die Grenzen unseres Arrays stoßen, haben wir Pech gehabt.</p>
+<p>
+	Das Lesen eines Objektes mit <em>get()</em> ist ganz einfach,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public Object get(int i) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (i &gt;= 0 &amp;&amp; i &lt;= position) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return arr[i];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return null;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	wir müssen lediglich darauf achten, dass die Werte von <em>i</em> in Ordnung sind.&nbsp; Schließlich fehlt nur noch die <em>set()</em> Methode,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void set(int i, Object obj) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (i &gt;= 0 &amp;&amp; i &lt;= position) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr[i] = obj;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	War gar nicht so schwer.&nbsp; Natürlich haben wir die schweren Sachen auch weg gelassen.</p>
+<p>
+	Challenge: Man könnte versuchen die remove() Methode zu implementieren.&nbsp; Und man könnte eine generische Klasse daraus machen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/LinkedList.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 225px; float: right;" /><strong>Homemade LinkedList</strong></h2>
+<p>
+	Wir wollen jetzt unsere eigene LinkedList Klasse schreiben.&nbsp; Sie soll die folgenden Methoden haben:</p>
+<ul>
+	<li>
+		size()</li>
+	<li>
+		add( object )</li>
+	<li>
+		get( i )</li>
+	<li>
+		set( i, object )</li>
+</ul>
+<p>
+	Die <em>remove()</em> Methode haben wir auch wieder weggelassen.&nbsp; Bevor wir aber beginnen können, müssen wir uns kurz überlegen, wie eine LinkedList ihre Daten speichert.&nbsp; Das geht über die Verlinkung von Knoten.&nbsp; Ein Knoten ist eine einfache Klasse,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; class Node {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;public Node next;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;public Object obj;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	bestehend aus einem Objekt und einem Link zum nächsten Knoten.&nbsp; D.h. wir haben irgendwo einen ersten Knoten, <em>first</em>, und von dem aus hangeln wir uns von einem Knoten zum nächsten durch die ganze Liste, bis wir den Knoten haben, den wir suchten. Unsere <em>HomemadeLinkedList</em> Klasse hat also eine Referenz auf den ersten Knoten, und weiss noch wie groß sie ist:</p>
+<pre style="margin-left: 40px;">
+public class HomemadeLinkedList {
+
+&nbsp;&nbsp; &nbsp;private Node first;
+&nbsp;&nbsp; &nbsp;private int size = 0;
+
+&nbsp;&nbsp; &nbsp;public HomemadeLinkedList() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// nothing to do
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;public int size() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return size;
+&nbsp;&nbsp; &nbsp;}
+    ...</pre>
+<p>
+	Wenn wir neue Elemente hinzufügen,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void add(Object obj) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (first == null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;first = new Node();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;first.obj = obj;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;size++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// find last node
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Node current = first;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (current.next != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;current = current.next;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// we are at the end, add new one
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;current.next = new Node();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;current.next.obj = obj;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;size++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	dann müssen wir als allererstes feststellen, ob überhaupt schon was in unserer Liste ist, also ob <em>first == null</em>.&nbsp; Falls das der Fall ist, müssen wir einen allerersten neuen Knoten anlegen.&nbsp; Falls nein, dann müssen wir den letzten Knoten finden, denn <em>add()</em> bedeutet ja, dass wir etwas ans Ende der Liste anfügen.&nbsp; Wenn wir dann etwas hinzugefügt haben, müssen wir natürlich die Größe, <em>size</em>, um eins erhöhen.</p>
+<p>
+	Das Lesen eines Objektes mit <em>get()</em> ist nicht ganz so einfach wie bei der ArrayList,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public Object get(int i) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Node nde = getNode(i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (nde != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return nde.obj;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return null;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	wir müssen erst einmal wissen, ob wir überhaupt ein Element <em>i</em> haben.&nbsp; Das macht die Methode <em>getNode()</em>:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private Node getNode(int i) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int cnt = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Node current = first;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (current != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (cnt == i) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return current;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;current = current.next;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;cnt++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return null;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Im Prinzip geht diese Methode unsere Liste durch, einen Knoten nach dem anderen, beginnend bei dem ersten, <em>first</em>. Außerdem zählt sie mit, wieviele Knoten wir schon besucht haben, und wenn der Zähler <em>cnt</em> gleich dem gesuchten <em>i</em> ist, dann haben wir den Knoten gefunden.</p>
+<p>
+	Wenn wir einmal die Methode <em>getNode()</em> haben, dann ist auch das set() relativ problemlos:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void set(int i, Object obj) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Node nde = getNode(i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (nde != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;nde.obj = obj;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Auch hier kann man noch die <em>remove()</em> Methode implementieren und die Klasse generisch machen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/LinkedListVsArrayList.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />ArrayList vs LinkedList</h2>
+<p>
+	Weiter oben haben wir uns die Frage gestellt, wann man eine <em>ArrayList</em> und wann eine <em>LinkedList</em> verwenden sollte.&nbsp; Die Antwort war: bei häufigem Lesen die ArrayList und bei häufigem Schreiben die LinkedList.&nbsp; Stimmt das aber auch?&nbsp;</p>
+<p>
+	Am besten wir prüfen das mal nach.&nbsp; Dazu messen wir einfach wie lange das Lesen bzw. Schreiben dauert.&nbsp; Wir schreiben also eine Methode <em>testRead(List&lt;Integer&gt; al)</em>, die wir einmal mit einer <em>ArrayList</em> und einmal mit einer <em>LinkedList</em> aufrufen:</p>
+<pre style="margin-left: 40px;">
+println(&quot;ArrayList read time: &quot; + testRead(<span style="color:#0000ff;">new ArrayList&lt;Integer&gt;()</span>) + &quot; ms&quot;);
+println(&quot;LinkedList read time: &quot; + testRead(<span style="color:#0000ff;">new LinkedList&lt;Integer&gt;()</span>) + &quot; ms&quot;);</pre>
+<p>
+	&nbsp;</p>
+<p>
+	(Wir sehen wie praktisch das List <em>Interface</em> ist.)&nbsp; Kommen wir zur Test Methode:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private <span style="color:#0000ff;">static</span> long testRead(List&lt;Integer&gt; al) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// fill list with some dummy data:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 1000000; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;al.add(42);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// start the read test:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long start = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 100000; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// read an element at a random position:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int randomPos = (int) (100000.0 * Math.random());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;al.get(randomPos);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long end = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return (end - start);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Im ersten Teil, befüllen wir die Liste mit einer Millionen Zahlen, immer die selbe.&nbsp; Danach beginnen wir mit unserem Test: wir lesen einhunderttausend Mal von einer zufälligen Position in der Liste.&nbsp; Die Zeit ermitteln wir mit der <em>System.currentTimeMillis()</em> Methode, die gibt uns die Zeit die seit dem 01.01.1970 vergangen ist in Millisekunden.</p>
+<p>
+	Das Ergebnis ist ziemlich eindeutig:</p>
+<pre style="margin-left: 40px;">
+ArrayList read time: 19 ms
+LinkedList read time: 7556 ms</pre>
+<p>
+	Die ArrayList ist fast zehntausend mal schneller!&nbsp; Beim Schreiben ist der Unterschied nicht ganz so krass, da ist die LinkedList &quot;nur&quot; doppelt so schnell.</p>
+<p>
+	Vielleicht ist aufgefallen, dass wir hier eine <em>statische</em> Methode verwendet haben.&nbsp; Das ist ausnahmsweise mal o.k., weil wir Zeitmessungen machen, und statische Methoden etwas schneller sind.&nbsp; Das muss aber die Ausnahme bleiben, normalerweise dürfen wir <em>static</em> nie verwenden, auch wenn&#39;s schnell gehen soll!&nbsp; Der Grund ist, dass wir nicht mehr objekt-orientiert programmieren, wenn wir static verwenden.&nbsp;</p>
+<p>
+	Fassen wir zusammen: Die ArrayList</p>
+<p style="margin-left: 40px;">
+	+ hat sehr schnellen, direkten Zugriff auf Elemente, vor allem beim Lesen.<br />
+	- Beim Einfügen und auch Entfernen von Elementen müssen alle nachfolgenden Elemente verschoben werden, und das führt dazu, dass diese Operation im Durchschnitt eher langsam ist.<br />
+	- Stößt man an die interne Grenze des zugrundeliegenden Arrays, dann kostet es sehr viel Zeit ein einziges neues Element hinzuzufügen.</p>
+<p>
+	Bei der LinkedList ist</p>
+<p style="margin-left: 40px;">
+	+ das Einfügen und Entfernen von Elementen eine einfache und schnelle Operation da nur ein Link neu gesetzt werden muss.<br />
+	+ Da es kein zugrundeliegendes Array gibt, kann man auch nie an dessen Grenze stoßen.<br />
+	- Um ein bestimmtes Element in der Liste zu finden, muss man u.U. durch die ganze Liste iterieren, da man keinen direkten Zugriff auf ein beliebiges Element hat.&nbsp; Jedes Element kennt nur sein Nachfolgeelement.&nbsp; Das dauert.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Palindrome2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Palindrome</h2>
+<p>
+	Wir wollen ein einfaches ConsoleProgram schreiben, das feststellt ob ein gegebenes Wort ein Palindrom ist, d.h. sowohl vorwärts als auch rückwärts das Gleiche bedeutet, wie z.B. &quot;Madam&quot;.&nbsp;</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void run() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String text = readLine(&quot;Enter a word: &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;The word is a palindrome: &quot; + isPalindrome(text));
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	In der Methode <em>isPalindrome()</em> checken wir, ob das umgekehrte Wort mit dem ursprünglichen übereinstimmt:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private boolean isPalindrome(String text) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String revers = reverseString(text);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return revers.equals(text);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Kommen wir zur letzten Methode <em>reverseString()</em>:&nbsp; Es gibt natürlich mehrere Möglichkeiten einen String umzukehren, aber eine verwendet die Klasse Stack:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private String reverseString(String text) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Stack&lt;Character&gt; st = new Stack&lt;Character&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; text.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char c = text.charAt(i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;st.push(c);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String revers = &quot;&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (!st.isEmpty()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char c = st.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;revers = revers + c;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return revers;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Im ersten Teil definieren wir einen Stack für Characters, auf den wir einen Buchstaben nach dem anderen <em>pushen</em>.&nbsp; Im zweiten Teil holen wir einen Buchstaben nach dem anderen mittels <em>pop()</em> wieder vom Stack, bis dieser leer ist.&nbsp;</p>
+<p>
+	Das ist jetzt nicht die effektivste Art und Weise einen String umzukehren, aber es zeigt an einem einfachen Beispiel die Arbeitsweise der Klasse Stack.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Parentheses.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Parentheses</h2>
+<p>
+	Eine klassische Anwendung für die Stack Klasse ist es festzustellen, ob die Klammern in einem Ausdruck stimmen, also ob es für jede geöffnete Klammer auch wieder eine geschlossene gibt.&nbsp; Beispiele sind &quot;(())&quot; , &quot;(()&quot; ,&nbsp; &quot;)&quot; und &quot;(()(()))&quot;.&nbsp; Wir wollen also eine Methode <em>doParenthesesMatch()</em> schreiben, die feststellt ob alles stimmt:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void run() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;(()): &quot; + doParenthesesMatch(&quot;(())&quot;));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;((): &quot; + doParenthesesMatch(&quot;(()&quot;));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;): &quot; + doParenthesesMatch(&quot;)&quot;));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;(()(())): &quot; + doParenthesesMatch(&quot;(()(()))&quot;));
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Dazu verwenden wir wieder einen Stack für Buchstaben:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private boolean doParenthesesMatch(String text) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Stack&lt;Character&gt; stack = new Stack&lt;Character&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; text.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char c = text.charAt(i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;switch (c) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case &#39;(&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(c);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case &#39;)&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (!stack.isEmpty()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return false;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;default:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;System.out.println(&quot;we should never get here!&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// if parenthesis matched, the stack should be empty now:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (stack.isEmpty()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return false;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Wir lesen dann Zeichen für Zeichen ein.&nbsp; Wenn es eine offene Klammer ist, dann pushen wir die auf den Stack.&nbsp; Wenn es eine geschlossene Klammer ist, dann popen wir das oberste Element vom Stack.&nbsp; Hier müssen wir allerdings aufpassen, es könnte sein, dass gar nichts auf dem Stack ist.&nbsp; Das würde z.B. passieren wenn der Nutzer &quot;)&quot; eingibt.&nbsp; Sind wir dann durch, ist ganz einfach festzustellen, ob die gleiche Anzahl von offenen wie geschlossenen Klammern war: wenn nämlich der Stack leer ist, dann war alles in Ordnung.</p>
+<p>
+	Challenge: etwas komplizierter (aber nicht viel) wird es wenn man auch eckige und geschweifte Klammern zulässt: {([]{()})({})} und [{]}.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ArithmeticExpression2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />ArithmeticExpression</h2>
+<p>
+	Kommen wir zu einer der wichtigsten Anwendung der Stack Klasse: der Auswertung arithmetischer Ausdrücke, wie z.B.,&nbsp;</p>
+<pre style="margin-left: 40px;">
+1 + ( 2 + 3 * 4 + 3 ) / 2</pre>
+<p>
+	Wir wollen uns aber der Einfachheit halber auf vollständig geklammerte arithmetische Ausdrücke, also z.B.</p>
+<pre style="margin-left: 40px;">
+( ( 1 + ( 2 + 3 ) ) * ( ( 4 + 3 ) / 2 ) )</pre>
+<p>
+	beschränken.&nbsp; Diese Form der Notation nennt man auch die <em>Infix</em> Notation (nicht mit der <em>Idefix</em> Notation zu verwechseln).&nbsp; Die <em>Infix</em> Notation ist zwar ganz praktisch für Menschen, aber für Computer taugt sie nicht viel.&nbsp; Computer lieben eher die <em>Postfix</em> Notation.&nbsp; Deswegen müssen wir aus <em>Infix</em> <em>Postfix</em> machen.&nbsp; Und dafür gibt es ganz einfache Regeln:</p>
+<ol>
+	<li>
+		Wir lesen einen Token nach dem anderen;</li>
+	<li>
+		ist der Token ein Operator, also &#39;+&#39;, &#39;-&#39;, &#39;*&#39; oder &#39;/&#39;, dann schieben wir ihn auf den Stack;</li>
+	<li>
+		ist er eine Ganzzahl, dann schreiben wir ihn in den <em>out</em> String;</li>
+	<li>
+		ist er eine rechte Klammer &#39;)&#39;, dann holen wir das oberste Element vom Stack und schreiben es in den <em>out</em> String;</li>
+	<li>
+		ist er eine linke Klammer &#39;(&#39;, dann machen wir gar nichts.</li>
+</ol>
+<p>
+	Das setzen wir einfach in der Methode <em>infixToPostfix()</em> um:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public String infixToPostfix(String infix) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String out = &quot;&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Stack&lt;String&gt; stack = new Stack&lt;String&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;StringTokenizer st = new StringTokenizer(infix, &quot;()+-*/ &quot;, true);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String token = st.nextToken().trim();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (token.length() == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// do nothing&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (&quot;+-*/&quot;.contains(token)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(token);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (&quot;)&quot;.contains(token)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;out += stack.pop() + &quot; &quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (&quot;(&quot;.contains(token)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// do nothing
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;out += token + &quot; &quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return out;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Eine kleine Komplizierung kommt von den Leerzeichen, aus denen werden nach dem <em>trim()</em> leere Strings, die müssen wir explizit ignorieren.&nbsp; In der <em>Infix</em> Notation sieht unser arithmetischer Ausdruck so aus:</p>
+<pre style="margin-left: 40px;">
+1 2 3 + + 4 3 + 2 / *
+</pre>
+<p>
+	Man nennt das auch &quot;reverse polish notation&quot; (RPN).&nbsp; Wir tun uns damit schwer, aber Computer lieben diese Form, weil sie damit sofort weiterrechnen können.&nbsp; Auch hier gibt es wieder ganz einfache Regeln:</p>
+<ol>
+	<li>
+		Wir lesen einen Token nach dem anderen;</li>
+	<li>
+		ist der Token eine Ganzzahl, dann schieben wir sie auf den Stack;</li>
+	<li>
+		ist es ein Operator, dann nehmen wir die beiden obersten Element vom Stack, führen den Operator mit diesen beiden Zahlen aus, und schieben das Ergebnis wieder auf den Stack;</li>
+	<li>
+		am Ende dürfte nur noch ein Element auf dem Stack sein, und das ist das Ergebnis.</li>
+</ol>
+<p>
+	Das setzen wir in der Methode <em>evaluatePostfix()</em> um:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public int evaluatePostfix(String postfix) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Stack&lt;Integer&gt; stack = new Stack&lt;Integer&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;StringTokenizer st = new StringTokenizer(postfix, &quot;+-*/ &quot;, true);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String token = st.nextToken().trim();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (token.length() == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// do nothing
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (&quot;+-*/&quot;.contains(token)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int y = stack.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int x = stack.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (token.equalsIgnoreCase(&quot;+&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(x + y);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (token.equalsIgnoreCase(&quot;-&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(x - y);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (token.equalsIgnoreCase(&quot;*&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(x * y);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (token.equalsIgnoreCase(&quot;/&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(x / y);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stack.push(Integer.parseInt(token));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return stack.pop();
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Wenn wir das auf den Ausdruck oben anwenden, sollte 18 als Ergebnis herauskommen.</p>
+<p>
+	An dieser Stelle sei aber noch einmal auf die Einschränkung hingewiesen: unser Algorithmus funktioniert nur für vollständig geklammerte arithmetische Ausdrücke.&nbsp; Unser Algorithmus kennt auch kein Punkt-vor-Strich.&nbsp; D.h., wenn wir ihm unseren Ausdruck aus dem ersten Semester</p>
+<pre style="margin-left: 40px;">
+( 1 + 3 * 5 / 2 )</pre>
+<p>
+	vorsetzen würden, käme da etwas falsches heraus.&nbsp; Allerdings wenn wir ihm</p>
+<pre style="margin-left: 40px;">
+( 1 + ( ( 3 * 5 ) / 2 ) )</pre>
+<p>
+	vorsetzen, dann macht er alles richtig.&nbsp; Es ist nicht allzu schwer unseren Algorithmus so zu modifizieren, dass er auch noch Punkt-vor-Strich kann, aber didaktisch ist er dann nicht mehr ganz so einfach.&nbsp; Wen es interessiert kann bei [1] und [2] nachlesen.</p>
+<p>
+	Wir sollten kurz innehalten, um uns der Tragweite bewusst zu werden was wir gerade geschafft haben: mit Hilfe des Stacks haben wir eine Rechenmaschine gebaut.&nbsp; Es stellt sich heraus, dass die Java Virtual Machine auch eine Stack-Maschine ist, d.h., was wir hier gemacht haben, ist fast schon eine Virtual Machine programmiert - fast.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/GameServerQueue.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />GameServerQueue</h2>
+<p>
+	Multiplayer Games benötigen eine gerechte Möglichkeit Spieler zu Teams zusammenzufassen.&nbsp; Dafür verwendet man am besten eine Queue.&nbsp; Nehmen wir an wir wollen Teams mit jeweils zwei Spielern bilden.</p>
+<pre style="margin-left: 40px;">
+public class GameServerQueue extends ConsoleProgram {
+&nbsp;&nbsp; &nbsp;private final int NR_OF_PLAYERS_PER_TEAM = 2;
+&nbsp;&nbsp; &nbsp;private Queue&lt;String&gt; playerQueue = new LinkedList&lt;String&gt;();
+
+&nbsp;&nbsp;&nbsp; public void run() {
+        ...
+    }
+}
+</pre>
+<p>
+	Als erstes fügen wir ein paar Spieler in die Schlange ein, z.B. fünf verschiedene Namen:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void fillQueueWithNames() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (true) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String name = readLine(&quot;Enter player name: &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (name.length() == 0)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;playerQueue.add(name);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Diese werden in der Schlange gespeichert in der Reihenfolge in der sie eingegeben wurden.&nbsp; Dann ist es an der Zeit Paare zu bilden, also jeweils zwei Spieler aus der Queue zu entfernen:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void removePlayers() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (playerQueue.size() &gt;= NR_OF_PLAYERS_PER_TEAM) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; NR_OF_PLAYERS_PER_TEAM; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(playerQueue.remove() + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Wie wir sehen, passiert das in der richtigen Reihenfolge.&nbsp; Außerdem bleibt der fünfte Spieler in der Schlange, solange bis ein neuer Spieler hinzukommt, denn mit einem Spieler kann man kein Paar bilden.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/LoadBalance.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />LoadBalance</h2>
+<p>
+	LoadBalance ist eine typische Queue Anwendung.&nbsp; Wir haben z.B. vier Server, und wir möchten, dass die Last gleichmässig auf die Server verteilt wird.&nbsp; Es gibt verschiedene Möglichkeiten das zu tun.&nbsp; Bei <em>RoundRobin</em> z.B. wird die Last einfach der Reihe nach verteilt.&nbsp; Eine andere berücksichtigt die Last des Servers.&nbsp; Soll heißen, der Server mit der geringsten Last, soll den neuesten Task zugewiesen bekommen.&nbsp;</p>
+<p>
+	Wir schreiben ein einfaches ConsoleProgram, in dem wir die <em>serverQueues</em> als Array definieren, und in der <em>init()</em> Methode initialisieren:</p>
+<pre style="margin-left: 40px;">
+public class LoadBalance extends ConsoleProgram {
+&nbsp;&nbsp; &nbsp;private final int NR_OF_SERVERS = 4;
+&nbsp;&nbsp; &nbsp;private Queue&lt;String&gt;[] serverQueues;
+&nbsp;&nbsp; &nbsp;private int currentTaskNr = 0;
+
+&nbsp;&nbsp; &nbsp;public void init() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;serverQueues = new Queue[NR_OF_SERVERS];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; serverQueues.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;serverQueues[i] = new LinkedList&lt;String&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+    ...
+</pre>
+<p>
+	In der <em>run()</em> Methode,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void run() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (true) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addNewServerTask();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addNewServerTask();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;removeSomeRandomTask();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;printServerLoad();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pause(1000);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	fügen wir jeweils zwei neue Tasks hinzu, und entfernen einen zufälligen alten.&nbsp; Dazwischen lassen wir uns immer die Serverlast ausgeben:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void printServerLoad() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; serverQueues.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(serverQueues[i].size() + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println();
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	das ist einfach die Größe jeder der vier Queues.&nbsp; Das Entfernen ist ganz einfach zufällig:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void removeSomeRandomTask() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int serverNr = (int) (NR_OF_SERVERS * Math.random());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (serverQueues[serverNr].size() &gt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;serverQueues[serverNr].remove();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Bevor wir neue Tasks hinzufügen können, müssen wir erst einmal wissen welcher der Server der mit der geringsten Last ist:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private int findServerWithLowestLoad() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int serverNr = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int min = serverQueues[serverNr].size();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 1; i &lt; serverQueues.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (min &gt; serverQueues[i].size()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;min = serverQueues[i].size();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;serverNr = i;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return serverNr;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Wir gehen einfach alle Server durch und finden denjenigen, dessen Queue am wenigsten Tasks enthält.&nbsp; Danach geben wir diesem einen neuen Task:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void addNewServerTask() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int serverNr = findServerWithLowestLoad();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentTaskNr++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;serverQueues[serverNr].add(&quot;Task Nr.&quot; + currentTaskNr);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Und das war&#39;s schon.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="http://127.0.0.1:8000../images/RandomArt.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 229px; float: right;" />RandomArt</h2>
+<p>
+	Mit dem Beispiel ArithmeticExpression kann man auch hübsche, zufällige Graphiken erzeugen.&nbsp; Der Code ist fast identisch, lediglich die Regeln ändern sich ein wenig.&nbsp;</p>
+<p>
+	Bevor wir aber beginnen, wollen wir erst einmal eine interessante Beobachtung machen: der Sinus und Cosinus einer beliebigen Zahl ergibt immer einen Wert zwischen -1 und +1.&nbsp; Wenn wir zwei Zahlen die zwischen -1 und +1 sind miteinander multiplizieren, dann ergibt das immer eine Zahl die zwischen -1 und +1 liegt.&nbsp; Und wenn wir den Durchschnitt zweier Zahlen bilden die zwischen -1 und +1 sind, dann kommt da auch wieder eine Zahl zwischen -1 und +1 raus.&nbsp; Diese Tatsache lässt sich nutzen um hübsche Graphiken zu erzeugen.</p>
+<p>
+	Für unser RandomArt Projekt wollen wir also die vier mathematischen Funktionen <em>sine</em>, <em>cosine</em>, <em>multiplication</em> und <em>average</em> verwenden.&nbsp; Dabei beginnen wir mit zwei Variablen <em>x</em> und <em>y</em> mit denen wir dann folgendes ausrechnen können:</p>
+<pre style="margin-left: 40px;">
+z = s( x )     // sine
+z = c( x )     // cosine
+z = ( x * y )  // multiply x by y
+z = ( x , y )  // average x and y
+</pre>
+<p>
+	Wenn <em>x</em> und <em>y</em> zwischen -1 und +1 liegen, dann wird auch <em>z</em> wieder zwischen -1 und +1 liegen.&nbsp; Wir könnten also <em>z</em> wieder in eine der vier Funktionen stecken, und das <em>rekursiv</em> immer wieder tun.&nbsp; Das ist was die Funktion <em>createMathFunction()</em> macht:</p>
+<pre style="margin-left: 40px;">
+private String createMathFunction() {
+&nbsp;&nbsp; &nbsp;String s = &quot;&quot;;
+&nbsp;&nbsp; &nbsp;int key = (int) (Math.random() * 6);
+&nbsp;&nbsp; &nbsp;switch (key) {
+&nbsp;&nbsp; &nbsp;case 0:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;s = &quot;x&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case 1:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;s = &quot;y&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case 2:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// cosinus
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;s = &quot;c(&quot; + createMathFunction() + &quot;)&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case 3:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// sinus
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;s = &quot;s(&quot; + createMathFunction() + &quot;)&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case 4:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// multiplication
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;s = &quot;(&quot; + createMathFunction() + &quot;*&quot; + createMathFunction() + &quot;)&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case 5:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// average:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;s = &quot;(&quot; + createMathFunction() + &quot;,&quot; + createMathFunction() + &quot;)&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return s;
+}</pre>
+<p>
+	Da hier der Zufall mitspielt kann man nicht genau sagen was rauskommt, aber ein Resultat dieser Methode könnte wie folgt aussehen:</p>
+<pre style="margin-left: 40px;">
+c(c(s(c((c(s(s(x))),(y*y))))))</pre>
+<p>
+	Das erinnert sehr an die <em>infix</em> Notation der ArithmeticExpression, und das ist es auch.&nbsp; Es stellt sich heraus, dass zu kurze Ausdrücke nach nichts aussehen und zu lange Ausdrücke benötigen zu viel Zeit zum darstellen, deswegen suchen wir so lange bis wir eine <em>infix</em> Notation finden die irgendwo zwischen 50 und 200 Zeichen lang ist:</p>
+<pre style="margin-left: 40px;">
+private String findGoodPostfix() {
+&nbsp;&nbsp; &nbsp;String infix = &quot;&quot;;
+&nbsp;&nbsp; &nbsp;while (true) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;infix = createMathFunction();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if ((infix.length() &gt; 50) &amp;&amp; (infix.length() &lt; 200))
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;String postfix = convertFromInfixToPostfix(infix);
+&nbsp;&nbsp; &nbsp;return postfix;
+}</pre>
+<p>
+	Aus dieser <em>infix</em> Notation machen wir dann genauso wie bei ArithmeticExpression eine postfix Notation in der Methode <em>convertFromInfixToPostfix()</em>.&nbsp; Die folgt auch den gleichen Regeln:</p>
+<ol>
+	<li>
+		Wir lesen einen Token nach dem anderen;</li>
+	<li>
+		ist der Token ein Operator, also &#39;s&#39;, &#39;c&#39;, &#39;*&#39; oder &#39;,&#39;, dann schieben wir ihn auf den Stack;</li>
+	<li>
+		ist es ein &#39;x&#39; oder &#39;y&#39; ist, dann schreiben wir es in den <em>out</em> String;</li>
+	<li>
+		ist es eine rechte Klammer &#39;)&#39;, dann holen wir das oberste Element vom Stack und schreiben es in den <em>out</em> String;</li>
+	<li>
+		ist es eine linke Klammer &#39;(&#39;, dann machen wir gar nichts.</li>
+</ol>
+<p>
+	Analog zum ArithmeticExpression Beispiel benötigen wir noch die <em>evaluate()</em> Methode.&nbsp; Auch hier sind die Regeln fast identisch:</p>
+<ol>
+	<li>
+		Wir lesen einen Token nach dem anderen;</li>
+	<li>
+		ist der Token ein &#39;x&#39; oder &#39;y&#39;, dann schieben wir ihn auf den Stack;</li>
+	<li>
+		ist es ein binärer Operator, also entweder &#39;*&#39; oder &#39;,&#39;, dann nimm die beiden obersten Elemente vom Stack, führe den Operator mit diesen beiden Zahlen aus (also Multiplikation oder Durchschnitt bilden), und schiebe das Ergebnis wieder auf den Stack;</li>
+	<li>
+		ist es ein unärer Operator, also entweder &#39;s&#39; oder &#39;c&#39;, dann nimm das oberste Elemente vom Stack, führe die Operation aus (also nimm entweder den Sinus oder Cosinus dieser Zahl), und schiebe das Ergebnis wieder auf den Stack;</li>
+	<li>
+		am Ende dürfte nur noch ein Element auf dem Stack sein, und das ist das Ergebnis.</li>
+</ol>
+<p>
+	Jetzt benötigen wir lediglich eine Methode um unsere Kunstwerke zu zeichnen. Wir gehen sowohl für <em>x</em> als auch für <em>y</em> alle Werte zwischen -1 und +1 durch, und rufen für jeden die <em>evaluate()</em> Methode auf:</p>
+<pre style="margin-left: 40px;">
+private void drawArt(String postfix) {
+&nbsp;&nbsp; &nbsp;double step = 2.0 / SIZE;
+&nbsp;&nbsp; &nbsp;long startTime = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;for (double x = -1.0; x &lt; 1.0; x += step) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (double y = -1.0; y &lt; 1.0; y += step) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double col = evaluate(postfix, x, y);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;setPixel(x, y, col);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Die gibt uns einen Wert zwischen -1 und +1 zurück, den wir dann auf einen Grauwert zwischen 0 und 255 skalieren, und zeichnen:</p>
+<pre style="margin-left: 40px;">
+private void setPixel(double x, double y, double col) {
+&nbsp;&nbsp; &nbsp;int i = (int) ((x + 1.0) * SIZE) / 2;
+&nbsp;&nbsp; &nbsp;int j = (int) ((y + 1.0) * SIZE) / 2;
+&nbsp;&nbsp; &nbsp;GLine r = new GLine(0, 0, 0, 1);
+&nbsp;&nbsp; &nbsp;int color = (int) ((col + 1.0) * 255) / 2;
+&nbsp;&nbsp; &nbsp;r.setColor(new Color(color, color, color));
+&nbsp;&nbsp; &nbsp;add(r, i, j);
+}</pre>
+<p>
+	Natürlich müssen wir auch noch die x- und y-Positionen skalieren.&nbsp; Die Idee für dieses Projekt stammt von Christopher Stone [3], welches wiederum von Andrej Bauer inspiriert wurde [4].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Capacity.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 209px; float: right;" />Capacity*</h2>
+<p>
+	Eine ArrayList verwendet ja ein internes Array.&nbsp; Die Frage ist, können wir das beweisen?&nbsp; Ja, können wir.&nbsp; Denn jedes Mal wenn das interne Array voll ist, muss ein neues angelegt werden, und das alte muss rüberkopiert werden.&nbsp; Und das dauert.&nbsp; Wie man in dem Screenshot rechts sehen kann, dauert es normalerweise zwischen 2 und 7 ms um eine Millionen Zahlen in die ArrayList einzufügen.&nbsp; Ab und zu aber dauert es länger,&nbsp; hier sind es z.B. 91 ms, das ist zehnmal länger.&nbsp;</p>
+<p>
+	Um das zu messen benötigen wir erst einmal eine Methode die eine Millionen Zahlen (also grob 4 MByte) in die Liste einfügt:</p>
+<pre style="margin-left: 40px;">
+    private static void addSomeEntries(List&lt;Integer&gt; al) {
+        long start = System.currentTimeMillis();        
+        for (int i = 0; i &lt; 1000000; i++) {
+            al.add( 42 );            
+        }        
+        long end = System.currentTimeMillis();
+        System.out.println(&quot;Time: &quot; + (end-start) + &quot; ms (&quot;+al.size()*4/ONE_MEGABYTE+&quot; MByte)&quot;);
+    }</pre>
+<p>
+	Diese Methode führen wir dann einfach 80 mal aus und beobachten was passiert:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public static void main(String[] args) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;List&lt;Integer&gt; al = new ArrayList&lt;Integer&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//List&lt;Integer&gt; al = new LinkedList&lt;Integer&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long startMem = <span style="color:#0000ff;">usedMemory()</span>;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 80; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addSomeEntries(al);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long endMem = usedMemory();
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;System.out.println(&quot;Really used: &quot;+(endMem-startMem)/ONE_MEGABYTE+&quot; MByte&quot;);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Nur so Interesse halber wollen wir auch mal sehen wieviel Speicher unser Programm wirklich benötigt, und das geht mit <em>usedMemory()</em>:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private static long usedMemory() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Runtime runtime = Runtime.getRuntime();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return runtime.totalMemory() - runtime.freeMemory();
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Die Methode ist etwas mit Vorsicht zu geniesen, da sie den freien Speicher des gesamten Betriebssystems wiedergibt.&nbsp; Wenn wir also gleichzeitig alle möglichen anderen Sachen auf unserem Rechner laufen lassen, dann wird das nicht funktionieren.&nbsp;</p>
+<p>
+	Wenn wir ein bischen mit dem Programm spielen, und auch mal LinkedLists anstelle von ArrayLists verwenden stellen wir einige interessante Dinge fest:</p>
+<ul>
+	<li>
+		die meisten Inserts gehen bei der ArrayList sehr schnell, aber hin und wieder dauert es länger, bei einer richtigen großen Liste kann es schon mal ne Sekunde oder länger dauern;</li>
+	<li>
+		irgendwie scheint Java nicht besonders effektiv mit dem Speicher umzugehen: wir hätten erwartet, dass lediglich 300 MByte verbraucht werden, in Wirklichkeit scheint unser kleines Programm aber etwas mehr als 1 GByte verbraucht zu haben;</li>
+	<li>
+		eine LinkedList sollte eigentlich nie das Problem mit der Capacity haben, aber auch hier stellen wir fest, dass es ab und zu ewig dauert ein einziges neues Element einzufügen.&nbsp; Verstehen tue ich das auch nicht.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	Circular Buffer</h2>
+<p>
+	<img alt="" src="images/CircularBuffer.png" style="float: right; width: 200px; height: 181px;" />Ein Ringpuffer ist eine Queue-artige Datenstruktur, also eine FIFO Datenstruktur, die allerdings eine feste vorgegeben Größe hat [5].&nbsp; Dies wird sehr häufig für Log-Dateien, für Round-Robin im Load-Balancing oder für die Übertragung von Daten zwischen asynchronen Prozessen verwendet.&nbsp;</p>
+<p>
+	In dieser Übung sollen wir eine generische Klasse namens <em>CircularBuffer</em> schreiben, die einen Ringpuffer mit folgender Funktionalität umsetzt:</p>
+<ul>
+	<li>
+		<strong>isEmpty():</strong> gibt <em>true</em> zurück, falls der Puffer leer ist;</li>
+	<li>
+		<strong>isFull():</strong> gibt <em>true</em> zurück, falls der Puffer voll ist;</li>
+	<li>
+		<strong>enqueue():</strong> fügt eine neues Element am Ende ein, falls der Puffer allerdings voll ist, gibt die Methode <em>false</em> zurück, ansonsten <em>true</em>;</li>
+	<li>
+		<strong>dequeue():</strong> gibt das Element am Anfang zurück, oder <em>null</em>, falls der Puffer leer ist.</li>
+</ul>
+<p>
+	Am einfachsten verwendet man ein Array um das zu implementieren.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	In diesem Kapitel gibt es nicht ganz so viel zu erforschen.&nbsp;</p>
+<p>
+	.</p>
+<h2>
+	List of Data Structures</h2>
+<p>
+	Um eine Vorstellung davon zu bekommen, wie viele Datenstrukturen es da draußen gibt, werfen wir einen Blick auf die Sammlung von Datenstrukturen, die in der Wikipedia gelistet werden [6].</p>
+<p>
+	.</p>
+<h2>
+	Double-Ended Queue</h2>
+<p>
+	Es gibt Anwendungen bei denen bräuchte man eine Queue, bei der man sowohl am Anfang als auch am Ende etwas einfügen könnte, und genauso auch an beiden Enden etwas entfernen könnte.&nbsp; Dafür gibt es in Java die Klasse <em>ArrayDeque</em>.&nbsp; Finden Sie ein oder zwei mögliche Anwendungsfälle für eine derartige Datenstruktur.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Erklären Sie den Unterschied zwischen einer LinkedList und einer ArrayList.<br />
+		&nbsp;</li>
+	<li>
+		Geben Sie je eine Beispielanwendung für einen Stack und eine Queue.<br />
+		&nbsp;</li>
+	<li>
+		Welchen Datenstruktur verwenden Sie für Matching Parentheses?<br />
+		&nbsp;</li>
+	<li>
+		Vergleichen Sie das einfache Java-Array (int []) mit der ArrayList-Klasse. Nennen Sie je drei Unterschiede.<br />
+		&nbsp;</li>
+	<li>
+		Nennen Sie die Namen von drei Methoden der Stack-Klasse.<br />
+		&nbsp;</li>
+	<li>
+		Beschreiben Sie wie der Stack nach folgenden Operation aussieht:<br />
+		push(5), push(3), pop(), push(2), push(8), pop(), pop(), push(9), push(1), pop(), push(7), push(6), pop(), pop(), push(4), pop(), pop()</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Eine sehr schöne Einführung zu den Stack und Queue Datenstrukturen gibt das Buch von Robert Sedgewick and Kevin Wayne [7].</p>
+<p>
+	[1] Introduction to Programming in Java, Robert Sedgewick and Kevin Wayne, http://introcs.cs.princeton.edu/java/43stack/Evaluate.java.html</p>
+<p>
+	[2] Victor S.Adamchik, Computer Science - 121, Fall 2009, https://www.cs.cmu.edu/~adamchik/15-121/lectures/Stacks%20and%20Queues/Stacks%20and%20Queues.html</p>
+<p>
+	[3] Random Art, Christopher A. Stone, nifty.stanford.edu/2009/stone-random-art/</p>
+<p>
+	[4] Random Art, Andrej Bauer, www.random-art.org</p>
+<p>
+	[5] Wikipedia: Circular buffer, http://en.wikipedia.org/wiki/Circular_buffer</p>
+<p>
+	[6] List of data structures, http://en.wikipedia.org/wiki/List_of_data_structures</p>
+<p>
+	[7] Introduction to Programming in Java, by Robert Sedgewick and Kevin Wayne, at http://www.cs.princeton.edu/introcs/43stack/</p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

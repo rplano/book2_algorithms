@@ -1,0 +1,794 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html" class="active">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img alt="" src="images/b63f8aaa-c348-42b5-b144-eb5784d499a0.png" style="display: block; margin-left: auto; margin-right: auto; width: 161px; height: 182px;" /></p>
+<h1>
+	Text</h1>
+<p>
+	Die wichtigsten Anwendungen für die wir unsere Computer verwenden haben mit Text zu tun.&nbsp; Das beginnt wahrscheinlich mit dem Browser, über Email und geht bis hin zu unserem Lieblings-Textverarbeitungsprogramm.&nbsp; Selbst SMS und WhatsApp haben mit Text zu tun.&nbsp; Etwas das wir dabei als sebstverständlich voraussetzen ist die <em>Suche</em>: sowohl in unseren Word Dokumenten, in unseren Dateien, und auch im Web.&nbsp; Ein Teil dieses Kapitel widmet sich effektiver Such-Algorithmen.&nbsp; Dazu gehören aber auch Spellchecker, Phonetische Suche und z.B. Plagiatserkennung.&nbsp; Dokumente können dabei sowohl Text Dokumente, wie z.B. eine Bachelorarbeit, aber auch HTML Dokumente sein.&nbsp; Aber auch eine DNA Sequenz kann man als Dokument bezeichnen, und unter bestimmten Umständen macht es auch Sinn digitalisierte Bilder als Dokumente zu bezeichnen. Viele der Algorithmen die wir hier sehen, werden u.a. in Spellcheckern, in DNA Analyse und auch in Spam Filtern verwendet, aber auch in der Betrugserkennung und der Fingerabdruckanalyse.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Search2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Search</h2>
+<p>
+	Sehr häufig wollen wir ein gewisses Wort in einem Text finden.&nbsp; Dann verwenden wir einen Suchalgorithmus.&nbsp; Wir werden uns hier zwei näher ansehen.&nbsp; Der erste ist einfach ein Brute-Force Algorithmus: wir suchen den Pattern <em>pat</em> in dem Text <em>txt</em>, und die Methode soll ab der Position <em>shift</em> anfangen zu suchen:</p>
+<pre style="margin-left: 40px;">
+private int search(String txt, String pat, int shift) {
+&nbsp;&nbsp; &nbsp;final int m = pat.length();
+&nbsp;&nbsp; &nbsp;final int n = txt.length();
+
+&nbsp;&nbsp; &nbsp;for (int i = shift; i &lt;= (n - m); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">txt.substring(i, i + m ).equals(pat)</span>) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return i;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;return -1;
+}</pre>
+<p>
+	Der Algorithmus geht im String <em>txt</em> einfach eine Position nach der anderen durch, beginnend bei <em>shift</em>, und vergleicht ob der Substring mit der Länge des Patterns ab der Position i im Text, gleich dem gesuchten Pattern ist. Wenn ja gibt er die Position zurück, ansonsten versucht er es weiter.</p>
+<p>
+	Der Brute-Force Algorithmus ist nicht der schnellste, sein Laufzeitverhalten ist im Schnitt O(m*n).</p>
+<p>
+	.</p>
+<h2>
+	BoyerMoore</h2>
+<p>
+	Etwas besser macht das der <em>Boyer-Moore</em> Algorithmus.&nbsp; Den versteht man am besten wenn man sich gleich ein konkretes Beispiel ansieht: wir versuchen in dem Text,</p>
+<pre style="margin-left: 40px;">
+HERE IS A SIMPLE EXAMPLE</pre>
+<p>
+	den Pattern,</p>
+<pre style="margin-left: 40px;">
+EXAMPLE</pre>
+<p>
+	zu finden.&nbsp; Wir beginnen damit, dass wir die beiden unter einander schreiben,</p>
+<pre style="margin-left: 40px;">
+HERE I<span style="color:#0000ff;">S</span> A SIMPLE EXAMPLE
+EXAMPL<span style="color:#0000ff;">E</span></pre>
+<p>
+	Wir vergleichen den letzten Buchstaben im Pattern, &#39;E&#39;, mit dem Buchstaben an der gleichen Stelle im Text, dem &#39;S&#39;.&nbsp; Da die beiden nicht gleich sind, brauchen wir die anderen Buchstaben davor gar nicht zu vergleichen.</p>
+<p>
+	Interessant ist aber weiter, dass das &#39;S&#39; gar nicht im Pattern vorkommt.&nbsp; Deswegen dürfen wir für den nächsten Vergleich, den Pattern um seine ganze Länge nach rechts verschieben,</p>
+<pre style="margin-left: 40px;">
+HERE IS A SIM<span style="color:#0000ff;">P</span>LE EXAMPLE
+       EXAMPL<span style="color:#0000ff;">E</span></pre>
+<p>
+	Jetzt vergleichen wir das &#39;E&#39; mit dem &#39;P&#39;.&nbsp; Auch hier kein Match.&nbsp; Allerdings kommt das &#39;P&#39; dieses mal im Pattern vor, und zwar an vor-vorletzter Stelle. Die Regel besagt jetzt, dass wir den Pattern so verschieben müssen, dass diese beiden &#39;P&#39;s untereinander sind:</p>
+<pre style="margin-left: 40px;">
+HERE IS A SIM<span style="color:#0000ff;">P</span>LE EXAMPLE
+         EXAM<span style="color:#0000ff;">P</span>LE</pre>
+<p>
+	Nach diesem Verschieben, beginnen wir wieder die beiden von rechts nach links zu vergleichen:</p>
+<pre style="margin-left: 40px;">
+HERE IS A S<span style="color:#ff0000;">I</span><span style="color:#0000ff;">MPLE</span> EXAMPLE
+         EX<span style="color:#ff0000;">A</span><span style="color:#0000ff;">MPLE</span></pre>
+<p>
+	Das geht ganz gut aber beim &#39;A&#39; gibt es keinen Match mehr. Also wieder nach dem &#39;I&#39; im Pattern suchen.&nbsp; Kommt nicht vor, also dürfen wir den Pattern bis nach dem &#39;I&#39; nach rechts verschieben:</p>
+<pre style="margin-left: 40px;">
+HERE IS A SIMPLE E<span style="color:#0000ff;">X</span>AMPLE
+            EXAMPL<span style="color:#0000ff;">E</span></pre>
+<p>
+	Jetzt müssen wir nach dem &#39;X&#39; im Pattern suchen, und den Pattern um soviel verschieben, dass das &#39;X&#39; unter dem &#39;X&#39; ist:</p>
+<pre style="margin-left: 40px;">
+HERE IS A SIMPLE E<span style="color:#0000ff;">X</span>AMPLE
+                 E<span style="color:#0000ff;">X</span>AMPLE</pre>
+<p>
+	Wenn wir nun wieder unseren Vergleich von rechts beginnend machen, dann haben wir unseren Match gefunden.</p>
+<p>
+	Was wir hier verwendet haben ist die <em>Bad-Character Regel</em> des <em>Boyer-Moore</em> Algorithmus.&nbsp; Es gibt aber noch die <em>Good-Suffix Regel</em>, um die zu verstehen schaut man sich aber das Beispiel beim Herrn Moore persönlich an [1].&nbsp; Das Laufzeitverhalten von Boyer-Moore ist im schlimmsten Fall zwar auch O(m*n), aber wenigstens für englischen Text hat er meistens ein Laufzeitverhalten von O(m+n+x), also praktisch linear in m+n, und das ist gut.</p>
+<p>
+	<img alt="" src="images/BoyerMoore.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />In Code sieht das dann so aus:</p>
+<pre style="margin-left: 40px;">
+private int search(String txt, String pat, int shift) {
+&nbsp;&nbsp; &nbsp;final int m = pat.length();
+&nbsp;&nbsp; &nbsp;final int n = txt.length();
+
+&nbsp;&nbsp; &nbsp;int[] badchar = new int[NO_OF_CHARS];
+&nbsp;&nbsp; &nbsp;initBadCharHeuristic(pat, m, badchar);
+
+&nbsp;&nbsp; &nbsp;while (shift &lt;= (n - m)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int j = m - 1;
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// chars of pattern and text are matching
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (j &gt;= 0 &amp;&amp; pat.charAt(j) == txt.charAt(shift + j)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;j--;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (j &lt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return shift; // we found pattern
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;shift += Math.max(1, j - badchar[txt.charAt(shift + j)]);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return -1;
+}</pre>
+<p>
+	wobei,</p>
+<pre style="margin-left: 40px;">
+private void initBadCharHeuristic(String str, int size, int[] badchar) {
+&nbsp;&nbsp; &nbsp;// initialize all occurrences as -1
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; NO_OF_CHARS; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;badchar[i] = -1;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// fill the actual value of last occurrence of a character
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; size; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;badchar[str.charAt(i)] = i;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Es gibt noch viele andere Pattern-Matching Algorithmen.&nbsp; Bekannt sind er Rabin-Karp Algorithmus [2] und der Knuth Morris Pratt (KMP) Algorithmus [3], welcher vor allem deswegen interessant ist weil er ein Laufzeitverhalten von O(m+n) hat.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Levenshtein.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Levenshtein</h2>
+<p>
+	Wie funktioniert denn ein Spellchecker?&nbsp; Ein Spellchecker versucht Wörter zu finden, die ähnlich sind wie das Wort das wir falsch geschrieben haben.&nbsp; Was bedeutet ähnlich?&nbsp; Es heißt soviel wie, dass es in der Nähe ist, bzw. eine kleine Distanz entfernt ist.&nbsp; Wie misst man jetzt Distanzen zwischen zwei Strings?&nbsp; Dafür gibt es sogenannte String-Metriken [4] und die bekannteste dürfte die <em>Levenshtein</em> Distanz sein [5].&nbsp; Man kann sie auch zur Korrektur bei der Digitalisierung von Dokumenten (OCR) verwenden, auch in der Genetik werden String-Metriken und ihre Nachfahren eingesetzt.</p>
+<p>
+	Die <em>Levenshtein</em> Distanz ist eine sogenannte Editierdistanz, d.h. sie zählt wieviele Edits minimal nötig sind um von einem String auf den anderen zu kommen.&nbsp; Edits sind dabei Einfüge-, Lösch- und Ersetz-Operationen. Als Beispiel berechnen wir die <em>Levenshtein</em> Distanz zwischen den Worten &quot;kitten&quot; und &quot;sitting&quot;.&nbsp; Es sind drei Edits notwendig:</p>
+<ul>
+	<li>
+		ersetze &#39;k&#39; durch &#39;s&#39;,</li>
+	<li>
+		ersetze &#39;e&#39; durch &#39;i&#39; und</li>
+	<li>
+		füge ein &#39;g&#39; am Ende an.</li>
+</ul>
+<p>
+	deswegen ist die <em>Levenshtein</em> Distanz 3.&nbsp;</p>
+<p>
+	Der Algorithmus ist ein rekursiver:</p>
+<pre style="margin-left: 40px;">
+private int distance(String s, String t) {
+&nbsp;&nbsp; &nbsp;int cost;
+&nbsp;&nbsp; &nbsp;int len_s = s.length();
+&nbsp;&nbsp; &nbsp;int len_t = t.length();
+
+&nbsp;&nbsp; &nbsp;// base case:
+&nbsp;&nbsp; &nbsp;if (len_s == 0 || len_t == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return len_s + len_t;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// test if last characters of the strings match
+&nbsp;&nbsp; &nbsp;if (s.charAt(len_s - 1) == t.charAt(len_t - 1)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;cost = 0;
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;cost = 1;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// return minimum of delete char from s, delete char from t, and delete
+&nbsp;&nbsp; &nbsp;// char from both
+&nbsp;&nbsp; &nbsp;return min(
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;distance(s.substring(0, len_s - 1), t) + 1,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;distance(s, t.substring(0, len_t - 1)) + 1,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;distance(s.substring(0, len_s - 1), t.substring(0, len_t - 1))
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;+ cost);
+}
+</pre>
+<p>
+	Diese Version ist nicht die schnellste, aber die verständlichste [5].&nbsp;</p>
+<p>
+	Interessant in diesem Zusammenhang ist auch noch die <em>Hamming</em> Distanz [6]: sie funktioniert nur für Strings gleicher Länge und entspricht einfach der Anzahl der Buchstaben die unterschiedlich sind. Etwas später werden wir noch die Longest Common Subsequence sehen.&nbsp; Die Referenz [7] ist eine interessante Quelle in diesem Zusammenhang.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Soundex.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Soundex</h2>
+<p>
+	Beim Soundex Algorithmus [8] geht es darum Homophone, also gleichklingende Worte, zu finden. Z.B. &quot;Robert&quot; und &quot;Rupert&quot; klingen im Englischen sehr ähnlich, obwohl sie unterschiedlich geschrieben werden.&nbsp; Verwendet wird der Soundex z.B. für die phonetische Suche.&nbsp;</p>
+<p>
+	Der Soundex Algorithmus macht aus jedem Wort einen Soundex Code der aus einem Buchstaben (dem Anfangsbuchstaben) gefolgt von 3 Ziffern besteht. Z.B. wird aus &quot;Robert&quot; und &quot;Rupert&quot; der Soundex Code &quot;R163&quot;.&nbsp; Berechnet wird der Soundex Code wie folgt:</p>
+<ol>
+	<li>
+		zunächst wandelt man den String in Großbuchstaben um;</li>
+	<li>
+		dann merkt man sich den ersten Buchstaben;</li>
+	<li>
+		vom String werden all &quot;H&quot; und &quot;W&quot; entfernt, außer dem ersten Buchstaben;</li>
+	<li>
+		alle Konsonanten werden durch Zahlen ersetzt, und zwar:<br />
+		&quot;BFPV&quot; -&gt; 1, &quot;CGJKQSXZ&quot; -&gt; 2, &quot;DT&quot; -&gt; 3, &quot;L&quot; -&gt; 4, &quot;MN&quot; -&gt; 5, &quot;R&quot; -&gt; 6;</li>
+	<li>
+		es sollen keine Ziffern doppelt vorkommen, also z.B. aus &quot;77757&quot; wird &quot;757&quot;;</li>
+	<li>
+		die Vokale &quot;AEIOUY&quot; (außer der erste Buchstabe) werden entfernt;</li>
+	<li>
+		zum Schluß wird der erste Buchstabe Buchstabe in dem String wieder mit dem ursprünglichen ersten Buchstaben ersetzt, dann werden drei Nullen angehängt, und davon dann die ersten vier Zeichen genommen.&nbsp; Das ist der Soundex Code.</li>
+</ol>
+<p>
+	Beispiele sind:&nbsp; &quot;Robert&quot; und &quot;Rupert&quot;: R163,&nbsp; &quot;Rubin&quot;: R150,&nbsp; &quot;Ashcraft&quot; und &quot;Ashcroft&quot;: A261,&nbsp; &quot;Tymczak&quot;: T522 und &quot;Pfister&quot;: P236.&nbsp; Fertige Algorithmen findet man u.a. in der Apache Commons Codec [9].</p>
+<p>
+	Der Soundex Algorithmus ist für die englische Sprache optimiert, es gibt aber auch eine Version fürs Deutsche [10].&nbsp; Der Algorithmus wurde ursprünglich von Robert C. Russell and Margaret King Odell entwickelt und patentiert. Heutzutage wird eher der <em>Metaphone</em> Algorithmus verwendet, der auch für andere Sprachen sehr gut funktioniert.&nbsp; Eine schöner Vergleich findet sich in [11].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/a8ce6fbd-4adb-40da-b9ed-69d33f3fe9fc.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 191px; float: right;" />Tries</h2>
+<p>
+	Kommen wir zu einer ganz interessanten Datenstruktur, dem <em>Trie</em>. Das Wort ist eine Anspielung auf Tree, denn es handelt sich um eine Baumdatenstruktur, aber kommt von dem Wort <em>re<b>trie</b>val</em>, denn dafür wurde sie erfunden: zum Suchen.&nbsp; Ein <em>Trie</em> ist eine Datenstruktur in der man z.B. alle Wörter eines Dokumentes speichern kann.&nbsp; Er erlaubt es einem dann sehr schnell zu suchen, insbesondere auch nach Prefixen und Pattern [12,13].</p>
+<p>
+	Da es relativ aufwendig ist einen <em>Trie</em> anzulegen, macht es nur Sinn mit Tries zu arbeiten, wenn man häufiger als nur einmal ein Suche in einem Dokument machen muss.&nbsp; Deswegen eignen sie sich z.B. hervorragend für Suchmaschinen.</p>
+<h3>
+	Standard Tries</h3>
+<p>
+	Beginnen wir mit dem Standard Trie: es handelt sich um einen geordneten Baum bei dem der Wurzelknoten leer ist.&nbsp; Die Knoten eines Tries enthalten jeweils einen Character.&nbsp; Beim Standard Trie sind die Leaves leer, das muss aber nicht sein. Wenn wir einen String einfügen, z.B. das Wort &quot;ulm&quot;, dann fügen wir einen Buchstaben nach dem anderen in den Trie ein, von der Wurzel beginnend.&nbsp; Geht man den Baum von der Wurzel zu den Blättern durch, dann erhält man wieder den String den man eingefügt hat. Das interessante sind jetzt Worte bei denen die ersten Buchstaben übereinstimmen, wie z.B. &quot;um&quot; und &quot;ulm&quot; beginnen beide mit &quot;u&quot;.&nbsp; Für dieses erste &quot;u&quot; verwendet der Trie nur einen Knoten, ist also theoretisch sehr sparsam.</p>
+<p>
+	Die Datenstruktur Trie unterstützt die folgenden Methoden:</p>
+<ul>
+	<li>
+		<strong>add(&quot;stun&quot;):</strong> fügt einen neuen String ein;</li>
+	<li>
+		<strong>startsWith(&quot;st&quot;):</strong> testet ob es einen String gibt der mit &quot;st&quot; beginnt;</li>
+	<li>
+		<strong>contains(&quot;stun&quot;):</strong> testet ob es den String &quot;stun&quot; gibt;</li>
+	<li>
+		<strong>nodesWithPrefix(&quot;st&quot;):</strong> gibt alle Strings die mit &quot;st&quot; beginnen;</li>
+	<li>
+		<strong>prefixesThatMatch(&quot;s..n&quot;):</strong> gibt nur die Prefixes der Strings die dem Pattern &quot;s..n&quot; entsprechen;</li>
+	<li>
+		<strong>nodesThatMatch(&quot;s..n&quot;):</strong> gibt alle Strings die dem Pattern &quot;s..n&quot; entsprechen.</li>
+</ul>
+<p>
+	Vor allem die letzten beiden sind wunderbar für das Suchen geeignet.&nbsp; Die Laufzeiteigenschaften für Suchen, Einfügen und Löschen sind proportional zur Größe des Alphabets, d, und der Länge, m, des Strings der gesucht oder eingefügt wird, also O(d*m).</p>
+<h3>
+	<img alt="" src="images/a8ce6fbd-4adb-40da-b9ed-69d33f3fe9fc.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 191px; float: right;" />Extension</h3>
+<p>
+	Es gibt eine Erweiterung zu den Standard Tries, die es auch erlaubt sich die Position eines Strings in einem gegebenen Dokument zu merken.&nbsp; Dazu betrachten wir das folgende Beispiel, eine alte Binsenweisheit unter Börsenprofis:</p>
+<pre style="margin-left: 40px;">
+in ulm und um ulm und um ulm herum 
+0123456789012345678901234567890123</pre>
+<p>
+	Wir fügen wie gewohnt unsere Strings in den Trie ein.&nbsp; Zusätzlich aber verwenden wir noch die ungenutzten Leaf Knoten, um uns die Position zu merken an der der String im Text vorkommt.&nbsp; Damit können wir dann nicht nur sagen ob ein bestimmtes Wort in einem Text vorkommt, sondern wir können auch noch sagen wo es vorkommt.&nbsp; Wir können daraus sogar das ursprüngliche Dokument wieder herstellen.</p>
+<h3>
+	Other Tries</h3>
+<p>
+	Wenn es einige sehr lange Worte gibt, dann geht die normale Trie Datenstruktur nicht sehr sorgfältig mit dem Speicher um.&nbsp; Für solche Szenarien gibt es die komprimierten Tries.&nbsp; Bei diesen werden die Enden komprimiert.&nbsp; Es gibt auch noch sogenannte Suffix Tries, die bei Suchen nach Teilstrings sehr hilfreich sein können.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Nach einer kurzen Einführung in die Textsuche, haben wir uns kurz Editierdistanzen und phonetische Suche angesehen.&nbsp; Die Datenstruktur Trie wird uns gleich noch ein wenig weiter beschäftigen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	Die Projekte In diesem Kapitel haben&#39;s in sich.&nbsp; Nicht vergessen, wir sind erst im zweiten Semester!</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Rhymes.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />Rhymes</h2>
+<p>
+	Ein wirklich einfach Anwendung der <em>Trie</em> Datenstruktur ist ein Programm für angehende Dichter.&nbsp; Wenn wir also Worte suchen die sich auf &quot;cool&quot; reimen, dann suchen wir nach allen Worten die auf &quot;ool&quot; enden.&nbsp; Der Trick ist die Worte falsch herum in einen Trie zu speichern.</p>
+<p>
+	Wir instanziieren den <em>Trie</em>:</p>
+<pre style="margin-left: 40px;">
+private SimpleTrie trie = new SimpleTrie();</pre>
+<p>
+	und in den Trie schreiben wir einfach unser gesamtes Wörterbuch</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp; &nbsp;loadLexiconFromFile(&quot;dictionary_en_de.txt&quot;);</pre>
+<p>
+	Beim Einfügen in den Trie</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp; &nbsp;trie.add( reverseString(en.toLowerCase()) );</pre>
+<p>
+	achten wir aber darauf, dass wir alle Worter falsch herum einfügen. Wenn wir dann nach Reimen suchen, ist das ganz einfach:</p>
+<pre style="margin-left: 40px;">
+public void run() {
+&nbsp;&nbsp; &nbsp;loadLexiconFromFile(&quot;dictionary_en_de.txt&quot;);
+
+&nbsp;&nbsp; &nbsp;String word = readLine(&quot;Enter word to rhyme: &quot;);
+&nbsp;&nbsp; &nbsp;for (String s : trie.nodesWithPrefix( reverseString(word) )) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println( reverseString(s) );
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/AutoComplete.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />AutoComplete</h2>
+<p>
+	Eine Trie Datenstruktur kann man auch dazu verwenden ein Auto-Complete zu implementieren.&nbsp; Wir laden wieder das englische Wörterbuch wie bei den Reimen in einen Trie.&nbsp; Nur dieses mal drehen wir die Wörter nicht herum.&nbsp; Wenn der Nutzer jetzt anfängt zu tippen, dann warten wir die ersten drei Buchstaben ab, ansonsten gäbe es zu viele Möglichkeiten.&nbsp; Dann aber suchen wir mit</p>
+<pre style="margin-left: 40px;">
+trie.nodesWithPrefix(text)</pre>
+<p>
+	nach einem Wort, das mit diesen drei Buchstaben beginnt.&nbsp; Da es wahrscheinlich mehr als nur ein Wort gibt, das mit diesen drei Buchstaben beginnt, wählen wir das kürzeste aus:</p>
+<pre style="margin-left: 40px;">
+String suggestion = &quot;hi there i am a very long string&quot;;
+for (String s : trie.nodesWithPrefix(text)) {
+&nbsp;&nbsp; &nbsp;if (s.length() &lt; suggestion.length()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;suggestion = s;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Hier könnte man bestimmt auch andere Heuristiken verwenden, aber einfach ist gut.&nbsp; Und das war es schon.&nbsp; Man könnte das Programm jetzt noch so erweitern, dass es beim Eingeben des Tab-Zeichens den momentanen Vorschlag übernimmt, und beim Eingeben des Leerzeichens den String nimmt den der Nutzer eingegeben hat, denn nicht alle Wörter sind im Wörterbuch.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Faust.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Faust</h2>
+<p>
+	Wenn man sich mit der <em>Trie</em> Datenstruktur erst einmal angefreundet hat, ist es überraschend was man mit ihr alles machen kann.&nbsp; Natürlich kennt jeder seinen Faust, wenigstens der Tragödie erster Teil.&nbsp; Aber wie war das mit dem &quot;Pudels Kern&quot; noch mal?&nbsp; Wir würden gerne wissen an welcher Stelle im Faust dieses Zitat vorkommt.&nbsp; Diese Art von Suche nennt man &quot;Proximity&quot; Suche.&nbsp; Wir wollen uns hier auf Suchen nach genau zwei Wörtern beschränken.</p>
+<p>
+	Zunächst definieren wir zwei Datenstrukturen:</p>
+<pre style="margin-left: 40px;">
+private Trie&lt;Integer&gt; trie = new Trie&lt;Integer&gt;();
+private List&lt;String&gt; text = new ArrayList&lt;String&gt;();</pre>
+<p>
+	In <em>trie</em> speichern wir die Zeilennummern, und in <em>text</em> speichern wir den gesamten Text, dabei soll der Index einfach die Zeilennummer sein.</p>
+<p>
+	Wir lesen dann den Faust Zeile für Zeile, speichern die in die Liste <em>text</em>, und zusätzlich fügen wir sie in den <em>trie</em>:&nbsp; als Schlüssel verwenden wir immer zwei Wörter, <em>previousToken</em> und <em>token</em>, und als Wert die Zeilennummer:</p>
+<pre style="margin-left: 40px;">
+private void loadLexiconFromFile(String fileName) {
+&nbsp;&nbsp; &nbsp;try {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BufferedReader br = new BufferedReader(new FileReader(fileName));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int lineNr = 1;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (true) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String words = br.readLine();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (words == null)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">text.add(words);</span>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;StringTokenizer st = new StringTokenizer(words, &quot; ,.:;&#39;!?-()\&quot;&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String previousToken = &quot;&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String token = st.nextToken().toLowerCase();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;token = token.replace(&quot;ä&quot;, &quot;ae&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;token = token.replace(&quot;ö&quot;, &quot;oe&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;token = token.replace(&quot;ü&quot;, &quot;ue&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;token = token.replace(&quot;ß&quot;, &quot;ss&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (previousToken.length() &gt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">trie.add(previousToken + &quot;&quot; + token, &quot;&quot; + lineNr);</span>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;previousToken = token;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;lineNr++;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;br.close();
+&nbsp;&nbsp; &nbsp;} catch (Exception e) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;e.printStackTrace();
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Die Suche nach Zitaten ist dann trivial:</p>
+<pre style="margin-left: 40px;">
+String searchWords = readLine(&quot;Enter two words: &quot;);
+String[] words = searchWords.toLowerCase().split(&quot; &quot;);
+
+Set&lt;Integer&gt; lineNrs = <span style="color:#0000ff;">trie.get(words[0].trim() + words[1].trim())</span>;
+println(&quot;The words occur in line(s): &quot; + lineNrs);</pre>
+<p>
+	Wenn man dann noch die Zeilen drum herum zitieren möchte, muss man nur in der <em>text</em> Liste nachsehen:</p>
+<pre style="margin-left: 40px;">
+for (int nr : lineNrs) {
+&nbsp;&nbsp; &nbsp;println(&quot;\&quot;&quot; + text.get(nr - 2) + &quot;\&quot;&quot;);
+&nbsp;&nbsp; &nbsp;println(&quot;\&quot;&quot; + text.get(nr - 1) + &quot;\&quot;&quot;);
+&nbsp;&nbsp; &nbsp;println(&quot;\&quot;&quot; + text.get(nr - 0) + &quot;\&quot;&quot;);
+}</pre>
+<p>
+	Interessant wäre jetzt noch zu wissen wie effektiv die Trie Datenstruktur ist, und was ihre Grenzen sind.&nbsp; Wenn man die kennt, wäre der nächste Schritt eine kleine Suchmaschine für die eigene Festplatte zu bauen:&nbsp; einfach alle Dateien durchgehen, alle Wörter einfach in den Trie schreiben, und als Wert verwendet man den Dateinamen.</p>
+<h3>
+	<img alt="" src="images/JVM_Monitor.png" style="margin-left: 10px; margin-right: 10px; width: 333px; height: 163px; float: right;" />JVM Monitor</h3>
+<p>
+	Wir wollen also wissen wieviel Speicher unsere Trie Datenstruktur verbraucht.&nbsp; Dazu kann man den JVM Monitor verwenden [14].&nbsp; Der kommt normalerweise mit Eclipse, man kann ihn aber auch im nachhinein noch installieren.&nbsp; Über Window &gt; Show View &gt; Other findet man ihn unter &quot;Java Monitor&quot;.&nbsp; Im &quot;JVM Explorer View&quot; sieht man alle Programme die gerade in der JVM laufen.&nbsp; Man startet dann das Programm das man untersuchen möchte, also z.B. unser <em>Faust</em> Programm. Dann muss man rechts-klicken und &quot;Start Monitoring&quot; auswählen.&nbsp; Das macht dann ein neues &quot;Properties&quot; Fenster auf (hängt manchmal ein bischen, einfach zwischen den Fenstern hin- und herklicken). Und das sagt uns z.B., dass es von dem Trie.Node[] Array 104958 Objekte gibt, die insgesamt etwas mehr als 12 MByte verbrauchen.&nbsp;</p>
+<p>
+	Wenn wir bedenken, dass die <em>Faust.txt</em> Datei nur ca. 222 kByte groß ist, dann ist das ziemlich verschwenderisch.&nbsp; Allerdings scheint es linear zu skalieren und wir haben noch keinerlei Optimierungen vorgenommen.</p>
+<pre style="margin-left: 40px;">
+File         File Size     Objects    RAM
+Faust.txt     222 kByte    104958     12 MByte
+Ulysses.txt  1600 kByte    617142     74 MByte&nbsp;&nbsp;&nbsp; 
+</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Document.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Document</h2>
+<p>
+	In diesem Beispiel wollen wir zeigen, dass man ein ganzes Dokument in einem Trie speichern kann, und das man es auch wieder rekonstruieren kann.&nbsp; Wir nehmen wieder unseren Faust.&nbsp; Unser Trie ist der gleiche wie gehabt, lediglich beim Parsen speichern wir jetzt zusätzlich zur Zeilennummer auch noch die Position,</p>
+<pre style="margin-left: 40px;">
+int position = 1;
+StringTokenizer st = new StringTokenizer(words, &quot; ,.:;&#39;!?-()\&quot;&quot;);
+while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;String token = st.nextToken().toLowerCase();
+&nbsp;&nbsp; &nbsp;// we assume lines are less than 100 chars!
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">trie.add(token, lineNr * 100 + position);</span>
+&nbsp;&nbsp; &nbsp;position += token.length() + 1;
+}
+lineNr++;</pre>
+<p>
+	dabei gehen wir davon aus, dass es keine Zeilen gibt die mehr als 100 Zeichen haben.&nbsp; Damit ist das Laden des Tries erledigt.</p>
+<p>
+	Die Rekonstruktion ist allerdings nicht ganz trivial.&nbsp; Dabei verwenden wir folgende Datenstruktur:</p>
+<pre style="margin-left: 40px;">
+Map&lt;Integer, Map&lt;Integer, String&gt;&gt; document;</pre>
+<p>
+	Eine Map mit einer Map.&nbsp; Der Key in der ersten Map ist die Zeilennummer.&nbsp; Der Key in der zweite Map ist die Position in der Zeile, und der String ist einfach das Wort in der Zeile und an der Position.&nbsp; Will man dann die Zeile Nummer 1707, sagt man einfach:</p>
+<pre style="margin-left: 40px;">
+Map&lt;Integer, String&gt;&gt; sentence = document.get(1707);</pre>
+<p>
+	Und wenn es sich hier um eine TreeMap handelt kann man einfach ein Wort nach dem anderen ausgeben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/CrosswordPuzzle.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 175px; float: right;" />CrosswordPuzzle</h2>
+<p>
+	Meine Mutter ist kreuzworträtselsüchtig.&nbsp; Und so mit der Zeit geht das ganz schön ins Geld.&nbsp; Also dachte ich mir, muss man doch automatisch machen können.&nbsp; Stellt sich heraus automatisch Kreuzworträtsel zu generieren ist überraschend kompliziert.&nbsp; Aber mit dem <em>Trie</em> ist es gar nicht so schwer.&nbsp; Der Trick hier ist die <em>nodesThatMatch()</em> Methode des Tries.&nbsp; Z.B., liefert der Aufruf:</p>
+<pre style="margin-left: 40px;">
+nodesThatMatch(&quot;s..n&quot;)</pre>
+<p>
+	die Resultate &quot;stun&quot; und &quot;stinks&quot;, wohingegen der Aufruf</p>
+<pre style="margin-left: 40px;">
+nodesThatMatch(&quot;s..n..&quot;)</pre>
+<p>
+	nur &quot;stinks&quot; liefert.&nbsp;</p>
+<p>
+	Um anzufangen benötigen wir ein paar Worte:</p>
+<pre style="margin-left: 40px;">
+private final String[] words = { &quot;ark&quot;, &quot;card&quot;, &quot;dad&quot;, &quot;day&quot;, &quot;dear&quot;,
+&nbsp;&nbsp; &nbsp;&quot;down&quot;, &quot;east&quot;, &quot;erase&quot;, &quot;ever&quot;, &quot;father&quot;, &quot;itsy&quot;, &quot;man&quot;, &quot;mesh&quot;,
+&nbsp;&nbsp; &nbsp;&quot;near&quot;, &quot;nerf&quot;, &quot;send&quot;, &quot;stinks&quot;, &quot;stun&quot;, &quot;sync&quot;, &quot;yard&quot; }</pre>
+<p>
+	Bei Kreuzworträtseln ist es sinnvoll die Worte nicht einfach aus einem Wörterbuch zu nehmen, sondern solche die thematisch und vom Schwierigkeitsgrad irgendwie passen.&nbsp; Uns interessieren nur die richtigen Antworten, aber natürlich bräuchte man auch irgendwo die Fragen die dazu gehören.</p>
+<p>
+	Die Idee ist, dass wir im ersten Schritt unser Kreuzworträtsel definieren als 9x9 Array von chars:</p>
+<pre style="margin-left: 40px;">
+private char[][] puzzle = new char[PUZZLE_SIZE][PUZZLE_SIZE];</pre>
+<p>
+	dann initialisieren wir es mit lauter Punkten &#39;.&#39; und verteilen zufällig ein paar unserer Wort horizontal:</p>
+<pre style="margin-left: 40px;">
+dad..send
+..east...
+.....itsy
+ner<span style="color:#ff0000;">f</span>.....
+...<span style="color:#ff0000;">a</span>rk...
+...<span style="color:#ff0000;">.</span>.sync
+mes<span style="color:#ff0000;">h</span>.....
+...<span style="color:#ff0000;">e</span>ver..
+nea<span style="color:#ff0000;">r</span>.....</pre>
+<p>
+	Die Worte die wir horizontal verteilen schreiben wir in Kleinbuchstaben.&nbsp; Interessant wird ein Kreuzworträtsel nicht dadurch, dass die Wörter einfach nur horizontal verteilt sind, sondern auch vertikal. Wenn wir uns das Beispiel oben ansehen, bemerken wir z.B. dass da Platz wäre für ein &quot;fa.her&quot; (rot markiert). Die Methode <em>nodesThatMatch()</em> ist genau was wir hier brauchen, wenn wir ihr</p>
+<pre style="margin-left: 40px;">
+nodesThatMatch(&quot;fa.her&quot;)</pre>
+<p>
+	übergeben, würde die uns &quot;father&quot; zurückliefern.&nbsp; Das war&#39;s eigentlich schon.&nbsp; Wir probieren einfach ein paar vertikale Wörter, zufällig, und schauen was rauskommt:</p>
+<pre style="margin-left: 40px;">
+<span style="color:#0000ff;">D</span>aDM.Send
+<span style="color:#0000ff;">A</span>EEAsTI.S
+<span style="color:#0000ff;">Y</span>VANCIT<span style="color:#0000ff;">S</span>Y
+nER<span style="color:#0000ff;">F</span>ANS<span style="color:#0000ff;">T</span>N
+.RM<span style="color:#0000ff;">A</span>RKY<span style="color:#0000ff;">I</span>C
+..E<span style="color:#0000ff;">T</span>DSY<span style="color:#0000ff;">N</span>C
+MeS<span style="color:#0000ff;">H</span>..A<span style="color:#0000ff;">K</span>A
+A.H<span style="color:#0000ff;">E</span>veR<span style="color:#0000ff;">S</span>R
+Nea<span style="color:#0000ff;">R</span>..D.D</pre>
+<p>
+	Passt doch.&nbsp; Unser Algorithmus ist nicht gerade besonders optimiert, er wird daher auch nur für relative kurze Worte funktionieren.&nbsp; Eine interessante Übung wäre es das Laufzeitverhalten dieses Algorithmus abzuschätzen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/b63f8aaa-c348-42b5-b144-eb5784d499a0.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 226px; float: right;" />Longest Common Substring</h2>
+<p>
+	Sehr häufig müssen wir testen ob sich zwei Strings &quot;ähnlich&quot; sind. Zum Beispiel beim Programmieren, möchte man manchmal den Unterschied zwischen einer älteren und neueren Versionen wissen (z.B. UNIX diff command), oder wenn mehrere Personen an einem längeren Text arbeiten, möchte man wissen was sind denn die Änderungen zwischen verschiedenen Versionen des Dokuments.&nbsp; In der Wikipedia gibt es ab und an mal sogenannte &quot;Editing Wars&quot;.&nbsp; Auch da möchte man gerne wissen was hat sich denn zur Vorgängerversion geändert.&nbsp; Und schließlich eine ganz wichtige Anwendung ist in der DNA Analyse: hier interessieren einen sehr häufig die Unterschiede zwischen zwei verschiedenen DNA Sequenzen.</p>
+<p>
+	Wenn wir einen Brute-Force Algorithmus verwenden um zwei Strings und all ihre Substrings zu vergleichen, dann funktioniert das nur für relativ kurze Strings, denn das Laufzeitverhalten dieses Algorithmus ist exponentiell, als O(2<sup>n</sup>).&nbsp; Zu unserem Glück gibt es aber einen Algorithmus der das Problem in polynomischer Zeit schaffen kann, und zwar O(m*n), wobei <em>m</em> die Länge des einen und <em>n</em> die Länge des anderen Strings ist.&nbsp; Der Algorithmus ist eigentlich ganz einfach, und wir wollen ihn an einem genetischen Beispiel demonstrieren.</p>
+<p>
+	Homer möchte wissen, ob Bart wirklich sein Sohn ist.&nbsp; Also hat er ein Haar von sich und eines von Bart geschnappt und an den DNA Shop geschickt.&nbsp; Zurück kam folgendes:</p>
+<pre style="margin-left: 40px;">
+Homer = &quot;GTTCCTAATA&quot;
+Bart = &quot;CGATAATTGAGA&quot;.
+</pre>
+<p>
+	Was Homer jetzt machen muss, ist ein Stück kariertes Papier hernehmen, seinen DNA String entlang der x-Achse ausschreiben, und den von Bart entlang der y-Achse.&nbsp; Danach geht er einfach Zeile für Zeile durch und macht einfach in jedes Kästchen ein Kreuzchen wo beide Strings den gleichen Buchstaben haben.&nbsp; Wenn er dann die Kästchen die sich zu Diagonalen zusammenschließen, markiert, dann findet er die Übereinstimmungen in den beiden DNAs.&nbsp; Man sucht also nach dem <em>größten gemeinsamen Teilstring</em> [].&nbsp; Ich würde mal sagen, dass grob 50% der DNA übereinstimmen, also alles in Ordnung.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/LongestSubsequence.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 263px; float: right;" />Longest Common Subsequence</h2>
+<p>
+	Während wir oben nach einem exakten Match gesucht haben, erlauben wir bei der Suche nach der <em>Longest Common Subsequence</em> [18] auch Fehler:</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="images/LongestSubsequence2.png" style="width: 202px; height: 87px;" /></p>
+<p>
+	Der Algorithmus ist sehr ähnlich, mit dem gleichen Laufzeitverhalten.&nbsp; Man trägt wieder die beiden zu vergleichenden Strings an der x- und y-Achse auf.&nbsp; Im Unterschied zum obigen Beispiel benutzt man jetzt aber einen Zähler, den man am Anfang auf 0 setzt.</p>
+<ol>
+	<li>
+		man fängt oben links an, und schreibt in die nullte Zeile und Spalte lauter Nullen;</li>
+	<li>
+		man geht dann entlang der x-Achse, und jedes Mal wenn die Buchstaben übereinstimmen, erhöht man den Zähler um eins;</li>
+	<li>
+		in der nächsten Zeile&nbsp; geht wieder entlang der x-Achse.&nbsp; Jetzt kommt es darauf an ob die Buchstaben übereinstimmen, dann wird wieder hochgezählt, oder ob der Wert in der Zelle davor oder darüber höher ist.&nbsp; Es wird immer der höhere Wert übernommen;</li>
+	<li>
+		das Ganze macht man so lange bis man alle Zeilen durch hat.</li>
+</ol>
+<p>
+	Den Wert den der Zähler am Ende hat, ist die <em>längste gemeinsame Teilsequenz</em>.&nbsp; Die Sequenz selbst erhält man, wenn man der Diagonale folgt, in der die Werte des Zählers höher werden. Ein sehr schöne Animation der ganzen Prozedur findet man auf Youtube [19].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DotPlot.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />DotPlot</h2>
+<p>
+	Der Dotplot (dt. Punktauftragung) [20] ist eine Anwendung des <em>Longest Common Substring</em> Algorithmus, der vor allem in der Bioinformatik sehr populär ist [21].&nbsp; Die visuelle Darstellung ist wirklich super-easy, und das kann sogar ein Erstsemester.&nbsp; Wir bitten unseren User einfach zwei Strings einzugeben:</p>
+<pre style="margin-left: 40px;">
+public void run() {
+&nbsp;&nbsp; &nbsp;IODialog dialog = new IODialog();
+&nbsp;&nbsp; &nbsp;String s1 = dialog.readLine(&quot;Enter first string:&quot;);
+&nbsp;&nbsp; &nbsp;String s2 = dialog.readLine(&quot;Enter second string:&quot;);
+&nbsp;&nbsp; &nbsp;showSimilarity( s1, s2 );
+}</pre>
+<p>
+	die wir dann in der Methode <em>showSimilarity()</em> visuell darstellen:</p>
+<pre style="margin-left: 40px;">
+private void showSimilarity(String s1, String s2) {
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; s1.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int j = 0; j &lt; s2.length(); j++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if ( s1.charAt(i) == s2.charAt(j) ) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;GRect pixel = new GRect(BLOCK_SIZE, BLOCK_SIZE);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pixel.setFilled(true);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;add( pixel, i*BLOCK_SIZE, j*BLOCK_SIZE );
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Wir haben zwei verschachtelte Schleifen, die eine geht durch alle Buchstaben des ersten Strings, und die zweite durch alle Buchstaben des zweiten Strings, und falls die beiden Buchstaben gleich sind, zeichnen wir einfach ein kleines Rechteck.</p>
+<p>
+	Wenn wir für den ersten String und den zweiten String das gleiche Wort eingeben, dann kommt einfach eine gerade Linie heraus. Interessant wird&#39;s wenn wir mal ein Palindrom eingeben.&nbsp; Dann kommt da ein &#39;X&#39; heraus.&nbsp; Auch Fast-Palindrome geben interessante Muster:</p>
+<ul>
+	<li>
+		abcdefgh</li>
+	<li>
+		lagerregal</li>
+	<li>
+		abracadabra</li>
+	<li>
+		max i stay away at six am</li>
+</ul>
+<p>
+	Es ist ziemlich offensichtlich, dass diese visuelle Darstellung hilft bestimmte Regelmäßigkeiten auf einfach Art und Weise zu entdecken.&nbsp;</p>
+<p>
+	Gehen wir aber einen Schritt weiter, denn wir wollen ja den <em>Longest Common Substring</em> finden. Glücklicherweise finden wir in der Wikipedia&nbsp; Pseudocode der sich ganz einfach in Java übertragen lässt [17]:</p>
+<pre style="margin-left: 40px;">
+private String findLargestCommonSubstring(String S, String T) {
+&nbsp;&nbsp;&nbsp; int[][] L = new int[S.length()][T.length()];
+&nbsp;&nbsp;&nbsp; int z = 0;
+&nbsp;&nbsp;&nbsp; int endIndex = 0;
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; S.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int j = 0; j &lt; T.length(); j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (S.charAt(i) == T.charAt(j)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i == 0 || j == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L[i][j] = 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L[i][j] = L[i-1][j-1] + 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( L[i][j] &gt; z ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z = L[i][j];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endIndex = i;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L[i][j] = 0;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;if ( z &gt; 0 ) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return S.substring( endIndex-z+1, endIndex+1 );
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return null;
+}</pre>
+<p>
+	Die Länge der Übereinstimmung des Strings ist ein Meßgröße dafür wie ähnlich sich die beiden Strings sind.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DotPlot2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />Horse, Minke Whale and Kangaroo</h2>
+<p>
+	Als angehende Bioinformatiker würden wir gerne die phylogenetische Beziehungen zwischen Pferd, Zwergwal und rotem Känguru bestimmen.&nbsp; Im internet findet man &quot;The Basic Local Alignment Search Tool (BLAST)&quot; [22] und wenn man dort &quot;horse ribonuclease pancreatic&quot; als Suchbegriff eingibt findet man:</p>
+<pre style="margin-left: 40px;">
+horse
+horse ribonuclease pancreatic
+&gt;sp|P00674|1-128
+KESPAMKFERQHMDSGSTSSSNPTYCNQMMKRRNMTQGWCKPVNTFVHEPLADVQAICLQ
+KNITCKNGQSNCYQSSSSMHITDCRLTSGSKYPNCAYQTSQKERHIIVACEGNPYVPVHF
+DASVEVST
+
+minke whale
+balac ribonuclease pancreatic
+&gt;sp|P00673|1-124
+RESPAMKFQRQHMDSGNSPGNNPNYCNQMMMRRKMTQGRCKPVNTFVHESLEDVKAVCSQ
+KNVLCKNGRTNCYESNSTMHITDCRQTGSSKYPNCAYKTSQKEKHIIVACEGNPYVPVHF
+DNSV
+
+red kangaroo
+macru ribonuclease pancreatic
+&gt;sp|P00686|1-122
+ETPAEKFQRQHMDTEHSTASSSNYCNLMMKARDMTSGRCKPLNTFIHEPKSVVDAVCHQE
+NVTCKNGRTNCYKSNSRLSITNCRQTGASKYPNCQYETSNLNKQIIVACEGQYVPVHFDA
+YV</pre>
+<p>
+	Wenn man diese Daten einfach mittels unseres DotPlot Programms anzeigen lässt, erkennt sogar der Laie, dass es da eine Beziehung zwischen den dreien gibt.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DotPlot3.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />Jurassic Park</h2>
+<p>
+	Kommen wir zu unserem letzten Beispiel aus der Genanalyse: wir würden gern wissen wie nahe sind die heute lebenden Elephanten, also der afrikanische und der indische, mit dem Mammut verwandt [23]?&nbsp; Ein paar der DNA Schnipsel findet man auf den Webseiten des National Center for Biotechnology Information [24].&nbsp; Dort kann man in der Nucleotide Datenbank suchen.&nbsp; Unter den folgenden Kürzeln [23],</p>
+<pre style="margin-left: 40px;">
+African elephant: DQ316069
+Asiatic elephant: DQ316068
+Woolly mammoth: DQ316067
+N. American mastodon: EF632344
+Rock hyrax: NC_004919
+Dugong: NC_003314</pre>
+<p>
+	findet man DNA Schnipsel der entsprechenden Spezies.&nbsp; Wenn wir die einfach mit unserem simplen DotPlot Programm laden, dann sieht man zwar eine Diagonale, aber man sieht auch viel Unsinn.&nbsp; Das hat damit zu tun, dass mit den Buchstaben &quot;ACGT&quot; eben keine besonders große Vielfalt im DNA Alphabet exisitiert.&nbsp; Was die Genetiker hier machen, sie zeichnen nur dann Punkte, wenn die diagonalen Linien eine gewisse Mindestlänge haben, z.B., nur wenn mindestens sechs Aminosäuren übereinstimmen zeichnen wir diese.&nbsp; Wenn wir wollen könnten wir unser DotPlot Programm so verbessern, dass es genau das tut.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Plagiation.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 211px; float: right;" />Plagiation</h2>
+<p>
+	Eine weitere interessante Anwendung für den <em>Longest Common Substring</em> Algorithmus, ist die Erkennung von Plagiaten.&nbsp; Wir wollen die Hausarbeiten von sechs Studierenden (Richard, Mary, James, Robert, Jessica und Susan) vergleichen.&nbsp; Dazu generieren wir die DotPlots für alle möglichen Kombinationen, also 2 aus 6. Diese kombinieren wir dann zu einer gemeinsamen großen Übersichtsgrafik: dort tragen wir die Namen der Studierenden jeweils an der x- und y-Achse auf, und zeichnen in der jeweiligen Zelle den DotPlot zwischen den Hausarbeiten der beiden Studierenden.</p>
+<p>
+	In der Übersichtsgrafik kann man sofort erkennen, dass Jessica und Robert zusammen gearbeitet haben, während Susan alleine gearbeitet hat.&nbsp; Das sieht man an den langen, durchgezogenen Diagonalen.&nbsp; Je länger oder je mehr, desto größer ist die Übereinstimmung.&nbsp; Bei den anderen sieht man unterschiedlich große Übereinstimmungen, die natürlich teilweise auch zufällig sein können.</p>
+<p>
+	Um die Übereinstimmungen visuell noch stärker hervortreten zu lassen, kann man die jeweiligen DotPlots noch mit einer Hintergrundfarbe versehen.&nbsp; Weiß bedeutet so viel wie keine Übereinstimmungen, während rot hingegen eine große Übereinstimmung andeutet.&nbsp; Wie misst man denn die Übereinstimmung?&nbsp; Hier gibt es mehrere Ansätze: der einfachste, man nimmt einfach die Länge des längsten gemeinsamen Substrings, und teilt ihn durch die Länge des Gesamtstrings.&nbsp; Man könnte auch mehrere kleine Übereinstimmungen nehmen, deren Länge aufaddieren und dann skalieren.&nbsp; Interessanterweise funktioniert die einfach Variante aber bereits recht gut.</p>
+<p>
+	Eine interessante Frage die man sich stellen sollte ist, wie ist denn das Laufzeitverhalten dieses Projektes?</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	Zu diesem Kapitel gibt es sehr interessante Research, wenigstens wenn man sich dafür interessiert wie eine Suchmaschine funktioniert.</p>
+<p>
+	.</p>
+<h2>
+	diff</h2>
+<p>
+	Der diff Utility vergleicht zwei Dateien und zeigt die Unterschiede an. Es basiert auf der Lösung der längsten gemeinsamen Teilsequenz. Weitere Details finden sich in Referenz [25].</p>
+<p>
+	.</p>
+<h2>
+	Google</h2>
+<p>
+	Wie funktioniert denn eine Suchmaschine?&nbsp; Gerade im Faust Beispiel haben wir eigentlich schon gesehen wie.&nbsp; Man scannt eben nicht nur ein Dokument, sondern sehr viele, z.B. das Web.&nbsp; Die Dokumente sind in dem Fall HTML Seiten.&nbsp; Die bereitet man etwas auf, also man entfernt alles was unnötig ist, wie HTML Tags, Stopwords und man vereinfacht die Grammatik.&nbsp; Was dann übrigbleibt speichert man in einem Trie.&nbsp; Allerdings speichert man nicht die Zeilenzahl, sondern die Webseite als Wert.&nbsp; Falls es mehrere Webseiten zu einem Wert gibt, dann speichert man eine Liste (oder Set) von Webseiten.&nbsp; Diesen Trie nennt man auch manchmal &quot;Inverted Index&quot; [15]. Je nachdem wieviele Seiten man hat, passt dieser Trie nicht mehr in den RAM, da muss man sich dann Gedanken machen wie man das am besten macht mit Hilfe von Festplatten.&nbsp; Was noch fehlt ist natürlich ein Ranking, dazu dürfte die Lektüre von Referenz [16] ganz interessant sein.&nbsp; Der Rest ist Geschichte, wie es so schön heißt.</p>
+<p>
+	.</p>
+<h2>
+	Suffix Tries</h2>
+<p>
+	Für die Suche sind <em>Suffix Tries</em> sehr wichtig.&nbsp; Man sollte mal im Internet nach ihnen suchen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		In welchem Kontext wird der Boyer-Moore-Algorithmus verwendet?<br />
+		&nbsp;</li>
+	<li>
+		Hat ein Trie genügend informationen, um den Ursprungstext komplett zu rekonstruieren?&nbsp; Ist es effizienter, den Text in Form eines Trie oder als Klartext zu speichern?<br />
+		&nbsp;</li>
+	<li>
+		In einem der Aufgaben schrieben wir ein kleines Programm, um unseren Dichterfreunden zu helfen, bessere Reime zu schaffen. Welche Datenstruktur haben wir benutzt, um gute Reime zu finden?<br />
+		&nbsp;</li>
+	<li>
+		In den Übungen sahen wir ein Beispiel, wie man Plagiate identifiziert, oder genauer, wie man Copy-Paste Plagiate entdeckt. Welchen Algorithmus würden Sie verwenden, um Plagiate zu erkennen?<br />
+		&nbsp;</li>
+	<li>
+		Für die folgenden Strings konstruieren Sie einen Standard-Trie:
+		<ul>
+			<li>
+				idea, idiot, idle, hit, hour, house</li>
+			<li>
+				humid, stupid, stop, hungry, bear, hunger, stock</li>
+			<li>
+				Fischers Fritz fischt frische Fische, frische Fische fischt Fischers Fritz.<br />
+				&nbsp;</li>
+		</ul>
+	</li>
+	<li>
+		Bei der Rechtschreibprüfung (spell checker) geht es darum festzustellen ob ein Wort richtig geschrieben wurde.&nbsp; Welche Datenstruktur ist dafür am besten wenn es sich um eine etwas kompliziertere Sprache, wie z.B. das Deutsche, handelt?<br />
+		&nbsp;</li>
+	<li>
+		Vergleichen Sie die beiden Strings &quot;GCTTCGTAACT&quot; und &quot;CTATGATACTG&quot;.&nbsp; Finden Sie den größten gemeinsamen Teilstring.<br />
+		&nbsp;</li>
+	<li>
+		Was ist der Unterschied zwischen &quot;longest common substring&quot; (längste gemeinsamer Teilstring) und &quot;longest common subsequence&quot; (längste gemeinsame Teilsequenz)?</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	In diesem Kapitel gibt es ungewöhnlich viele Referenzen.</p>
+<p>
+	[1] The Boyer-Moore Fast String Searching Algorithm, <a href="http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/">www.cs.utexas.edu/users/moore/best-ideas/string-searching/</a></p>
+<p>
+	[2] Rabin-Karp Algorithm, Searching for Patterns | Set 3 (Rabin-Karp Algorithm), <a href="http://www.geeksforgeeks.org/searching-for-patterns-set-3-rabin-karp-algorithm/">www.geeksforgeeks.org/searching-for-patterns-set-3-rabin-karp-algorithm/</a><br />
+	<br />
+	[3] Knuth Morris Pratt (KMP), Searching for Patterns | Set 2 (KMP Algorithm), <a href="http://www.geeksforgeeks.org/searching-for-patterns-set-2-kmp-algorithm/">www.geeksforgeeks.org/searching-for-patterns-set-2-kmp-algorithm/</a></p>
+<p>
+	[4] String metric, <a href="https://en.wikipedia.org/wiki/String_metric">https://en.wikipedia.org/wiki/String_metric</a></p>
+<p>
+	[5] Levenshtein distance, <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">https://en.wikipedia.org/wiki/Levenshtein_distance</a></p>
+<p>
+	[6] Hamming distance, <a href="https://en.wikipedia.org/wiki/Hamming_distance">https://en.wikipedia.org/wiki/Hamming_distance</a></p>
+<p>
+	[7] amatch - Approximate Matching Extension for Ruby, <a href="https://github.com/makaroni4/amatch">https://github.com/makaroni4/amatch</a></p>
+<p>
+	[8] Soundex, <a href="https://en.wikipedia.org/wiki/Soundex">https://en.wikipedia.org/wiki/Soundex</a></p>
+<p>
+	[9] Apache Commons Codec 1.10 API, <a href="https://commons.apache.org/proper/commons-codec/apidocs/overview-summary.html">https://commons.apache.org/proper/commons-codec/apidocs/overview-summary.html</a></p>
+<p>
+	[10] Kölner Phonetik, <a href="https://de.wikipedia.org/wiki/Kölner_Phonetik">https://de.wikipedia.org/wiki/Kölner_Phonetik</a></p>
+<p>
+	[11] Using Fuzzy Matching to Search by Sound with Python, Doug Hellmann, <a href="http://informit.com/articles/article.aspx?p=1848528">informit.com/articles/article.aspx?p=1848528</a></p>
+<p>
+	[12] Data Structures and Algorithms in Java, M.T. Goodrich and R. Tamassia</p>
+<p>
+	[13] Tries, <a href="http://algs4.cs.princeton.edu/52trie/">algs4.cs.princeton.edu/52trie/</a></p>
+<p>
+	[14] JVM Monitor, <a href="http://jvmmonitor.org/index.html">jvmmonitor.org/index.html</a></p>
+<p>
+	[15] Inverted index, <a href="https://en.wikipedia.org/wiki/Inverted_index">https://en.wikipedia.org/wiki/Inverted_index</a></p>
+<p>
+	[16] The Anatomy of a Large-Scale Hypertextual Web Search, Engine Sergey Brin and Lawrence Page, <a href="http://infolab.stanford.edu/~backrub/google.html">infolab.stanford.edu/~backrub/google.html</a></p>
+<p>
+	[17] Longest common substring problem, <a href="https://en.wikipedia.org/wiki/Longest_common_substring_problem">https://en.wikipedia.org/wiki/Longest_common_substring_problem</a></p>
+<p>
+	[18] Longest common subsequence problem, <a href="https://en.wikipedia.org/wiki/Longest_common_subsequence_problem">https://en.wikipedia.org/wiki/Longest_common_subsequence_problem</a></p>
+<p>
+	[19] Longest common subsequence algorithm -- example, <a href="https://www.youtube.com/watch?v=P-mMvhfJhu8">https://www.youtube.com/watch?v=P-mMvhfJhu8</a></p>
+<p>
+	[20] Dot plot (bioinformatics), <a href="https://en.wikipedia.org/wiki/Dot_plot_(bioinformatics)">https://en.wikipedia.org/wiki/Dot_plot_(bioinformatics)</a></p>
+<p>
+	[21] Introduction to Bioinformatics, A.M. Lesk, Oxford University Press, 2005</p>
+<p>
+	[22] The Basic Local Alignment Search Tool (BLAST), <a href="http://www.uniprot.org/blast/">www.uniprot.org/blast/</a></p>
+<p>
+	[23] The evolution of mammoths and their living relatives - DNA to Darwin, <a href="http://www.dnadarwin.org/casestudies/10/FILES/MammothSG2.0.pdf">www.dnadarwin.org/casestudies/10/FILES/MammothSG2.0.pdf</a></p>
+<p>
+	[24] National Center for Biotechnology Information, <a href="https://www.ncbi.nlm.nih.gov/nuccore/">https://www.ncbi.nlm.nih.gov/nuccore/</a></p>
+<p>
+	[25] diff utility, <a href="https://en.wikipedia.org/wiki/Diff_utility">https://en.wikipedia.org/wiki/Diff_utility</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

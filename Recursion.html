@@ -1,0 +1,884 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html" class="active">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/RecursiveKarel2.png" style="display: block; margin-left: auto; margin-right: auto; width: 171px; height: 197px;" /></p>
+<h1>
+	Recursion</h1>
+<p>
+	Das Wort <em>Rekusion</em> kommt von dem lateinischen &quot;recurrere&quot; was &quot;zurückkehren&quot; bedeutet.&nbsp; Für uns heißt es soviel wie laufen wir mal los bis wir auf etwas stoßen, das wir schon kennen, und dann <em>kehren wir zurück</em> zu dem was wir vorher machen sollten.&nbsp; Rekursion ist eine weit verbreitete Technik zur Lösung aller möglichen Probleme.&nbsp; Im Vergleich zur <em>Iteration</em>, ist sie zwar häufig etwas langsamer, aber in der Regel viel eleganter.&nbsp; Fast alle Probleme lassen sich sowohl durch Iteration als auch durch Rekusion lösen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Palindrome.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Palindrome</h2>
+<p>
+	Ein sehr schönes Beispiel für Rekursion sind <em>Palindrome</em> [1]: also Worte oder Sätze die das Gleiche bedeuten, egal ob man sie von links nach rechts oder rechts nach links liest:</p>
+<ul>
+	<li>
+		rentner</li>
+	<li>
+		lagerregal</li>
+	<li>
+		racecar</li>
+	<li>
+		was it a car or a cat i saw</li>
+	<li>
+		Saippuakippokukkakivikakkukoppikauppias (Finisch für &quot;Soap-bowl-flower-stone-cake-box seller&quot;) [2]</li>
+</ul>
+<p>
+	Man kann ein Palindrom folgendermaßen definieren:</p>
+<ol>
+	<li>
+		ein Wort das null oder einen Buchstaben lang ist, ist immer ein Palindrom;</li>
+	<li>
+		ein Wort ist dann ein Palindrom, wenn der erste und letzte Buchstabe gleich sind, und wenn das Wort ohne die beiden auch ein Palindrom ist.</li>
+</ol>
+<p>
+	Das ist das typische Muster für Rekursion: wir haben immer einen <em>recursive case</em>, hier Schritt 2, in dem wir das Problem durch eine einfachere Version von sich selbst ausdrücken, und einen <em>base case</em>, hier Schritt 1, der dafür sorgt, dass die Rekursion irgendwann aufhört, deswegen nennt man es auch die Abbruchbedingung.&nbsp; Denn die häufigste Bug bei rekursiven Programmen ist, dass sie nie aufhören, so wie beim Infinite Loop aus dem letzten Semester.</p>
+<p>
+	Natürlich wollen wir das gleich in Java umsetzen: wir wollen eine Methode namens <em>isPalindrome(String s)</em> schreiben, die feststellt ob ein gegebener String ein Palindrom ist:</p>
+<pre style="margin-left: 40px;">
+private boolean <span style="color:#0000ff;">isPalindrome</span>(String s) {
+&nbsp;&nbsp;&nbsp; if (s.length() &lt;= 1) {&nbsp;&nbsp; // base case
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return true;
+&nbsp;&nbsp;&nbsp; } else {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // recursive case
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (s.charAt(0) == s.charAt(s.length() - 1)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return <span style="color:#0000ff;">isPalindrome</span>(s.substring(1, s.length() - 1));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return false;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Übrigens gibt es Palindrome auch in der Musik, und interessanterweise auch in unserer DNA: anscheinend speichert unserer Immunsystem die RNA von Viren sowohl vorwärts als auch rückwärts um böse Viren zu erkennen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Factorial.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Factorial</h2>
+<p>
+	Kommen wir zu einem anderen Klassiker der sich sehr schön mittels Rekursion lösen lässt, die Fakultät einer Zahl.&nbsp; In der Schule haben wir gelernt, dass man die Fakultät von vier wie folgt berechnet:</p>
+<pre style="margin-left: 40px;">
+4! = 4 * 3 * 2 * 1</pre>
+<p>
+	Wenn wir das als Programm schreiben wollen, dann bietet sich eine Schleife an:</p>
+<pre style="margin-left: 40px;">
+int fac = 1;
+for (int i=1; i&lt;=4) {
+     fac = fac * i;
+}
+</pre>
+<p>
+	Das ist die iterative Art und Weise die Fakultät einer Zahl zu berechnen.&nbsp; Es gibt aber noch eine andere, die rekursive.&nbsp; Dazu beobachten wir, dass:&nbsp;</p>
+<pre style="margin-left: 40px;">
+<span style="color:#0000ff;">4!</span> = 4 * 3 * 2 * 1 = 4 * <span style="color:#0000ff;">3!</span></pre>
+<p>
+	Wir können also 4! durch vier mal 3! ausdrücken.&nbsp; Im Allgemeinen gilt sogar</p>
+<pre style="margin-left: 40px;">
+n! = n * (n-1)!</pre>
+<p>
+	Immer wenn wir eine derartige Beziehung finden, also dass eine Funktion in <em>f(n)</em> durch eine Funktion in <em>f(n-1)</em> ausgedrückt werden kann, dann haben wir eine rekursive Lösung für unser Problem.</p>
+<p>
+	Setzen wir das gleich mal in Code um:</p>
+<pre style="margin-left: 40px;">
+int <span style="color:#0000ff;">factorial</span>(int n) {
+    return n * <span style="color:#0000ff;">factorial</span>( n-1 );
+} 
+</pre>
+<p>
+	Wir haben also eine Methode die sich selbst aufruft: das ist Rekursion.</p>
+<p>
+	Unser Code hat allerdings ein kleines Problem: er hört nicht auf zu laufen, weil wir die Abbruchbedingung, den <em>base case</em>, vergessen haben.&nbsp; Bei der Fakultät ist das die Tatsache, dass per definitionem</p>
+<pre style="margin-left: 40px;">
+0! = 1</pre>
+<p>
+	Damit sieht unser Java dann wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+int factorial(int n) {
+    if ( n == 0 )
+        return 1;
+    else
+        return n * factorial( n-1 );
+} 
+</pre>
+<p>
+	Wir sehen also man kann die Fakultät einer Zahl sowohl durch Iteration als auch durch Rekursion berechnen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/7f5aa121-0f79-43b2-b788-73a707690b1e.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 128px; float: right;" />Tower of Hanoi</h2>
+<p>
+	Das Rekursion nicht nur mit Wörtern oder Zahlen zu tun hat, sondern sehr häufig hübsche grafische Anwendungen hat, soll das Beispiel <em>Tower of Hanoi</em> zeigen [3].&nbsp; Im Kindergarten hat eigentlich schon mal fast jeder mit dem Spiel <em>Türme von Hanoi</em> zu tun gehabt.&nbsp; Dabei geht es darum einen Stapel Scheiben, meist aus Holz, von dem Stab auf er linken Seite auf den Stab auf der rechten Seite zu verschieben. Dabei gilt es allerdings folgende Regeln zu beachten:</p>
+<ol>
+	<li>
+		man kann immer nur eine Scheibe verschieben;</li>
+	<li>
+		es kann immer nur die oberste Scheibe eines Stapels verschoben werden;</li>
+	<li>
+		es darf nie ein größere Scheibe auf einer kleineren zu liegen kommen.</li>
+</ol>
+<p>
+	Man denkt, das kann doch gar nicht so schwer sein, aber beim ersten Mal ist es gar nicht so einfach.&nbsp;</p>
+<p>
+	Interessant für uns ist, dass es eine überraschend elegante rekursive Lösung für das Problem gibt: Angenommen, wir haben einen Stapel mit sieben Scheiben.&nbsp; Und nehmen wir an wir wüssten wie man einen Stapel mit sechs Scheiben verschieben kann.&nbsp; Dann ist die Lösung für unser Problem ganz einfach: Schiebe zunächst die sechs Scheiben auf den mittleren Stab.&nbsp; Dann nimm die übriggebliebene siebte Scheibe (die weiße) und verschiebe sie auf den rechten Stab.&nbsp; Und jetzt verschieben wir den Stapel mit den sechs Scheiben auf den rechten Stab.&nbsp; Das Problem mit sieben Scheiben ist gelöst.&nbsp; Wir können also das 7 Scheiben Problem lösen, wenn wir das 6 Scheiben Problem lösen können.&nbsp; Und das ist eine rekursive Lösung.&nbsp; Bleibt die Frage nach dem Abbruchkriterium: das ist ganz einfach: einen Stapel mit einer Scheibe können wir immer bewegen.</p>
+<p>
+	<img alt="" src="images/TowerOfHanoiGraphic.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Also sieht unser Algorithmus wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+private void <span style="color:#0000ff;">moveTower</span>(int n, int source, int destination, int temp) {
+&nbsp;&nbsp; &nbsp;if (n &gt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">moveTower</span>(n - 1, source, temp, destination);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;moveOneDisk(source, temp);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">moveTower</span>(n - 1, destination, source, temp);
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	Und das kann man auch sehr hübsch animieren.</p>
+<p>
+	Eine kleine Anmerkung zum <em>Tower of Hanoi</em> Problem: schon für relativ wenige Scheiben, dauert es sehr lange die Scheiben zu verschieben.&nbsp; Z.B., wenn man annimmt, das es eine Sekunde dauert eine Scheibe zu verschieben, dann dauert es 12 Tage um einen Stapel mit nur 20 Scheiben zu verschieben.&nbsp; Und für einen Stapel mi 60 Scheiben würde man mehr Zeit benötigen als unser Universum alt ist [3]!</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Mittels Rekursion lassen sich sehr viele Probleme elegant lösen.&nbsp; Sehr vielen Algorithmen denen wir begegnen werden bedienen sich daher eines rekursiven Ansatzes.&nbsp; Der folgt immer den folgenden zwei Schritten:</p>
+<ol>
+	<li>
+		ein Problem kann durch eine einfachere Version von sich selbst ausgedrückt werden;</li>
+	<li>
+		es gibt ein Abbruchkriterium, also irgend einen einfachen Fall von dem man die Antwort kennt.</li>
+</ol>
+<p>
+	Sehr, sehr viele Problem lassen sich durch Rekursion lösen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	Man mag sich vielleicht die Frage stellen, muss ich mir die Rekursion wirklich antun?&nbsp; Nach den folgenden Beispielen kann jeder die Frage für sich selbst beantworten.&nbsp; Für mich ist die Antwort aber ziemlich eindeutig: Rekursion ist cool.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/RecursiveKarel.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />RecursiveKarel</h2>
+<p>
+	In dem Projekt geht es darum Rekursion zu visualisieren.&nbsp; Dazu nehmen wir ein Bild von Karel, welches wir schrittweise immer kleiner machen, und die einzelnen Bilder ineinander zeichnen.&nbsp; Wir beginnen mit dem großen Karel:</p>
+<pre style="margin-left: 40px;">
+drawKarel(4.0, 10, -40);</pre>
+<p>
+	In der drawKarel() Methode, zeichnen wir dann ein GImage, skaliert wie gewünscht,</p>
+<pre style="margin-left: 40px;">
+private void <span style="color:#0000ff;">drawKarel</span>(double scale, int x, int y) {
+&nbsp;&nbsp; &nbsp;GImage karel = new GImage(&quot;Karel0.png&quot;);
+&nbsp;&nbsp; &nbsp;karel.scale(scale);
+&nbsp;&nbsp; &nbsp;add(karel, (SIZE-karel.getWidth())/2 + x, (SIZE-karel.getHeight())/2 + y);
+
+&nbsp;&nbsp; &nbsp;if (karel.getWidth() &lt; 2) { // base case
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+&nbsp;&nbsp; &nbsp;} else { // recursive case
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">drawKarel</span>(scale / 2, x+=(5*scale), y-=(2.5*scale));
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	und rufen danach uns selbst wieder auf, allerdings soll das Bild dieses mal nur halb so groß sein, und etwas verschoben.</p>
+<p>
+	Hier handelt es sich um eine ganz einfaches Beispiel von Selbstähnlichkeit, viele Fraktale beruhen auf einem ganz ähnlichen Prinzip.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Tree2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 174px; float: right;" />Tree</h2>
+<p>
+	Bäume zu zeichnen ist eines von den Beispielen, die ganz einfach sind mit Rekursion, aber ziemlich knifflig werden wenn man es mit Iteration versucht.&nbsp; Ein Baum besteht aus Ästen, und wir zeichnen diese rekursiv, einen nach dem anderen.&nbsp; Wir schreiben wieder ein GraphicsProgram und beginnen damit den ersten Ast (also den Stamm) zu zeichnen:</p>
+<pre style="margin-left: 40px;">
+drawBranch(x, y, angle, length);</pre>
+<p>
+	dabei sind <em>x</em> und <em>y</em> die Position wo ein Ast beginnt, <em>angle</em> ist der Winkel mit dem sich der Ast neigt, und <em>length</em> ist die Länge des Astes.&nbsp; In jeder <em>drawBranch()</em> Methode zeichnen wir also zunächst einen Ast als GLine,</p>
+<pre style="margin-left: 40px;">
+private void drawBranch(double x0, double y0, double angle,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double length) {
+
+&nbsp;&nbsp; &nbsp;double x1 = x0 - Math.cos(angle) * length;
+&nbsp;&nbsp; &nbsp;double y1 = y0 - Math.sin(angle) * length;
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">drawLine(x0, y0, x1, y1, length);</span></pre>
+<p>
+	Danach wollen aber rekursive jeweils zwei neue Zweige zeichnen, die ein klein bischen kürzer sein sollen, und sich auch zufällig ein bischen mehr nach links und rechts neigen sollen:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; // base case
+&nbsp;&nbsp; &nbsp;if (length &lt; 10)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;double bendAngle = Math.toRadians(rgen.nextDouble(-10, 10));
+&nbsp;&nbsp; &nbsp;double branchAngle = Math.toRadians(rgen.nextDouble(-30, 30));
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">drawBranch</span>(x1, y1, angle + bendAngle - branchAngle,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;length * rgen.nextDouble(0.6, 0.8));
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">drawBranch</span>(x1, y1, angle + bendAngle + branchAngle,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;length * rgen.nextDouble(0.6, 0.8));
+}</pre>
+<p>
+	Wir brauchen natürlich auch ein Abbruchkriterium, und das ist sobald die Äste kürzer als zehn Pixel sind hören wir auf.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ArithmeticExpression.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />ArithmeticExpression</h2>
+<p>
+	Die Berechnung von arithmetischen Ausdrücken ist auch etwas was sich sehr schön mittels Rekursion lösen lässt.&nbsp; Betrachten wir dazu einen Ausdruck wie</p>
+<pre style="margin-left: 40px;">
+1 + 3 * 5</pre>
+<p>
+	als Beispiel.&nbsp; Zunächst einmal ist das ein String den wir vom Nutzer erhalten</p>
+<pre style="margin-left: 40px;">
+String expression = readLine(&quot;Enter an expression:&quot;);
+println( <span style="color:#0000ff;">evaluate</span>( expression ) );</pre>
+<p>
+	und <em>evaluate()</em> ist die rekursive Methode die den eingegeben String auswerten soll.</p>
+<p>
+	Beginnen wir mit dem <em>base case</em>: der tritt dann ein wenn unser String keine Operatoren enthält, dann ist es einfach eine Zahl, und wir können die einfach in einen <em>int</em> umwandeln:</p>
+<pre style="margin-left: 40px;">
+private int evaluate(String expression) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (!expression.contains(&quot;+&quot;) &amp;&amp; !expression.contains(&quot;-&quot;) &amp;&amp; !expression.contains(&quot;*&quot;)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&amp;&amp; !expression.contains(&quot;/&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return <span style="color:#0000ff;">Integer.parseInt(expression.trim())</span>;
+&nbsp;&nbsp; &nbsp;}
+    ...
+}
+</pre>
+<p>
+	Kommen wir zum <em>recursive case</em>: wir wissen zwar nicht wie wir &quot;1 + 3 * 5&quot; ausrechnen können, aber wenn wir wüssten was &quot;1&quot; ist und was &quot;3*5&quot; ist, dann könnten wir es.&nbsp; D.h., wir berechnen erst einmal diese beiden, und kehren dann zurück (recur) zur Addition dieser beiden Terme.&nbsp; Deswegen spliten wir erst einmal den String beim &#39;+&#39;,</p>
+<pre style="margin-left: 40px;">
+int i = expression.indexOf(&#39;+&#39;);
+String o1 = expression.substring(0, i);
+String o2 = expression.substring(i + 1, expression.length());
+</pre>
+<p>
+	und berechnen dann rekursiv:</p>
+<pre style="margin-left: 40px;">
+int result = evaluate(o1) + evaluate(o2);</pre>
+<p>
+	d.h. der rechte Term beinhaltet <em>evaluate(&quot;1&quot;)</em> und der rechte <em>evaluate(&quot;3*5&quot;)</em>. Die werden jetzt beide wiederum rekursiv ausgewertet, bis wir jeweils beim <em>base case</em> ankommen.&nbsp; So motiviert betrachten wir den <em>recursive case</em>:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; // recursive case
+&nbsp;&nbsp; &nbsp;int i = findPlusAndMinus(expression);
+&nbsp;&nbsp; &nbsp;if (i &lt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;i = findTimesAndDivideBy(expression);
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;String o1 = expression.substring(0, i);
+&nbsp;&nbsp; &nbsp;String o2 = expression.substring(i + 1, expression.length());
+
+&nbsp;&nbsp; &nbsp;int result = 0;
+
+&nbsp;&nbsp; &nbsp;switch (expression.charAt(i)) {
+&nbsp;&nbsp; &nbsp;case &#39;+&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;result = evaluate(o1) + evaluate(o2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case &#39;-&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;result = evaluate(o1) - evaluate(o2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case &#39;*&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;result = evaluate(o1) * evaluate(o2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case &#39;/&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;result = evaluate(o1) / evaluate(o2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return result;
+}
+</pre>
+<p>
+	Wir suchen als erstes nach einem Plus oder einem Minus.&nbsp; Falls wir eines finden, dann schneiden wir den String auseinander, und je nachdem ob es ein Plus oder ein Minus ist, addieren oder sutrahieren wir das Ergebnis der <em>evaluate()</em> Methode mit den jeweilgen linken und rechten Teilstrings. Falls es kein Plus oder Minus gibt suchen wir nach einem Mal oder Geteilt-Durch, und machen dann das Gleiche.</p>
+<p>
+	Obwohl es ja Punkt-vor-Strich heißt, und man naiv erwarten würde, dass man erst nach Mal und Geteilt-Durch sucht, und danach erst nach Plus und Minus, ist es in der Rekursion genau umgekehrt.&nbsp; Das hat damit zu tun, dass eben die rekursiven Schritte in umgekehrter Reihenfolge ausgeführt werden.&nbsp; Daran muss man sich erst gewöhnen, und das macht die Rekursion auch manchmal etwas gewöhnungsbedürftig.</p>
+<p>
+	Interessanterweise, passiert dieses Zurückkehren glech nochmal: wenn wir &quot;3*5/2&quot; betrachten, dann soll von links nach rechts ausgewertet werden, also erst &quot;3*5&quot; und dann &quot;15/2&quot; (ergibt 7 in Ganzzahl-Arithmetik). Das bedeutet aber, da wir ja rekursiv arbeiten, dass wir in der <em>findTimesAndDivideBy()</em> Methode nicht von links nach rechts nach &#39;*&#39; oder &#39;/&#39; suchen, sondern von rechts nach links:</p>
+<pre style="margin-left: 40px;">
+private int findTimesAndDivideBy(String expression) {
+&nbsp;&nbsp; &nbsp;int i;
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">for (i = expression.length() - 1; i &gt;= 0; i--) {</span>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (expression.charAt(i) == &#39;*&#39; || expression.charAt(i) == &#39;/&#39;) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return i;
+}</pre>
+<p>
+	Das Gleiche gilt auch für die <em>findPlusAndMinus()</em> Methode.&nbsp; Am besten man probiert es mal aus und sieht, dass es funktioniert.&nbsp; Dann kann man ja mal die naive Version versuchen, und wird feststellen, dass da was Falsches rauskommt.&nbsp; Und dann geht man am besten einfach Schritt-für-Schritt das einfache Beispiel &quot;1 + 3 * 5&quot; durch um zu sehen, wie das mit der Rekusion funktioniert.&nbsp; Danach hat man dann die Rekursion wirklich verstanden!</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Permutations.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Permutations</h2>
+<p>
+	Die Berechnung von Permutationen [4] ist auch ein Problem das sehr elegant mit Rekursion gelöst werden kann.&nbsp; Als Beispiel betrachten wir die Buchstabenkombination &quot;abc&quot;. Wir wollen alle möglichen Permutationen dieser Buchstabenkombination auflisten, als da sind:</p>
+<pre style="margin-left: 40px;">
+abc, acb,   bac, bca,   cab, cba</pre>
+<p>
+	Wichtig bei Permutationen ist, dass es auf die Reihenfolge der Buchstaben ankommt.</p>
+<p>
+	Wir beginnen also indem wir den ersten Buchstaben festlegen, und permutieren dann die übrigen.&nbsp; Das sieht nach einem rekursiven Algorithmus aus: wir haben das größere Problem, permutiere eine Wort mit drei Buchstaben, auf ein einfacheres Problem, permutiere eine Wort mit zwei Buchstaben, zurückgeführt.&nbsp; Bleibt das Abbruchkriterium, und das sind Wörter die nur einen Buchstabe enthalten, da gibt es nur eine Permutation, der Buchstabe selbst.</p>
+<pre style="margin-left: 40px;">
+private void <span style="color:#0000ff;">permute</span>(String picked, String remaining) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (remaining.length() == 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(picked + remaining + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; remaining.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char pick = remaining.charAt(i); // pick a letter
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String front = remaining.substring(0, i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String back = remaining.substring(i + 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">permute</span>(picked + pick, front + back);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Was wir noch gerne wissen würden ist, wieviele Permutationen gibt es insgesamt?</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Subsets.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Subsets</h2>
+<p>
+	Bei Subsets [5] geht es um Untermengen:&nbsp; wir betrachten wieder die Buchstabenkombination &quot;abc&quot;. Wir wollen alle möglichen Untermengen dieser Buchstabenkombination auflisten, auch das ist keine Raketenwissenschaft:</p>
+<pre style="margin-left: 40px;">
+abc,   ab, ac, bc,   a, b, c</pre>
+<p>
+	Bei Untermengen spielt die Reihenfolge der Buchstaben keine Rolle.&nbsp;</p>
+<p>
+	Die rekursive Lösung für dieses Problem ist nicht ganz offensichtlich, deswegen sehen wir uns erst mal den Code an, und versuchen ihn dann zu verstehen:</p>
+<pre style="margin-left: 40px;">
+private void <span style="color:#0000ff;">subset</span>(String picked, String remaining) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (remaining.length() == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(picked + &quot;, &quot;);
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char pick = remaining.charAt(0); // pick first letter
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">subset</span>(picked + pick, remaining.substring(1));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">subset</span>(picked, remaining.substring(1));
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Als Beispiel betrachten wir das Wort &quot;abc&quot;: am Anfang enthält <em>picked</em> den Leerstring und <em>remaining</em> enthält &quot;abc&quot;.&nbsp; Beim ersten Durchlauf, wird die Methode <em>subset()</em> zweimal aufgerufen, dabei einmal mit <em>picked=&quot;a&quot;</em> und einmal mit <em>picked=&quot;&quot;</em>, aber beide male mit <em>remaining=&quot;bc&quot;</em>.&nbsp; Das kann man recht übersichtlich als Baum darstellen:</p>
+<h2 style="margin-left: 40px;">
+	<img alt="" src="images/SubsetTree.png" style="margin-left: 10px; margin-right: 10px; width: 474px; height: 71px;" /></h2>
+<p>
+	links steht immer der Wert von <em>picked</em>, und rechts der Wert von <em>remaining</em>.&nbsp; Wir sind fertig, wenn in <em>remaining</em> nichts mehr steht.</p>
+<p>
+	Unser Code liefert auch den Leerstring als mögliches Subset.&nbsp; Das ist eine überaus nicht-triviale Entscheidung, sie hat nämlich mit den Gödelschen Unvollständigkeitssätzen zu tun [23]:&nbsp; In einer Stadt (ist nicht Nürnberg), in der es nur einen Herrenfriseur gibt, gibt es eine Verordnung die besagt, dass jeder Mann der sich nicht selbst rasiert vom Friseur rasiert wird.&nbsp; Hat der Friseur einen Bart?&nbsp; Das ist die Frage die die Grundfesten der Mathematik erschüttert hat, und von der sich selbige bis heute nicht erholt hat.</p>
+<p>
+	Was wir noch gerne wissen würden ist, wieviele Subsets gibt es insgesamt?</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PascalTriangle.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />PascalTriangle</h2>
+<p>
+	Das Pascalsche Dreieck [6] ist auch ein sehr anschauliches Beispiel für Rekursion.&nbsp; Wenn wir irgendeine Zahl in dem Dreieck nehmen, z.B. die 4, dann ist sie die Summe der beiden Zahlen links und rechts in der Zeile darüber, also 1+3.&nbsp; Das gilt für alle Zahlen in dem Dreieck.&nbsp; Dass das eine rekursive Beziehung ist sehen wir daran, dass 3, wiederum die Summe der beiden Zahlen 1 und 2 ist, in der Zeile darüber.&nbsp; Wir nummerieren die Zeilen mit <em>n</em>, und die Spalten mit <em>k</em>, dann gilt also</p>
+<pre style="margin-left: 40px;">
+private int pascalRecursion(int n, int k) {
+    // recursive case
+&nbsp;&nbsp; &nbsp;return pascalRecursion(n - 1, k - 1) + pascalRecursion(n - 1, k);
+}</pre>
+<p>
+	Was ist das Abbruchkriterium?&nbsp; Wir sehen dass an den Seiten immer eine 1 steht.&nbsp; Für die linke Seite gilt immer <em>k==0</em> und für die rechte Seite gilt immer <em>k==n</em>.&nbsp; Also,</p>
+<pre style="margin-left: 40px;">
+private int pascalRecursion(int n, int k) {
+&nbsp;&nbsp; &nbsp;if (k == 0 || k == n) { // base case
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 1;
+&nbsp;&nbsp; &nbsp;} else { // recursive case
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return pascalRecursion(n - 1, k - 1) + pascalRecursion(n - 1, k);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Damit lässt sich jetzt jede Zahl im Pascalsche Dreieck berechnen.&nbsp; Wenn wir noch über die Zeilen und Spalten iterieren, können wir das gesamt Dreieck darstellen.</p>
+<p>
+	Kommen wir zur Bedeutung des Pascalschen Dreiecks: es hat mit den Binomialkoeffizienten zu tun.&nbsp; Zur Erinnerung, was sind die Binomialkoeffizienten:</p>
+<pre style="margin-left: 40px;">
+(a + b)&sup1; = <span style="color:#0000ff;">1</span>*a  + <span style="color:#0000ff;">1</span>*b
+(a + b)&sup2; = <span style="color:#0000ff;">1</span>*a&sup2; + <span style="color:#0000ff;">2</span>*a*b  + <span style="color:#0000ff;">1</span>*b&sup2;
+(a + b)&sup3; = <span style="color:#0000ff;">1</span>*a&sup3; + <span style="color:#0000ff;">3</span>*a&sup2;*b + <span style="color:#0000ff;">3</span>*a*b&sup2; + <span style="color:#0000ff;">1</span>*b&sup2;</pre>
+<p>
+	das sind die blauen Zahlen vor den Termen, und wenn wir diese mit den Zahlen im Pascalsche Dreieck vergleichen sollten wir erkennen, dass die sich sehr ähnlich sehen.&nbsp; Also stellt das Pascalsche Dreieck eine sehr einfache Art und Weise dar die Binomialkoeffizienten auszurechnen.</p>
+<p>
+	Interessant ist auch die Beziehung zwischen dem Pascalschen Dreieck und den Fibonacci-Zahlen [6].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Combinations.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Combinations</h2>
+<p>
+	Das Pascalsche Dreieck ist nicht nur hübsch und hat alle möglichen interessanten mathematischen Eigenschaften, es hat auch eine durchaus praktische Anwendung, mit der wir nicht selten zu tun haben werden: manchmal sollen wir alle möglichen Paare aus einer Menge von z.B. vier Personen auflisten [7].&nbsp; In dem Fall sagen wir, wir wollen alle möglichen Zweier-Kombination aus den vier Personen finden, man sagt auch 2 aus 4.&nbsp; Nehmen wir an die vier Personen heißen a, b, c und d, dann gibt es folgende Paarkombinationen:</p>
+<pre style="margin-left: 40px;">
+ab, ac, ad, bc, bd, cd</pre>
+<p>
+	Auch hier können wir wieder eine rekursive Beziehung erkennen:</p>
+<pre style="margin-left: 40px;">
+private void <span style="color:#0000ff;">combinations</span>(int n, int k, String picked, String remaining) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (k == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(picked + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;} else if ((k == n)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(picked + remaining + &quot;, &quot;);
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char pick = remaining.charAt(0); // pick first letter
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">combinations</span>(n - 1, k, picked, remaining.substring(1));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">combinations</span>(n - 1, k - 1, picked + pick, remaining.substring(1));
+&nbsp;&nbsp; &nbsp;}
+}.</pre>
+<p>
+	Der Code ist ähnlich zu dem von Subsets, allerdings durch die <em>n</em> und <em>k</em>, etwas komplizierter.&nbsp; Am besten wir betrachten wieder die Darstellung als Baum:</p>
+<h2 style="margin-left: 40px;">
+	<img alt="" src="images/CombinationsTree.png" style="margin-left: 10px; margin-right: 10px; width: 541px; height: 99px;" /></h2>
+<p>
+	von links nach rechts stehen die Werte von <em>n</em>, <em>k</em>, <em>picked</em> und <em>remaining</em>.&nbsp; Nehmen wir an wir wollen alle Zweierkombination aus dem Wort &quot;abcd&quot;. Dann ist <em>n=4</em> die Länge des Worts, <em>k=2</em> steht für Zweierkombinationen, und <em>picked</em> ist am Anfang leer, und <em>remaining</em> enthält &quot;abcd&quot;.&nbsp;</p>
+<p>
+	Im ersten Schritt haben wir die Möglichket &#39;a&#39; zu wählen (rechts) oder nicht zu wählen (links).&nbsp; Wenn wir &#39;a&#39; gewählt haben, können wir als nächstes &#39;b&#39; wählen (wieder rechts) oder &#39;b&#39; nicht wählen (wieder links).&nbsp; Wenn wir &#39;b&#39; gewählt haben, sind wir fertig, da wir ja schon zwei Buchstaben (&#39;a&#39; und &#39;b&#39;) gewählt haben.&nbsp; Wenn wir &#39;b&#39; nicht gewählt haben, dann bleiben noch zwei Möglichkeiten: wir können &#39;c&#39; wählen (rechts), oder &#39;c&#39; nicht wählen (links).&nbsp; Wenn wir &#39;c&#39; wählen, sind wir fertig weil wir &#39;a&#39; und &#39;c&#39; gewählt haben.&nbsp; Wenn wir &#39;c&#39; nicht gewählt haben, sind wir auch fertig, weil es nur noch &#39;d&#39; zu wählen gibt um einer Zweierkombination zu bilden, ansonsten wäre es nämlich eine Einserkombination.</p>
+<p>
+	Und was hat das jetzt mit dem Pascalsche Dreieck zu tun?&nbsp; Es sagt uns wieviele Kombinationen es gibt.&nbsp; Nehmen wir unser Beispiel mit 2 aus 4:&nbsp; 4 ist n, also die Zeile, und 2 ist k, also die Position in der Zeile.&nbsp; Wenn wir nachsehen, dann ist in der vierten Zeile an der zweiten Position die 6.&nbsp; (Wie üblich beginnen wir mit 0 zu zählen.)&nbsp; Und das ist auch was wir gefunden haben: 6 Zweierkombinationen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/SierpinskiTriangle.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 231px; float: right;" />Sierpinski Triangle</h2>
+<p>
+	Das Sierpinski-Dreieck [8] ist ein anderes visuelles Beispiel für Rekursion. Dabei beginnt man mit dem ganz großen Dreieck, darin zeichnet man dann drei kleine Dreiecke, und in jedes dieser kleinen wieder drei kleine, und so weiter.&nbsp;</p>
+<pre style="margin-left: 40px;">
+void drawSierpinski(double x, double y, double w, double h) {
+
+&nbsp;&nbsp; &nbsp;drawTriangle(x, y, w, h);
+
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if ((w &lt; 2.0) || (h &lt; 2.0)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;double h2 = h / 2;
+&nbsp;&nbsp; &nbsp;double w2 = w / 2;
+&nbsp;&nbsp; &nbsp;drawSierpinski(x, y, w2, h2);
+&nbsp;&nbsp; &nbsp;drawSierpinski(x + w2 / 2, y + h2, w2, h2);
+&nbsp;&nbsp; &nbsp;drawSierpinski(x + w2, y, w2, h2);
+}</pre>
+<p>
+	Die <em>drawTriangle()</em> benutzt eine GPolygon um ein Dreieck beginnend an der Position x,y mit der Breite w und der Höhe h zu zeichnen.</p>
+<p>
+	Beim Sierpinski-Dreieck handelt es sich um ein typisches Fraktal.&nbsp; Fraktale haben die Eigenschaft der Selbstähnlichkeit, d.h. sie bestehen aus kleineren Teilen von sich selbst, die sich immer wieder wiederholen. Es gibt übrigens eine interessante Beziehung zwischen dem Tower of Hanoi Problem und dem Sierpinski Dreieck [9], und auch das Pascalsche Dreieck hat mit dem Sierpinski Dreieck verwandschaftliche Beziehungen.&nbsp;</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Mondrian.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />Mondrians</h2>
+<p>
+	Piet Mondrian [10] war ein niederländischer Maler dessen späteren Werke vor allem der Rekursion gewidmet waren.&nbsp; Bewiesen haben das Eric Roberts und Julie Zelenski [11].&nbsp; Der Beweis geht wie folgt:</p>
+<ol>
+	<li>
+		im ersten Schritt haben wir drei Optionen:
+		<ol>
+			<li>
+				wir teilen die Leinwand horizontal in zwei kleinere Leinwände oder</li>
+			<li>
+				wir teilen die Leinwand vertikal in zwei kleinere Leinwände oder</li>
+			<li>
+				wir tun gar nichts;</li>
+		</ol>
+	</li>
+	<li>
+		für jede der kleineren Leinwände wenden wir wieder Schritt 1 an, bis die Leinwände zu klein sind.</li>
+</ol>
+<p>
+	In Java sieht das dann so aus:</p>
+<pre style="margin-left: 40px;">
+private void drawMondrian(int i, int j, int width, int height) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if ((width &lt; MIN_SIZE) || (height &lt; MIN_SIZE)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;int choice = rgen.nextInt(0, 2);
+&nbsp;&nbsp; &nbsp;switch (choice) {
+&nbsp;&nbsp; &nbsp;case 0: // divide canvas horizontally
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawMondrian(i, j, width / 2, height);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawMondrian(i + width / 2, j, width / 2, height);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case 1: // divide canvas vertically
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawMondrian(i, j, width, height / 2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawMondrian(i, j + height / 2, width, height / 2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;default: // do nothing
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawRectangle(i, j, width, height);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Dabei zeichnet <em>drawRectangle()</em> ein GRect mit einer zufälligen Farbe.&nbsp; Damit das aber dann wie ein Mondrian aussieht, sollte man sich bei den Farben auf weiß, blau, gelb und rot beschränken.&nbsp; Nicht alle Mondrians werden was, man muss das ein paar Mal laufen lassen.&nbsp; Aber ab und zu kommen echte Originale raus.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Maze2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />Maze</h2>
+<p>
+	Es gibt zig Algorithmen um Labyrinthe zu erzeugen.&nbsp; Einer der einfacheren ist ein rekursiver, der aus einem Rechteck ein Labyrinth erzeugt [12]:</p>
+<ol>
+	<li>
+		wähle einen zufälligen Punkt innerhalb des großen Rechtecks und zeichne zwei Wände durch diesen Punkt, eine horizontal, die andere vertikal, es ergeben sich vier kleine Rechtecke;</li>
+	<li>
+		die beiden Wände die wir gerade eingezogen haben, teilen sich gegenseitig in je zwei Hälften, deswegen haben wir jetzt vier innere Wände.&nbsp; In drei dieser Wände machen wir ein Loch an einer zufälligen Position;</li>
+	<li>
+		für jedes der vier kleinen Rechtecke wiederholen wir Schritt 1 solange bis die Breite oder Höhe der Rechtecke gleich der Zellbreite ist.</li>
+</ol>
+<p>
+	Als erstes benötigen wir eine Methode, die unser großes Rechteck mit je zwei Wänden zerteilt:</p>
+<pre style="margin-left: 40px;">
+divisionByTwoWalls(0, SIZE, 0, SIZE);</pre>
+<p>
+	In dieser Methode checken wir als erstes den <em>base case</em>:</p>
+<pre style="margin-left: 40px;">
+private void divisionByTwoWalls(int x0, int x1, int y0, int y1) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if ((x1 - x0) &lt; 2 * MIN_WIDTH || (y1 - y0) &lt; 2 * MIN_WIDTH) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;...</pre>
+<p>
+	dabei ist <em>MIN_WIDTH</em> die Zellbreite.&nbsp; Kommen wir zum <em>recursive</em> case. Hier wählen wir einen zufälligen Punkt innerhalb unseres Rechtecks (der aber quantisiert sein sollte):</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; int x = rgen.nextInt(x0 + MIN_WIDTH, x1 - MIN_WIDTH) / MIN_WIDTH * MIN_WIDTH;
+&nbsp;&nbsp; &nbsp;int y = rgen.nextInt(y0 + MIN_WIDTH, y1 - MIN_WIDTH) / MIN_WIDTH * MIN_WIDTH;</pre>
+<p>
+	dann sollen wir zwei Wände einzeichnen.&nbsp; Es ist aber besser vier halbe Wände einzuzeichnen:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; int noHole = rgen.nextInt(0, 3);
+&nbsp;&nbsp; &nbsp;drawLineWithRandomOpening(x, y0, x, y, noHole == 0);
+&nbsp;&nbsp; &nbsp;drawLineWithRandomOpening(x, y, x, y1, noHole == 1);
+&nbsp;&nbsp; &nbsp;drawLineWithRandomOpening(x0, y, x, y, noHole == 2);
+&nbsp;&nbsp; &nbsp;drawLineWithRandomOpening(x, y, x1, y, noHole == 3);</pre>
+<p>
+	von denen eine kein Loch bekommt.&nbsp; Bleibt nur noch, dass wir uns selbst wieder für jedes der vier kleinen Rechtecke rekursiv aufrufen:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; divisionByTwoWalls(x0, x, y0, y);
+&nbsp;&nbsp; &nbsp;divisionByTwoWalls(x, x1, y0, y);
+&nbsp;&nbsp; &nbsp;divisionByTwoWalls(x0, x, y, y1);
+&nbsp;&nbsp; &nbsp;divisionByTwoWalls(x, x1, y, y1);
+}</pre>
+<p>
+	Die Methode <em>drawLineWithRandomOpening()</em>, die eine Wand mit einem zufälligen Loch zeichnet sieht wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+private void drawLineWithRandomOpening(int x0, int y0, int x1, int y1,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;boolean withNoOpening) {
+&nbsp;&nbsp; &nbsp;if (withNoOpening) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x0, y0, x1, y1);
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (x0 == x1) { // vertical
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int y = rgen.nextInt(y0, y1 - MIN_WIDTH) / MIN_WIDTH
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;* MIN_WIDTH;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x0, y0, x1, y);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x0, y + MIN_WIDTH, x1, y1);
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {// horizontal
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int x = rgen.nextInt(x0, x1 - MIN_WIDTH) / MIN_WIDTH
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;* MIN_WIDTH;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x0, y0, x, y1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x + MIN_WIDTH, y0, x1, y1);
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Eigentlich müsste das ein Fünfzeiler sein, mir ist aber einfach keine einfachere Lösung eingefallen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Lightning.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />Lightning</h2>
+<p>
+	Im Internet bin ich zufällig über eine interessante Anwendung für Rekursion gestoßen, einen Blitzgenerator [13].&nbsp; Er verwendet den sogenannten Midpoint-Displacement Algorithmus [14] um Blitze zu zeichnen.&nbsp; Der Mittelpunktverschiebungs-Algorithmus funktioniert folgendermaßen:</p>
+<ol>
+	<li>
+		wir beginnen mit zwei Punkten, die wir mit einer Linie verbinden wollen;</li>
+	<li>
+		aber anstelle die Linie direkt zu zeichnen, halbieren wir die Strecke, und verschieben den Mittelpunkt der Strecke senkrecht zur Strecke um einen gewissen Betrag, das <em>Displacement</em>;</li>
+	<li>
+		mit den beiden Hälften wiederholen wir das Verfahren, dabei wird der Betrag des <em>Displacements</em> jedesmal halbiert;</li>
+	<li>
+		wir hören auf, wenn das <em>Displacement</em> kleiner als ein bestimmter Wert ist.</li>
+</ol>
+<p>
+	In Java sieht das Ganze dann so aus:</p>
+<pre style="margin-left: 40px;">
+private void drawLightning(double x1, double y1, double x2, double y2,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double displace) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (displace &lt; 2) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLine(x1, y1, x2, y2);
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double mid_x = (x2 + x1) / 2.0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double mid_y = (y2 + y1) / 2.0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mid_x += (Math.random() - 0.5) * displace;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mid_y += (Math.random() - 0.5) * displace;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLightning(x1, y1, mid_x, mid_y, displace / 2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;drawLightning(x2, y2, mid_x, mid_y, displace / 2);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Man könnte es jetzt in unserer CityAtNight aus dem ersten Semester blitzen lassen...</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PlasmaFractal.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />PlasmaFractal</h2>
+<p>
+	Den Mittelpunktverschiebungs-Algorithmus [14] kann man nicht nur auf Linien, sondern auch auf Ebenen anwenden [15].&nbsp; Man beginnt mit einem Rechteck, legt die Farben der Eckpunkte fest, und gibt dem Mittelpunkt des Rechtecks eine zufällige Farbe.&nbsp; Man teilt das Rechteck dann in vier kleinere Rechtecke und beginnt mit dem Prozess von Vorne.&nbsp; Das macht man solange, bis die Rechtecke kleiner als ein Pixel sind.&nbsp; Das Verfahren eignet sich sehr gut um Wolken zu generieren, dann sollte man natürlich verschiedene Blautöne als Farben wählen.&nbsp; Man kann es aber auch zur Generierung von Terrains verwenden, dann entsprechen die Farbewerte den Höhen im Terrain.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/SierpinskiCarpet.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 231px; float: right;" />SierpinskiCarpet</h2>
+<p>
+	Der Herr Sierpinski hat sich nicht nur mit Dreiecken sondern auch mit Teppichen beschäftigt [16]. Es handelt sich auch wieder um eine fraktale Struktur.&nbsp; Um einen Sierpinski Teppich herzustellen folgt man diesen Anweisungen:</p>
+<ol>
+	<li>
+		teile das Rechteck in neun gleich große Rechtecke;</li>
+	<li>
+		entferne das mittlere, und wiederhole den ersten Schritt mit den acht übrig gebliebenen Rechtecken.</li>
+</ol>
+<p>
+	Es gibt auch eine dreidimensionale Version des Sierpinski Teppichs, die auch unter dem Namen Menger-Schwamm bekannt ist [17].</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/TSquare.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 224px; float: right;" />TSquare</h2>
+<p>
+	Ähnlich wie die Sierpinski Dreiecke und Teppiche ist auch das TSquare ein Fraktal.&nbsp; Die Konstruktion ist eigentlich auch ganz einfach:</p>
+<ol>
+	<li>
+		beginne mit einem Quadrat, das halb so groß ist wie die Fläche die zur Verfügung steht, und platziere es in die Mitte;</li>
+	<li>
+		an jeder Ecke diese Quadrats platziere mittig je ein neues Quadrat, das halb so groß ist wie das ursprüngliche;</li>
+	<li>
+		wiederhole den Vorgang solange, bis die Quadrat die Größe eines Pixels haben.</li>
+</ol>
+<p>
+	Man kann so etwas natürlich auch mit Dreiecken, Fünfecken, usw. machen.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/QuadraticCross.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 237px; float: right;" />QuadraticCross</h2>
+<p>
+	Das Quadratic Cross, auch Vicsek Fraktal genannt, ist ähnlich zum TSquare.&nbsp; Aber anstelle Quadrate hinzuzufügen, werden welche weggenommen.&nbsp; Wir beginnen also mit einer schwarzen Fläche. Dann folgen wir diesen Schritten:</p>
+<ol>
+	<li>
+		teile das Quadrat in neun gleich große Quadrate, und entferne die Eckquadrate;</li>
+	<li>
+		tue das gleich mit den übrig gebliebenen fünf Quadraten.</li>
+</ol>
+<p>
+	Dabei kommt dann etwas zum Vorschein, dass ein bischen wie ein Kreuz aussieht.&nbsp; Antennen in Handys werden von diesem Fraktal inspiriert [20].</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/HTree.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 231px; float: right;" />HTree</h2>
+<p>
+	Später wenn wir mit Bäumen arbeiten, dann werden wir den H-Baum brauchen [21].&nbsp; Im Moment beschränken wir uns darauf, dass er ganz einfach zu konstruiren ist.&nbsp; Die Konstruktionsvorschrift geht folgendermaßen:</p>
+<ol>
+	<li>
+		zeichne eine Linie in die Mitte, die halb so lange ist wie die Breite die zur Verfügung steht;</li>
+	<li>
+		dann zeichne zwei Linien an den jeweiligen Endpunkten, die senkrecht sind, und deren Länge 1/&radic;2 mal so lange ist;</li>
+	<li>
+		wiederhole Schritt 2 solange bis die Länge kleiner als z.B. 15 ist.</li>
+</ol>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/KochSnowflake.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 231px; float: right;" />KochSnowflake</h2>
+<p>
+	Kommen wir zum letzten Projekt in diesem Kapitel, der Koch-Kurve [22], die etwas an eine Schneeflocke erinnert.&nbsp; Auch bei der Koch-Kurve handelt es sich um ein Fraktal. Die Koch-Kurve beginnt als Dreieck:</p>
+<ol>
+	<li>
+		zeichne ein gleichseitiges Dreieck;</li>
+	<li>
+		teile jedes der drei Seitenteile in drei gleiche Teile;</li>
+	<li>
+		entferne das mittlere dieser drei Teile, und ersetze es durch ein gleichseitiges Dreieck das nach außen zeigt;</li>
+	<li>
+		entferne die Basis dieses neuen Dreiecks;</li>
+	<li>
+		wiederhole Schritt 2.</li>
+</ol>
+<p>
+	Auf der Seite der Wikipedia gibt es eine Animation in der man in die Koch-Kurve &quot;hineinfliegt&quot;, eine sehr schöne Verdeutlichung was Selbstähnlichkeit wirklich bedeutet.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	In diesem Kapitel gibt es mal was richtig Interessantes zu erforschen.</p>
+<p>
+	.</p>
+<h2>
+	Gödel&#39;s Unvollständigkeitssatz</h2>
+<p>
+	Für die Mathematiker ging die Welt unter, den Rest der Menschheit hat es eigentlich nicht interessiert: der Gödelsche Unvollständigkeitssatz [23].&nbsp; Die traurige Geschichte beginnt mit der <em>Principia Mathematica</em> [24] von Russell und Whitehead, führt dann zu <em>Russell&#39;s Paradox</em> [25], und endet mit <em>Gödel&#39;s Unvollständigkeitssatz</em>.&nbsp; Wenn einer keine traurigen Geschichten mag, sollte er das vielleicht nicht nachlesen, wen aber Horror pur leidenschaftlich anzieht, dem wird die Geschichte gefallen.&nbsp; Im Ernst, es ist schockierend wie wenige Leute jemals über die Erschütterung (und Zerstörung) der Grundfeste der Mathematik etwas gehört haben.&nbsp; Spricht für unser Bildungssystem...</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Der folgende Code ist ein Beispiel für die Berechnung der Fakultät einer Zahl. Aber etwas stimmt nicht mit diesem Code. Was ist es?<br />
+		<pre style="margin-left: 40px;">
+public int factorial(int n) {
+    return n * factorial( n-1 );
+}</pre>
+	</li>
+	<li>
+		Beschreiben Sie in griben Zügen ein Programm, das einen Baum rekursiv zeichnet.<br />
+		&nbsp;</li>
+	<li>
+		Ist der folgende Algorithmus ein rekursiver oder ein iterativer Algorithmus?<br />
+		<pre style="margin-left: 40px;">
+private int choose(int n, int k) {
+    if ( (k == 0) || (k == n) ) {
+        return 1;
+    } else {
+        return choose(n-1, k) + choose(n-1, k-1);
+    }
+}</pre>
+	</li>
+	<li>
+		Was ist ein rekursiver Algorithmus, was sind seine Vorteile, was sind seine Nachteile?<br />
+		&nbsp;</li>
+	<li>
+		Schreiben Sie zwei Methoden namens <em>powerIteration(double x, int n)</em> und <em>powerRecursion(double x, int n)</em>.&nbsp; Die erste Funktion sollte die Leistung der Zahl x auf die Leistung n iterativ berechnen, die zweite rekursiv.<br />
+		&nbsp;</li>
+	<li>
+		Rekursion folgt immer dem gleichen Muster. Nennen Sie die beiden Schritte die nötig sind, um einen Algorithmus rekursiv umzusetzen.<br />
+		&nbsp;</li>
+	<li>
+		Schreiben Sie eine rekursive Methode public boolean <em>isPalindrome(String s)</em> die prüft, ob eine gegebene Zeichenkette ein Palindrom ist. (&quot;otto&quot; und &quot;rentner&quot; sind zwei Beispiele für Palindrome.)<br />
+		&nbsp;</li>
+	<li>
+		In der Vorlesung und auch den Labs haben wir &ldquo;Mondrians&rdquo; gezeichnet.&nbsp; Skizzieren (malen) Sie grob wie diese aussehen.<br />
+		&nbsp;</li>
+	<li>
+		In der Vorlesung und auch den Labs haben wir Sierpinski Dreiecke (Sierpinski Triangles) gezeichnet. Skizzieren (malen) Sie grob wie diese aussehen.<br />
+		&nbsp;</li>
+	<li>
+		Was ist ein &quot;divide and conquer&quot; Algorithmus? Erklären Sie, wie diese funktionieren.</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Das wunderbare Buch &quot;Einführung in die Programmierung in Java&quot; von Robert Sedgewick und Kevin Wayne hat eine wunderbare Sammlung von Rekursionsalgorithmen: http://www.cs.princeton.edu/introcs/23recursion/.&nbsp; Das ist eigentlich Pflichtlektüre. &nbsp;</p>
+<p>
+	[1] Palindrome, <a href="https://en.wikipedia.org/wiki/Palindrome">https://en.wikipedia.org/wiki/Palindrome</a></p>
+<p>
+	[2] The long and short of it, The Economist, Johnson Language, <a href="http://www.economist.com/blogs/johnson/2010/06/short_and_long_words">www.economist.com/blogs/johnson/2010/06/short_and_long_words</a></p>
+<p>
+	[3] Tower of Hanoi, <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">https://en.wikipedia.org/wiki/Tower_of_Hanoi</a></p>
+<p>
+	[4] Permutation, <a href="https://en.wikipedia.org/wiki/Permutation">https://en.wikipedia.org/wiki/Permutation</a></p>
+<p>
+	[5] Subset, <a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></p>
+<p>
+	[6] Pascalsches Dreieck, <a href="https://de.wikipedia.org/wiki/Pascalsches_Dreieck">https://de.wikipedia.org/wiki/Pascalsches_Dreieck</a></p>
+<p>
+	[7] Combination, <a href="https://en.wikipedia.org/wiki/Combination">https://en.wikipedia.org/wiki/Combination</a></p>
+<p>
+	[8] Sierpinski triangle, <a href="https://en.wikipedia.org/wiki/Sierpinski_triangle">https://en.wikipedia.org/wiki/Sierpinski_triangle</a></p>
+<p>
+	[9] Tower of Hanoi, <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">https://en.wikipedia.org/wiki/Tower_of_Hanoi</a></p>
+<p>
+	[10] Piet Mondrian, <a href="https://en.wikipedia.org/wiki/Piet_Mondrian">https://en.wikipedia.org/wiki/Piet_Mondrian</a></p>
+<p>
+	[11] Programming Abstractions in C++, Eric S. Roberts and Julie Zelenski, Stanford University</p>
+<p>
+	[12] Maze generation algorithm, <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm">https://en.wikipedia.org/wiki/Maze_generation_algorithm</a></p>
+<p>
+	[13] Lightning Generator, <a href="https://krazydad.com/bestiary/bestiary_lightning.html">https://krazydad.com/bestiary/bestiary_lightning.html</a></p>
+<p>
+	[14] Diamond-square algorithm, <a href="https://en.wikipedia.org/wiki/Diamond-square_algorithm">https://en.wikipedia.org/wiki/Diamond-square_algorithm</a></p>
+<p>
+	[15] Plasma Fractal, Justin Seyster, <a href="http://jseyster.github.io/plasmafractal/">http://jseyster.github.io/plasmafractal/</a></p>
+<p>
+	[16] Sierpinski carpet, <a href="https://en.wikipedia.org/wiki/Sierpinski_carpet">https://en.wikipedia.org/wiki/Sierpinski_carpet</a></p>
+<p>
+	[17] Menger sponge, <a href="https://en.wikipedia.org/wiki/Menger_sponge">https://en.wikipedia.org/wiki/Menger_sponge</a></p>
+<p>
+	[18] T-square, <a href="https://en.wikipedia.org/wiki/T-square_(fractal)">https://en.wikipedia.org/wiki/T-square_(fractal)</a></p>
+<p>
+	[19] Vicsek fractal, <a href="https://en.wikipedia.org/wiki/Vicsek_fractal">https://en.wikipedia.org/wiki/Vicsek_fractal</a></p>
+<p>
+	[20] Fractal antenna, <a href="https://en.wikipedia.org/wiki/Fractal_antenna">https://en.wikipedia.org/wiki/Fractal_antenna</a></p>
+<p>
+	[21] H tree, <a href="https://en.wikipedia.org/wiki/H_tree">https://en.wikipedia.org/wiki/H_tree</a></p>
+<p>
+	[22] Koch snowflake, <a href="https://en.wikipedia.org/wiki/Koch_snowflake">https://en.wikipedia.org/wiki/Koch_snowflake</a></p>
+<p>
+	[23] Kurt Gödel, <a href="https://en.wikipedia.org/wiki/Kurt_Gödel">https://en.wikipedia.org/wiki/Kurt_Gödel</a></p>
+<p>
+	[24] Principia Mathematica, <a href="https://en.wikipedia.org/wiki/Principia_Mathematica">https://en.wikipedia.org/wiki/Principia_Mathematica</a></p>
+<p>
+	[25] Russell&#39;s paradox, <a href="https://en.wikipedia.org/wiki/Russell%27s_paradox">https://en.wikipedia.org/wiki/Russell%27s_paradox</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

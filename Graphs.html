@@ -1,0 +1,1452 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html" class="active">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/Subway2.png" style="display: block; margin-left: auto; margin-right: auto; width: 379px; height: 121px;" /></p>
+<h1>
+	Graphs</h1>
+<p>
+	Graphen sind überall, sie sind sogar noch weiter verbreitet als Bäume.&nbsp; Sie sind auch viel nützlicher.&nbsp; Vieles was zunächst wie ein Baum aussieht ist in Wirklichkeit ein Graph.&nbsp; Z.B. der klassische Familien-Stammbaum, ist in der Regel ein Graph.&nbsp; Genauso verhält es sich bei den meisten Spielebäumen (z.B. Tic-Tac-Toe), oder auch dem Pascaldreieck, das zwar wie ein Baum aussieht aber ein Graph ist.&nbsp; Auch Mazes sind häufig keine Bäume, sondern Graphen.</p>
+<p>
+	Bei den Algorithmen die mit Graphen zu tun haben, geht es meistens darum den kürzesten Pfad zu finden, oder herauszufinden ob ein Graph verbunden ist oder Kreise enthält.&nbsp; Aber auch für die Planung eines Straßennetzwerkes gibt es Graphalgorithmen.&nbsp; Ganz wichtig sind Graphen auch bei der Planung von Projekten.</p>
+<p>
+	.</p>
+<h2>
+	Examples</h2>
+<p>
+	Der Klassiker unter den Graphenanwendungen ist Google Maps.&nbsp; Aber egal ob Auto, Zug oder Flugzeug immer wenn man wissen möchte ob es einen Weg von A nach B gibt, oder was der kürzeste Weg von A nach B ist, dann verwendet man Graphenalgorithmen.&nbsp; Die Züge eines Spiel, wie z.B. Tic-Tac-Toe, stellen bei genauem Betrachten eine Graphstruktur und nicht eine Baumstruktur dar.</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: top;">
+				<p>
+					<img src="images/AirportsBig.png" style="width: 214px; height: 134px;" /></p>
+			</td>
+			<td style="text-align: center; vertical-align: top;">
+				<p>
+					<img src="images/Subway2.png" style="width: 214px; height: 91px;" /></p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<img src="images/TicTacToe.png" style="width: 218px; height: 192px;" /></td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Weitere Beispiele für Graphen sind:</p>
+<ul>
+	<li>
+		Freundesnetzwerke oder Beziehungen zwischen Menschen im Allgemeinen</li>
+	<li>
+		das Internet und all seine Webseiten</li>
+	<li>
+		Computer Netzwerke</li>
+	<li>
+		elektrische Schaltkreise</li>
+	<li>
+		Transport Netzwerke</li>
+	<li>
+		Planung von Tasks</li>
+	<li>
+		Klassendiagramme</li>
+	<li>
+		Workflows</li>
+</ul>
+<p>
+	Es gibt noch unzählige andere Beispiele.&nbsp; Übrigens, alle Bäume sind auch Graphen, aber ein Graph ist nicht notwendigerweise auch ein Baum.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PirateIsland2.png" style="width: 200px; height: 110px; float: right;" />Pirate Island</h2>
+<p>
+	Zur Einführung in Graphen betrachten wir eine Inselgruppe in der Karibik, bestehend aus den drei Inseln: <em>Pirate Island</em>, <em>Treasure Island</em> und <em>Island of Death</em> [1].&nbsp; Die Inseln bezeichnen wir als <em>Vertices</em>.&nbsp; Zwischen den Inseln kann man mit Booten hin- und manchmal auch wieder zurückfahren.&nbsp; Diese Verbindungsstrecken nennen wir <em>Edges</em>.&nbsp; Edges können eine Richtung haben, also man kann nur in eine Richtung fahren, oder sie haben keine Richtung.&nbsp; Das Ganze, also die Liste aller Vertices und Edges nennt man einen <em>Graphen</em>.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/AirportsBig.png" style="width: 200px; height: 126px; float: right;" />Definitions</h2>
+<p>
+	Auch was Graphen angeht, macht es Sinn sich erst einmal einen Wortschatz zuzulegen.&nbsp; Ein Graph besteht also aus Vertices und Edges.</p>
+<ul>
+	<li>
+		Ein Vertex ist ein Knoten in dem man Information speichern kann.</li>
+	<li>
+		Ein Edge verbindet immer zwei Vertices.&nbsp; Auch im Edge kann man Information speichern.&nbsp; Ein Edge kann gerichtet sein (directed), oder die Richtung ist egal (undirected).</li>
+</ul>
+<p>
+	Wenn wir z.B. Flughäfen mit ihren Verbindungsflügen betrachten, dann sind die Flughäfen die Vertices, und die Information die wir in den Vertices speichern ist der Name des jeweilgen Flughafens.&nbsp; Die Edges hingegen sind die Verbindungen die zwischen den Flughäfen existieren.&nbsp; Die Information die wir in den Edges speichern würden wäre dann die Entfernung zwischen den jeweilgen Flughäfen die durch dieses Edge verbunden werden.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Demo.png" style="width: 200px; height: 330px; float: right;" />Terminology</h2>
+<p>
+	Wenn man allgemein von Graphen spricht, dann benutzt man Großbuchstaben aus dem Ende des Alphabets, wie U, V, W, usw. für Vertices und Kleinbuchstaben vom Anfang des Alphabets, wie a, b, c, usw. für Edges.&nbsp; Wenn wir den Graphen rechts betrachten, dann sagt man:</p>
+<ul>
+	<li>
+		<em>U</em> und <em>V</em> sind die &quot;End-Vertices&quot; des Edge <em>a</em>;</li>
+	<li>
+		<em>a</em>, <em>b</em>, und <em>g</em> sind&nbsp; &quot;incident&quot; auf <em>V</em>;</li>
+	<li>
+		<em>U</em> und <em>V</em> sind &quot;adjacent&quot;, also benachbart;</li>
+	<li>
+		der Vertex <em>W</em> hat &quot;degree&quot; 4, weil er vier Edges hat;</li>
+	<li>
+		die Edges <em>c</em> und <em>d</em> sind &quot;parallel&quot;;</li>
+	<li>
+		das Edge <em>h</em> ist ein &quot;self-loop&quot;.</li>
+</ul>
+<p>
+	Durch einen Graph gibt es <em>Pfade</em>.&nbsp; Ein Pfad beginnt bei einem Anfangs-Vertex und endet bei einem End-Vertex:</p>
+<pre style="margin-left: 40px;">
+P1 = (U,f,X,g,V,b,W)</pre>
+<p>
+	dabei muss zwischen zwei Vertices immer ein Edge liegen, bestehen also abwechselnd aus Vertices und Edges.</p>
+<p>
+	Besondere Pfade sind <em>Ringe</em> (cycles): Ringe sind Pfade bei denen Anfangs- und End-Vertex gleich sind:</p>
+<pre style="margin-left: 40px;">
+C1 = (U,f,X,g,V,a,U)</pre>
+<p>
+	Ringe können problematisch sein, speziell für Navigationssysteme: sie führen u.U. dazu dass man immer im Kreis fährt ohne je an sein Ziel zu kommen.&nbsp; Auch für Datenpakete im Internet sind Ringe ein Problem.</p>
+<p>
+	Wenn wir von einem <em>Subgraphen</em> eines Graphen <em>G</em> sprechen, dann enthält dieser eine Untermenge der Vertices und Edges von <em>G</em>.&nbsp; Ein Spezialfall ist der <em>Spanning Subgraph</em>: dieser enthält alle Vertices von <em>G</em>, nicht notwendigerweise aber auch alle Edges.</p>
+<p>
+	Wir nennen einen Graphen <em>connected</em> (verbunden), wenn es einen Pfad zwischen allen Vertices gibt.&nbsp;<br />
+	<br />
+	Kommen wir zu den Bäumen (<em>Trees</em>): ein Baum ist eine Graph der connected (verbunden) ist, und der keine Ringe (Cycle) enthält.&nbsp; Bei einem <em>Forrest</em> (Wald) handelt es sich um einen Graphen der aus mehreren Bäumen besteht.&nbsp; Was uns schließlich zu einem ganz wichtigen Graphen führt, dem <em>Spanning Tree</em>: dabei handelt es sich um einen <em>Spanning Subgraph</em> der ein Baum ist.</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: top;">
+				<p>
+					<img src="images/ConnectedGraph.png" style="width: 210px; height: 212px;" /></p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img src="images/Forrest.png" style="width: 216px; height: 273px;" /></p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	.</p>
+<h2>
+	Graph ADT</h2>
+<p>
+	Graphen funktionieren etwas anders als Bäume.&nbsp; Während die Klasse <em>Tree</em> nicht viel mehr als ein Wrapper für den Wurzelknoten war, wird bei den Graphen die Hauptarbeit in der Klasse <em>Graph</em> selbst erledigt.&nbsp; Wir beschränken uns erst einmal auf ungerichtete Graphen.&nbsp; Um mit Graphen bequem arbeiten zu können, benötigen wir die folgenden Methoden zum Auflisten aller Edges und Vertices:</p>
+<ul>
+	<li>
+		<strong>edges():</strong> gibt uns alle Edges als Liste;</li>
+	<li>
+		<strong>vertices():</strong> gibt uns alle Vertices als Liste.</li>
+</ul>
+<p>
+	Zum Navigieren:</p>
+<ul>
+	<li>
+		<strong>incidentEdges(Vertex&lt;V&gt; vertex):</strong> gibt eine Liste aller Edges zurück, die mit dem Vertex <em>vertex</em> verbunden sind;</li>
+	<li>
+		<strong>opposite(Vertex&lt;V&gt; vertex, AbstractEdge&lt;E&gt; edge):</strong> gibt den Vertex zurück der über das Edge <em>edge</em> mit dem Vertex <em>vertex</em> verbunden ist;</li>
+	<li>
+		<strong>endVertices(AbstractEdge&lt;E&gt; edge):</strong> gibt die beiden Vertices zurück die über das Edge <em>edge</em> miteinander verbunden sind;</li>
+	<li>
+		<strong>areAdjacent(Vertex&lt;V&gt; vertex1, Vertex&lt;V&gt; vertex2):</strong> gibt <em>true</em> zurück, falls <em>vertex1</em> und <em>vertex2</em> direkt miteinander verbunden sind.</li>
+</ul>
+<p>
+	Zum Suchen:</p>
+<ul>
+	<li>
+		<strong>containsVertex(Vertex&lt;V&gt; vertex):</strong> stellt fest ob der gegebene Vertex im Graphen ist;</li>
+	<li>
+		<strong>findVertex(V element):</strong> sucht den Vertex, der das gegebene Element enthält;</li>
+	<li>
+		<strong>containsEdge(AbstractEdge&lt;E&gt; edge):</strong> stellt fest ob das gegebene Edge im Graphen ist;</li>
+	<li>
+		<strong>findEdge(E element):</strong> sucht das Edge, das das gegebene Element enthält.</li>
+</ul>
+<p>
+	Ganz nützlich sind die folgenden Hilfsmethoden:</p>
+<ul>
+	<li>
+		<strong>size():</strong> gibt die Anzahl der Vertices im Graphen zurück;</li>
+	<li>
+		<strong>isTree():</strong> stellt fest ob es sich bei dem Graphen in Wirklichkeit um einen Baum handelt;</li>
+	<li>
+		<strong>isConnected():</strong> stellt fest ob der Graph verbunden (connected) ist;</li>
+	<li>
+		<strong>hasCycle():</strong> stellt fest ob der Graph Ringe (Cycles) enthält.</li>
+</ul>
+<p>
+	Bzgl. dem Einfügen, Ersetzen und Entfernen gibt es die folgenden Methoden:</p>
+<ul>
+	<li>
+		<strong>insertVertex(Vertex&lt;V&gt; vertex):</strong> fügt einen neuen Vertex in den Graphen ein;</li>
+	<li>
+		<strong>insertEdge(Vertex&lt;V&gt; v1, Vertex&lt;V&gt; v2, E element):</strong> fügt ein neues Edge in den Graphen ein;</li>
+	<li>
+		<strong>replaceElement(Vertex&lt;V&gt; vertex, V element):</strong> ersetzt das Element des Vertex <em>vertex</em>;</li>
+	<li>
+		<strong>replaceElement(AbstractEdge&lt;E&gt; edge, E element):</strong> ersetzt das Element des Edges <em>edge</em>;</li>
+	<li>
+		<strong>removeVertex(Vertex&lt;V&gt; vertex):</strong> entfernt den Vertex aus dem Graphen, entfernt auch alle Edges die mit diesem Vertex verbunden sind;</li>
+	<li>
+		<strong>removeEdge(AbstractEdge&lt;E&gt; edge):</strong> entfernt das Edge aus dem Graphen, die Vertices bleiben aber im Graphen.</li>
+</ul>
+<p>
+	Ausserdem gibt es noch eine handvoll Traversal-Methoden, dazu weiter unten mehr.</p>
+<p>
+	<img alt="" src="images/airports_small.png" style="width: 200px; height: 115px; float: right;" />Das ist jetzt ein bischen viel auf einmal, deswegen sehen wir uns mal ein einfaches Beispiel an, wie man einen Graphen anlegt und verwendet:</p>
+<pre style="margin-left: 40px;">
+GraphEdgeList&lt;Integer, String&gt; graph = new GraphEdgeList&lt;Integer, String&gt;();
+Vertex&lt;String&gt; v1 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;NUE&quot;));
+Vertex&lt;String&gt; v2 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;AMS&quot;));
+Vertex&lt;String&gt; v3 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;MAD&quot;));
+AbstractEdge&lt;Integer&gt; e1 = graph.insertEdge(v1, v2, 542);
+AbstractEdge&lt;Integer&gt; e2 = graph.insertEdge(v2, v3, 1462);
+AbstractEdge&lt;Integer&gt; e3 = graph.insertEdge(v1, v3, 1524);
+
+System.out.println(&quot;Size: &quot; + graph.size());
+System.out.println(&quot;isConnected: &quot; + graph.isConnected());
+System.out.println(&quot;isTree: &quot; + graph.isTree());
+System.out.println(&quot;hasCycle: &quot; + graph.hasCycle());</pre>
+<p>
+	.<br />
+	<img alt="" src="images/SimpleFlights.png" style="width: 200px; height: 100px; float: right;" />Wenn wir jetzt z.B. wissen wollten was die Entfernung zwischen dem Nürnberger Flughafen und dem Madrid Barajas International Airport ist, dann suchen wir erst einmal nach dem Nürnberger und Madrider Flughafen:</p>
+<pre style="margin-left: 40px;">
+Vertex&lt;String&gt; v1 = graph.findVertex(&quot;NUE&quot;);
+Vertex&lt;String&gt; v2 = graph.findVertex(&quot;MAD&quot;);
+
+Collection&lt;AbstractEdge&lt;Integer&gt;&gt; connections = graph.incidentEdges(v1);
+for (AbstractEdge&lt;Integer&gt; edge : connections) {
+    Vertex&lt;String&gt; v3 = graph.opposite(v1, edge);
+    if (v2 == v3) {
+        println(&quot;Distance: &quot;+edge.getElement());
+    }
+}</pre>
+<p>
+	Danach müssen wir nach der Verbindungsstrecke (Edge) zwischen den beiden suchen.&nbsp; Das geht leider nicht direkt, aber wir können uns mal alle Verbindungen die von und nach Nürnberg gehen geben lassen, also <em>connections</em>.&nbsp; Dann iterierten wir einfach durch alle Verbindungen bis wir die finden an deren anderen Ende Madrid ist.&nbsp; Das war&#39;s.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DFS.png" style="width: 200px; height: 533px; float: right;" />Depth-First Search Traversal</h2>
+<p>
+	Was die Iterationsmethoden angeht, sind die Tiefensuche (depth-first search, <em>DFS</em>) und die Breitensuche (breadth-first search, <em>BFS</em>) die wichtigsten.&nbsp; Beide durchsuchen den gesamten Graphen, besuchen alle Vertices und Edges, und können feststellen ob der Graph zusammenhängend (connected) ist. Man kann mit ihnen auch feststellen ob ein Graph Kreise enthält.</p>
+<p>
+	Die Tiefensuche markiert zunächste alle Vertices und Edges als &quot;UNEXPLORED&quot;.&nbsp; Dann beginnt es mit einem beliebigen Vertex, markiert diesen als &quot;VISITED&quot; und folgt dann einem der Edges zum nächste Vertex.&nbsp; Dabei wird der neue Vertex mit &quot;VISITED&quot; markiert und das Edge mit &quot;DISCOVERY&quot;.&nbsp; Dies wird dann rekursiv wiederholt.&nbsp; Sollte es passieren, dass wir unterwegs auf einen Vertex stoßen den wir schon einmal besucht haben, dann wird das Edge mit &quot;BACK&quot; markiert.&nbsp; Sobald es ein Edge gibt, das mit &quot;BACK&quot; markiert wurde, wissen wir, dass unser Graph Kreise enthält.&nbsp; Sollten wir im ersten Durchlauf alle Vertices besucht haben, dann wissen wir auch, dass der Graph zusammenhängend ist.&nbsp; Sollte es aber noch Vertices geben, die wir noch nicht besucht haben, müssen wir die natürlich auch noch besuchen.</p>
+<p>
+	Man kann diesen Algorithmus auch in sogenannten <em>Pseudo-Code</em> beschreiben, das macht es in der Regel einfacher die Übersicht zu behalten.&nbsp;</p>
+<pre style="margin-left: 40px;">
+dfs(G) {
+&nbsp;&nbsp;&nbsp; for ( v in G.vertices() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( v, UNEXPLORED );
+&nbsp;&nbsp;&nbsp; for ( e in G.edges() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( e, UNEXPLORED );
+&nbsp;&nbsp;&nbsp; for ( v in G.vertices() )
+        if ( getLabel( v == UNEXPLORED ) ) 
+&nbsp;    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dfs( G, v );
+}
+</pre>
+<p>
+	Wobei der rekurisve Teil wie folgt aussieht:</p>
+<pre style="margin-left: 40px;">
+dfs(G, v) {
+    setLabel( v, VISITED )
+&nbsp;&nbsp;&nbsp; for ( e in G.incidentEdges( v ) ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( getLabel( e ) == UNEXPLORED ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; w = opposite( v, e );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( getLabel( w ) == UNEXPLORED ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( e, DISCOVERY );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DFS( G, w );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( e, BACK );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Der Algorithmus stammt aus dem wunderbaren Buch von Goodrich und Tamassia [].&nbsp; Das Depth-First Search Traversal entspricht dem Pre-Order Traversal bei Bäumen, d.h., er versucht zunächst so tief wie möglich in den Graph hineinzugehen, deswegen auch Tiefensuche.</p>
+<p>
+	[] Data Structures and Algorithms in Java, M.T. Goodrich and R. Tamassia</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/BFS.png" style="width: 200px; height: 463px; float: right;" />Breadth-First Search Traversal</h2>
+<p>
+	Die Breitensuche geht nicht in die Tiefe sondern die Breite.&nbsp; Auch hier markieren wir zunächste alle Vertices und Edges als &quot;UNEXPLORED&quot;.&nbsp; Dann beginnen wir wieder mit einem beliebigen Vertex, markieren diesen als &quot;VISITED&quot; und fügen ihn in eine Liste <em>L0</em> ein.&nbsp; Dann folgen wir allen Edges die von diesem Vertex ausgehen, markiern sie als &quot;VISITED&quot; und fügen diese in eine Liste <em>L1</em> ein, also alle Vertices die ein Edge vom Ausgangsvertex entfernt sind.&nbsp; Zusätzlich markieren wir alle Edges denen wir gefolgt sind mit &quot;DISCOVERY&quot;.&nbsp; Im dritten Schritt, folgen wir allen Edges die von den Vertices aus <em>L1</em> ausgehen.&nbsp; Alle Vertices die wir auf diese Art erreichen sammeln wir in der Liste <em>L2</em>. <em>L2</em> enthält also alle Vertices die zwei Edges vom Ausgangsvertex entfernt sind.&nbsp; Wir markieren auch wieder alle Edges mit &quot;DISCOVERY&quot;, es sei denn sie führen zurück auf einen Vertex den wir bereits besucht haben, den markieren wir dann mit &quot;CROSS&quot;. Das machen wir solange weiter, bis es nichts mehr zu entdecken gibt.&nbsp; Sollte es danach noch Vertices geben, die wir noch nicht besucht haben, müssen wir die natürlich auch noch besuchen.</p>
+<p>
+	Sollte es ein Edge mit &quot;CROSS&quot; geben, dann wissen wir wieder, dass unser Graph Kreise enthält.&nbsp; Auch hier gilt wieder, sollten wir im ersten Durchlauf nicht alle Vertices erreicht haben, dann ist der Graph nicht zusammenhängend.&nbsp;</p>
+<p>
+	Im <em>Pseudo-Code</em> sieht das dann so aus: erst markieren wir wieder alle Knoten und Edges:</p>
+<pre style="margin-left: 40px;">
+bfs(G) {
+&nbsp;&nbsp;&nbsp; for ( v in G.vertices() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( v, UNEXPLORED );
+&nbsp;&nbsp;&nbsp; for ( e in G.edges() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( e, UNEXPLORED );
+&nbsp;&nbsp;&nbsp; for ( v in G.vertices() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( getLabel( v == UNEXPLORED ) ) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bfs( G, v );
+}</pre>
+<p>
+	Und dann gehen wir alle durch,</p>
+<pre style="margin-left: 40px;">
+bfs(G, s) {
+&nbsp;&nbsp;&nbsp; L_0 = new sequence;
+&nbsp;&nbsp;&nbsp; L_0.insertLast( s );
+&nbsp;&nbsp;&nbsp; setLabel( s, VISITED );
+&nbsp;&nbsp;&nbsp; i = 0;
+&nbsp;&nbsp;&nbsp; while ( !L_i.isEmpty() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L_i+1 = new sequence;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for ( v in L_i.elements() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for ( e in G.incidentEdges( v ) ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( getLabel( e ) == UNEXPLORED ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; w = opposite( v, e );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( getLabel( w ) == UNEXPLORED ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( e, DISCOVERY );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( w, VISITED );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L_i+1.insertLast( w );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setLabel( e, CROSS );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i++;
+&nbsp;&nbsp;&nbsp; } 
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	Auch dieser Algorithmus stammt aus dem wunderbaren Buch von Goodrich und Tamassia [2]. Der BFS Traversal Algorithmus entspricht dem Level-Order Traversal bei Bäumen.&nbsp; U.a. kann man mit ihm auch die Verbindung mit den wenigsten Edges zwischen zwei Knoten finden.&nbsp; Das muss aber lange nicht die kürzeste Verbindung sein.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Dijkstra.png" style="width: 200px; height: 670px; float: right;" />Dijkstra</h2>
+<p>
+	Kommen wir zur wichtigsten Anwendung von Graphen: wie komme ich am schnellsten von A nach B, also das typische Google Maps Problem.&nbsp; Aber auch die Datenpakete die im Internet unterwegs sind, sollten idealerweise auf dem kürzesten (oder schnellsten) Weg vom Server zum Browser geschickt werden.&nbsp;&nbsp;</p>
+<p>
+	Der bekannteste Algorithmus der das Problem des kürzesten Pfades (shortest path) effektiv löst stammt von Edsger Dijkstra [3].&nbsp; Der Algorithmus geht davon aus, dass unser Graph zusammenhängend (connected) und ungerichtet (undirected) ist, und außerdem keine negativen Distanzen (weights) enthält.&nbsp; Es ist ein Greedy Algorithmus, der die Breitensuche (BFS) benutzt.</p>
+<p>
+	Wir beginnen beim Ausgangsvertex <em>A</em>, von dem wir unsere Reise beginnen möchten.&nbsp; Wir markieren alle Vertices mit der Distanz <em>Unendlich</em>, außer <em>A</em>, der wird mit der Distanz <em>0</em> markiert.&nbsp; Dann beginnen wir mit der Breitensuche und markieren alle Vertices die wir von <em>A</em> aus direkt erreichen können mit der Distanz die sie zu <em>A</em> haben.&nbsp; Jetzt kommt die Greedyness: wir machen mit dem Vertex <em>V</em> weiter, der die kürzeste Distanz zu <em>A</em> hat.&nbsp; Jetzt suchen wir nach allen Vertices die wir von diesem neuen Vertex <em>V</em> aus direkt erreichen können.&nbsp; Auch hier markieren wir wieder die Distanzen, allerdings die Distanz zum Ausgangsvertex <em>A</em>, nicht die zum neuen Vertex <em>V</em>.&nbsp; Hier gibt es zwei Alternativen: der Vertex ist noch mit <em>Unendlich</em> markiert, dann markieren wir ihn einfach mit der neuen Distanz zu <em>A</em>.&nbsp; Oder der Vertex war bereits markiert, da wir ihn schon in einem vorherigen Schritt erreicht haben.&nbsp; Dann markieren wir ihn nur dann neu, wenn die neue Distanz kürzer ist als die alte.&nbsp; Das wiederholen wir dann solange, bis wir alle Vertices im Graphen erreicht haben.&nbsp; Jeder Vertex ist jetzt mit der kürzesten Distanz zum Ausgangsvertex <em>A</em> markiert.&nbsp; Wenn wir uns noch zusätzlich merken, wer der Vorgängervertex war (prev) mit dem wir die letzte Änderung der Distanz vorgenommen haben, dann können wir auch den Pfad ausgeben, wie wir auf dem kürzesten Pfad von <em>A</em> nach <em>B</em> kommen.</p>
+<p>
+	In der Wikipedia findet man den Algorithmus auch als Pseudocode [4]:</p>
+<pre style="margin-left: 40px;">
+dijkstra(Graph, source):
+&nbsp;&nbsp;&nbsp; dist[source] &larr; 0
+&nbsp;&nbsp;&nbsp; create vertex set Q
+
+&nbsp;&nbsp;&nbsp; for each vertex v in Graph:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if v &ne; source
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dist[v] &larr; INFINITY
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; prev[v] &larr; UNDEFINED
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Q.add_with_priority(v, dist[v])
+
+&nbsp;&nbsp;&nbsp; while Q is not empty:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; u &larr; Q.extract_min()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for each neighbor v of u:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alt &larr; dist[u] + length(u, v)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if alt &lt; dist[v]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dist[v] &larr; alt
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; prev[v] &larr; u
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Q.decrease_priority(v, alt)
+
+&nbsp;&nbsp;&nbsp; return dist[], prev[]</pre>
+<p>
+	Vom Laufzeitverhalten her ist der Dijkstra AIgorithmus gar nicht so schlecht: O( (n+m)*log(n) ).&nbsp; Der A* Algorithmus [5] ist eine Erweiterung des Dijkstra AIgorithmus, die ein bischen komplizierter ist, aber dafür auch schneller.&nbsp; Viele Spiele verwenden deswegen den A* Algorithmus anstelle von Dijkstra&#39;s.</p>
+<p>
+	Es gibt auch andere Algorithmen um den kürzesten Pfad zu bestimmen, bekannte sind:</p>
+<ul>
+	<li>
+		Bellman-Ford: erlaubt auch negative Distanzen (weights) und läuft in O(n*m).</li>
+	<li>
+		DAG-basierte Algorithmen: funktioneren nur für gerichtete Graphen ohne Ringe, DAGs erlauben auch negative Distanzen (weights) und haben ein Laufzeitverhalten von O(n+m), sind also viel schneller als Dijkstra.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DirtCity.png" style="width: 200px; height: 135px; float: right;" />Minimum Spanning Tree</h2>
+<p>
+	Kommen wir zur zweiten wichtigen Anwendung für Graphen: dem <em>Minimum Spanning Tree</em>.&nbsp; Erinnern wir uns an unsere Definitionen: ein <em>Spanning Tree</em> ist ein <em>Spanning Subgraph</em> der ein Baum ist.&nbsp; Der <em>Minimum Spanning Tree</em> ist der <em>Spanning Tree</em> mit der niedrigsten Gesamt-Gewichtung (total weight).&nbsp; Minimum Spanning Trees sind deswegen so wichig, weil sie uns helfen Geld zu sparen.&nbsp; Z.B. möchten wir bei der Planung von Straßen zwei Kriterien erfüllt sehen: zum Einen soll es zu jedem Dorf und jeder Stadt mindestens eine Straße geben.&nbsp; Zum Anderen möchte man aber auch Kosten sparen, also keine unnötigen Straßen bauen.&nbsp; Das Gleiche gilt auch für das Schienennetz.&nbsp; Oder wenn wir elektrische Leitungen verlegen, dann soll natürlich jedes Gerät mit Strom versorgt werden, aber Kabel kosten Geld, deswegen wollen wir es eigentlich vermeiden unnötige Kabel zu verlegen.&nbsp; Das Gleiche gilt auch für die Verlegung von Wasserrohren oder Glasfaserkabel.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Prim.png" style="width: 200px; height: 479px; float: right;" />Prim</h2>
+<p>
+	Das Problem lässt sich mit zwei bekannten Algorithmen lösen, dem von Prim und dem von Kruskal.&nbsp; In Prim&#39;s Algorithmus initialisieren wir zunächst eine Priorityqueue <em>Q</em> mit allen Vertices unseres Graphen, dabei markieren wir aber alle Vertices wieder mit <em>Unendlich</em>, außer unserem zufälligen Startvertex <em>r</em>.&nbsp; Die Priorityqueue verwendet die Distanz als Sortierkriterium.&nbsp; Dann beginnen wir damit aus der Priorityqueue uns das Element <em>u</em> mit der höchsten Priorität zu geben.&nbsp; Beim ersten mal ist das unser Startvertex <em>r</em>.&nbsp; Dann lassen wir uns alle Vertices geben, die man von <em><em>u</em></em> aus erreichen kann.&nbsp; Für all diese Vertices berechnen wir die Markierungen (Distanzen) zu <em>u</em>, aber nur wenn diese noch in <em>Q</em> sind.&nbsp; Danach nehmen wir das nächste Element aus der Priorityqueue und wiederholen den Prozess solange bis die Queue leer ist.</p>
+<p>
+	In der Wikipedia findet man den Algorithmus als Pseudocode [6,7]:</p>
+<pre style="margin-left: 40px;">
+prim(G, r)
+&nbsp;&nbsp;&nbsp; Q: priority queue
+&nbsp;&nbsp;&nbsp; for ( v in G.vertices() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Q &lt;- v
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; for ( u in Q) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dist[u] &lt;- &infin;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; prev[u] &lt;- null
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; wert[r] &lt;- 0
+&nbsp;&nbsp;&nbsp; while ( !Q.isEmpty() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; u &lt;- extract_min(Q)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for ( all v &isin; neighbor(u) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( v &isin; Q&nbsp; &amp;&amp;&nbsp; weight(u,v) &lt; dist[v] )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; prev[v] &lt;- u
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dist[v] &lt;- weight(u,v)</pre>
+<p>
+	dabei ist weight() die Gewichtsfunktion für die Kantenlänge.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Kruskal.png" style="width: 200px; height: 470px; float: right;" />Kruskal</h2>
+<p>
+	Kruskal&#39;s Algorithmus ist ein wunderbares Beispiel dafür, wie man einen eigentlich nicht ganz trivialen Algorithmus unter zuhilfenahme einer geschickt gewählten Datenstruktur ganz einfach erscheinen lassen kann.&nbsp; Besagte Datenstruktur ist in diesem Fall das Disjoint-Set (auf gut deutsch <em>Union-Find-Datenstruktur</em>) [9]. Das Disjoint-Set ist ein Set so wie wir es aus Kapitel 3 kennen, aber mit der Eigenschaft, dass es seine Unter-Sets mit verwaltet und zwar derart, das jedes Element in nur einem dieser Unter-Sets sein kann, aber auch jedes Element in einem Unter-Set sein muss.&nbsp; Diese Datenstruktur erlaubt es nun einmal mittels <em>find()</em> das Unter-Set zu finden dem ein bestimmtes Element angehört, und mittels <em>union()</em> zwei Unter-Sets zu vereinen.</p>
+<p>
+	Kruskal&#39;s Algorithmus beginnt dann damit, dass er ein Disjoint-Set initialisiert, und jedes Element für sich erst einmal ein Unter-Set bildet. Wir initialisieren auch ein Minimum Spanning Tree Set, <em>A</em>.&nbsp; Das soll später alle Edges des Minimum Spanning Trees enthalten.&nbsp; Dann gehen wir durch alle Edges des Graphen, sortiert nach Distanz aufsteigend.&nbsp; Das macht man am einfachsten wieder mit einer Priorityqueue.&nbsp; Für die beiden Vertices <em>u</em> und <em>v</em> die zu dem jeweiligen Edge gehören lassen wir uns die jeweiligen Disjoint-Sets mittels <em>find()</em> geben.&nbsp; Sind diese beiden Disjoint-Sets verschieden, dann vereinigen wir diese mittels <em>union()</em> und fügen das Edge zu unserem Minimum Spanning Tree Set, <em>A</em>,&nbsp; hinzu.&nbsp; Das machen wir solange bis wir alle Edges durch sind.</p>
+<p>
+	Die Wikipedia enthält auch eine sehr schöne Erklärung des Kruskal Algorithmus und wie üblich findet man dort auch Pseudocode [8]:</p>
+<pre style="margin-left: 40px;">
+kruskal(G)
+&nbsp;&nbsp;&nbsp; A = &empty;   // set of edges
+&nbsp;&nbsp;&nbsp; foreach v &isin; G.V:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MAKE-SET(v)
+&nbsp;&nbsp;&nbsp; foreach (u, v) in G.E ordered by weight(u, v), increasing:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if FIND-SET(u) &ne; FIND-SET(v):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A = A &cup; {(u, v)}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UNION(u, v)
+&nbsp;&nbsp;&nbsp; return A</pre>
+<p>
+	Sieht doch gar nicht so kompliziert aus.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PirateIsland.png" style="width: 200px; height: 150px; float: right;" />Directed Graphs (Digraph)</h2>
+<p>
+	Gerichtete Graphen, auch Digraphs genannt, sind normale Graphen bei denen die Edges eine Richtung haben.&nbsp; Das wird graphisch meist durch einen Pfeil dargestellt.&nbsp; Digraphs haben zahlreiche Anwendungen.&nbsp; Z.B. die Links im Internet stellen einen gerichteten Graphen dar.&nbsp; Auch Flüge sind gerichtete Graphen.&nbsp; Es ist nicht selten, dass es einen Flug von A nach B gibt, aber es gibt keinen direkten Rückflug.&nbsp; Natürlich stellen auch Einbahnstraßen einen gerichteten Graphen dar.&nbsp; Im Prinzip kann jeder ungerichtete Graph in einen Digraph umgewandelt werden, indem man jedes ungerichtete Edge durch zwei gerichtete ersetzt, eines in die Hin- und eines in die Zurückrichtung.&nbsp;</p>
+<p>
+	Gerichtete Graphen haben alle Methoden eines normalen Graphen, zusätzlich gibt es aber noch folgende:</p>
+<ul>
+	<li>
+		<strong>incomingEdges(Vertex&lt;V&gt; vertex):</strong> gibt eine Liste aller Edges zurück, die mit dem Vertex <em>vertex</em> verbunden sind und deren Richtung auf den Vertex hin deutet;</li>
+	<li>
+		<strong>outgoingEdges(Vertex&lt;V&gt; vertex):</strong> gibt eine Liste aller Edges zurück, die mit dem Vertex <em>vertex</em> verbunden sind und deren Richtung von dem Vertex weg deutet.</li>
+</ul>
+<p>
+	Verwendet wird der Digraph ganz genauso wie der Graph.&nbsp; Wir implementieren das <em>Pirate Island</em> Beispiel:</p>
+<pre style="margin-left: 40px;">
+DiGraphEdgeList&lt;String, String&gt; graph = new DiGraphEdgeList&lt;String, String&gt;();
+
+Vertex&lt;String&gt; v1 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;Pirate Island&quot;));
+Vertex&lt;String&gt; v2 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;Island of Death&quot;));
+Vertex&lt;String&gt; v3 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;Treasure Island&quot;));
+
+AbstractEdge&lt;String&gt; e1 = graph.insertEdge(v1, v2, &quot;&quot;);
+AbstractEdge&lt;String&gt; e2 = graph.insertEdge(v1, v3, &quot;&quot;);
+AbstractEdge&lt;String&gt; e3 = graph.insertEdge(v3, v1, &quot;&quot;);</pre>
+<p>
+	Auch nicht allzu kompliziert.</p>
+<p>
+	Die Traversal-Methoden verhalten sich ein bischen anders für Digraphs. Es gibt sowohl ein gerichtetes DFS als auch ein gerichtetes BFS Traversal. Den Unterschied zu den normalen Traversal Methoden kann man sehr schön am <em>Pirate Island</em> Beispiel sehen: beginnt man seine Reise von <em>Treasure Island</em>, so kann man alle Inseln erreichen.&nbsp; Beginnt man allerdings im <em>Island of Death</em>, dann ist das nicht der Fall.&nbsp; Deswegen gibt es für gerichtete Graphen das Konzept der <em>Reachability</em>, also der Erreichbarkeit.&nbsp; Ein Digraph ist <em>strongly connected</em>, wenn von jedem Vertex aus jeder andere Vertex erreicht werden kann.</p>
+<p>
+	.</p>
+<h2>
+	Directed Acyclic Graphs (DAG)</h2>
+<p>
+	Eine ganz besondere Form der Digraphen sind die azyklischen: also gerichtete Graphen, die keine gerichteten Kreise enthalten.&nbsp; DAGs tauchen in sehr vielen interessanten Problemen auf [10], wie z.B. wenn wir in Java in einem Klassendiagramm Vererbungen darstellen, dann handelt es sich um einen DAG.&nbsp; Oder wenn wir die Abhängigkeiten von Vorlesungen betrachten, also man sollte erst Programmieren 1 gehört haben, bevor man Programmieren 2 hören kann, dann ist das auch wieder ein DAG.&nbsp; Die wichtigste Anwendung von DAGs sind allerdings Scheduling Constraints, wie sie z.B. im Projektmanagement auftreten.</p>
+<p>
+	Bei solchen Scheduling Constraints gibt es Abhängigkeiten.&nbsp; Z.B. können wir erst dann ein Bild aufhängen wenn wir vorher die Nägel gekauft haben, mit denen wir das Bild aufhängen wollen.&nbsp; Also ein Task hängt von einem anderen Task ab.&nbsp; Bei vielen Tasks, kann das etwas unübersichtlich werden.&nbsp; Um dann festzustellen, mit welchem Task man anfangen sollte, und in welcher Reihenfolge man die Tasks am effektivsten abarbeiten sollte, bedient man sich der <em>Topologischen Sortierung</em>.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/TopologicalSort.png" style="width: 140px; height: 390px; float: right;" />Topological Sort</h2>
+<p>
+	Topologische Sortierung hat damit zu tun, dass es einen Unterschied macht ob wir unsere Wäsche erst in die Waschmaschine und dann in den Trockner stecken oder umgekehrt.&nbsp; Im ersten Fall nämlich ist unsere Wäsche sauber und trocken, im zweiten Fall ist sie zwar auch sauber, aber nass. D.h. in unserem Graphen wollen wir sicher stellen, dass die Waschmaschine vor dem Trockner drankommt.&nbsp;</p>
+<p>
+	Es gibt mehrere Verfahren eine Topologische Sortierung durchzuführen.&nbsp; Die Resultate sind nicht immer die gleichen, da Topologische Sortierung nicht ganz eindeutig ist.&nbsp; Ein bekannter Algorithmus ist der von Kahn, den man in der Wikipedia als Pseudocode findet [11]:</p>
+<pre style="margin-left: 40px;">
+L &larr; Empty list that will contain the sorted elements
+S &larr; Set of all nodes with no incoming edges
+while S is non-empty do
+&nbsp;&nbsp;&nbsp; remove a node n from S
+&nbsp;&nbsp;&nbsp; add n to tail of L
+&nbsp;&nbsp;&nbsp; for each node m with an edge e from n to m do
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; remove edge e from the graph
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if m has no other incoming edges then
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; insert m into S
+if graph has edges then
+&nbsp;&nbsp;&nbsp; return error (graph has at least one cycle)
+else
+&nbsp;&nbsp;&nbsp; return L (a topologically sorted order)</pre>
+<p>
+	In den Projekten werden wir uns einige Beispiele ansehen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Nach einigen Definitionen zu Graphen und deren Vertices und Edges, haben wir von gerichteten und ungerichteten Graphen gehört.&nbsp; Bzgl. Iterationsmöglichkeiten haben wir von der Tiefensuche (DFS) und der Breitensuche (BFS) gehört.&nbsp; Wir haben uns auch mit den Algorithmen zu Suche nach dem kürzesten Pfad (Dijkstra) und dem Minimum Spanning Tree (Prim und Kruskal) beschäftigt, und zum Schluss haben wir etwas von der topologischen Sortierung gehört.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	Die Projekte in diesem Kapitel haben es in sich: ob Abenteuerspiel, UBahn- und Flugnavigation, Stadt- und Projektplanung, nichts ist mehr vor uns sicher.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Adventure2.png" style="width: 200px; height: 200px; float: right;" />Adventure</h2>
+<p>
+	Im dritten Kapitel haben wir das Adventure Spiel programmiert.&nbsp; Damals haben wir eine Map als Datenstruktur verwendet, genauer eine Map bestehend aus einem String als Key, dem Ausgangsraum, und einer Liste für die Räume, die man von diesem Ausgangsraum erreichen kann:</p>
+<pre style="margin-left: 40px;">
+HashMap&lt;String, ArrayList&lt;String&gt;&gt; roomMap;</pre>
+<p>
+	Im Prinzip ist nichts gegen diese Datenstruktur zu sagen, man kann das Problem aber auch mit einem Graphen lösen:</p>
+<pre style="margin-left: 40px;">
+DiGraphEdgeList&lt;String, String&gt; diGraph;</pre>
+<p>
+	Dabei sind die Räume die Vertices,</p>
+<pre style="margin-left: 40px;">
+Vertex&lt;String&gt; v1 = diGraph.insertVertex(new Vertex&lt;String&gt;(&quot;kitchen&quot;));
+Vertex&lt;String&gt; v2 = diGraph.insertVertex(new Vertex&lt;String&gt;(&quot;hallway&quot;));</pre>
+<p>
+	und Räume werden über Edges miteinander verbunden:</p>
+<pre style="margin-left: 40px;">
+AbstractEdge&lt;String&gt; e1 = diGraph.insertEdge(v1, v2, &quot;&quot;);</pre>
+<p>
+	Möchte man sein Abenteuer beginnen, so sucht man mit</p>
+<pre style="margin-left: 40px;">
+Vertex&lt;String&gt; currentVertex = diGraph.findVertex(&quot;kitchen&quot;);</pre>
+<p>
+	nach dem Anfangsvertex.&nbsp; Von diesem lässt man sich dann mittels</p>
+<pre style="margin-left: 40px;">
+Collection&lt;EdgeDirected&lt;String&gt;&gt; outEdgs = 
+    diGraph.outgoingEdges(currentVertex);</pre>
+<p>
+	die Verbindungsedges auflisten, die von diesem Knoten ausgehen.&nbsp; An den Enden dieser Edges befinden sich die Räume die man darüber erreichen kann:</p>
+<pre style="margin-left: 40px;">
+for (EdgeDirected&lt;String&gt; edge : outEdgs) {
+    Vertex&lt;String&gt; rm = diGraph.opposite(currentVertex, edge);
+    ...
+}
+</pre>
+<p>
+	So kann man dann durch den ganzen Graphen navigieren, also ein Abenteuer erleben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Synonyms.png" style="width: 200px; height: 200px; float: right;" />Synonyms</h2>
+<p>
+	Wörter die eine gleiche oder ähnliche Bedeutung haben, nennt man <em>Synonyme</em>.&nbsp; Im Internet finden sich Listen von Synonymen, z.B. der Website <em>WordNet</em> enthält eine Liste mit vielen Synonymen [12-14].&nbsp; Auch aus Synonymen kann man einen Graphen basteln.&nbsp; Eine Liste von Synonymen sieht z.B. wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+grass, pot
+pot, cooking vessel
+vessel, container
+box, container
+dish, container
+bin, container
+pie, dish
+plate, dish</pre>
+<p>
+	Aus diesen Synonymen kann man nun einen ungerichteten Graphen erstellen:</p>
+<pre style="margin-left: 40px;">
+GraphEdgeList&lt;String, String&gt; graph;</pre>
+<p>
+	durch den man dann wie im Adventure Spiel hindurch navigieren kann.&nbsp; Die Wörter sind die Vertices,</p>
+<pre style="margin-left: 40px;">
+Vertex&lt;String&gt; v1 = diGraph.insertVertex(new Vertex&lt;String&gt;(&quot;grass&quot;));
+Vertex&lt;String&gt; v2 = diGraph.insertVertex(new Vertex&lt;String&gt;(&quot;pot&quot;));</pre>
+<p>
+	und die Synonymbeziehung wird über die Edges abgebildet:</p>
+<pre style="margin-left: 40px;">
+AbstractEdge&lt;String&gt; e1 = diGraph.insertEdge(v1, v2, &quot;&quot;);</pre>
+<p>
+	Der Rest vom Code ist fast identisch zum Adventure Beispiel.&nbsp; Weiter unten werden wir noch einen visuellen SynonymBrowser erstellen.</p>
+<p>
+	.</p>
+<h2>
+	Traversals</h2>
+<p>
+	Ein anderes hübsches Beispiel ist es einmal die beiden Traversals für Graphen auszuprobieren und zu visualisieren.&nbsp; Das machen wir mit dem folgende Code:</p>
+<pre style="margin-left: 40px;">
+String str = &quot;A{B{C,D},E{F,G,H},I}&quot;;
+GraphEdgeList&lt;String, String&gt; graph = new GraphParser().parseTree(str);
+
+graph.bfs(new VisitorInterface&lt;Vertex&lt;String&gt;&gt;() {
+&nbsp;&nbsp; &nbsp;int counter = 1;
+
+&nbsp;&nbsp; &nbsp;public void visit(Vertex&lt;?&gt; p) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;((Vertex&lt;String&gt;) p).setElement(&quot;&quot; + counter++);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;System.out.println(p);
+&nbsp;&nbsp; &nbsp;}
+});</pre>
+<p>
+	In diesem Fall ist der Graph ein Baum, und zufälligerweise der gleiche den wir auch im Kapitel zu den Bäumen verwendet haben.&nbsp; Die Zahl in den Rechtecken gibt die Reihenfolge an in der die jeweiligen Knoten besucht wurden, links für DFS-Traversal und rechts für BFS-Traversal:</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img alt="" src="images/Traversal_DFS.png" style="width: 200px; height: 200px;" /></p>
+				<p>
+					DFS-Traversal</p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img alt="" src="images/Traversal_BFS.png" style="width: 200px; height: 200px;" /></p>
+				<p>
+					BFS-Traversal</p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					&nbsp;</p>
+				<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Was wir sehen ist, dass der DFS dem Pre-Order und der BFS dem Level-Order Traversal für Bäume entspricht.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Subway.png" style="width: 200px; height: 200px; float: right;" />Subway</h2>
+<p>
+	Ein anderes sehr schönes Beispiel für ein Netzwerk sind UBahnlinien.&nbsp; Z.B. in Nürnberg gibt es drei Linien:</p>
+<pre style="margin-left: 40px;">
+U1: Langwasser Süd, Gemeinschaftshaus, Langwasser Mitte, Scharfreiterring, ...
+U2: Röthenbach, Hohe Marter, Schweinau, St. Leonhard, Rothenburger Straße, ...
+U3: Friedrich-Ebert-Platz, Kaulbachplatz, Maxfeld, Rathenauplatz, ...
+</pre>
+<p>
+	Auch daraus lässt sich ein Graph erstellen: die Vertices sind die Haltestellen und die Edges stellen die UBahn Linien dar, also U1, U2 oder U3.&nbsp;</p>
+<p>
+	Wir lesen wie üblich mit einem BufferedReader Zeile für Zeile und parsen diese in der folgenden Methode:</p>
+<pre style="margin-left: 40px;">
+private void analyze(String line) {
+&nbsp;&nbsp; &nbsp;StringTokenizer st = new StringTokenizer(line, &quot;,:&quot;, false);
+&nbsp;&nbsp; &nbsp;String subwayLine = st.nextToken();
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;String from = st.nextToken().trim();
+&nbsp;&nbsp; &nbsp;addVertexToGraph(from);
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String to = st.nextToken().trim();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addVertexToGraph(to);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;graph.insertEdge(vertices.get(from), vertices.get(to), subwayLine);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;from = to;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Danach benutzen wir den <em>GraphDrawerCanvas</em> um den Graphen ansprechend darzustellen.</p>
+<pre style="margin-left: 40px;">
+private void drawRandomGraph(GraphEdgeList&lt;String, String&gt; graph) {
+&nbsp;&nbsp; &nbsp;GraphDrawerCanvas&lt;String, String&gt; canvas = new GraphDrawerCanvas&lt;String, String&gt;(
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;graph);
+&nbsp;&nbsp; &nbsp;canvas.setShapeNode(GraphDrawerCanvas.SHAPE_ROUNDRECT);
+&nbsp;&nbsp; &nbsp;canvas.setOrientation(GraphDrawerCanvas.VERTICAL);
+&nbsp;&nbsp; &nbsp;canvas.setEdgeStyle(GraphDrawerCanvas.EDGE_STYLE_AVOID_OVERLAP);
+&nbsp;&nbsp; &nbsp;canvas.setShowEdgeLabels(GraphDrawerCanvas.EDGE_LABELS_SHOW);
+&nbsp;&nbsp; &nbsp;canvas.setColorVertices(Color.BLUE);
+&nbsp;&nbsp; &nbsp;canvas.setColorVerticesFill(new Color(230, 230, 230));
+&nbsp;&nbsp; &nbsp;canvas.setNodeSeparationX(200);
+&nbsp;&nbsp; &nbsp;canvas.setNodeSeparationY(60);
+&nbsp;&nbsp; &nbsp;canvas.setGridOn(false);
+&nbsp;&nbsp; &nbsp;canvas.setFont(&quot;Courier new-bold-18&quot;);
+&nbsp;&nbsp; &nbsp;canvas.setTraversalType(GraphDrawingAlgorithm.TRAVERSAL_SPRING_FORCE);
+&nbsp;&nbsp; &nbsp;canvas.execute();
+&nbsp;&nbsp; &nbsp;add(new JScrollPane(canvas), CENTER);
+}</pre>
+<p>
+	Weiter unten werden wir das Projekt noch um eine Navigation erweitern.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Pathfinder.png" style="width: 200px; height: 150px; float: right;" />FlightFinder</h2>
+<p>
+	Im FlightFinder Projekt wollen wir einen Flug von Nürnberg nach Paris finden.&nbsp; Dazu initialisieren wir erst einmal unseren Graphen,</p>
+<pre style="margin-left: 40px;">
+GraphEdgeList&lt;Integer, String&gt; graph = new GraphEdgeList&lt;Integer, String&gt;();</pre>
+<p>
+	fügen dann die Flughäfen hinzu,</p>
+<pre style="margin-left: 40px;">
+Vertex&lt;String&gt; v1 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;NUE&quot;));
+Vertex&lt;String&gt; v2 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;AMS&quot;));
+Vertex&lt;String&gt; v3 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;MAD&quot;));
+Vertex&lt;String&gt; v4 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;CDG&quot;));</pre>
+<p>
+	und schließlich die Verbindungsflüge,</p>
+<pre style="margin-left: 40px;">
+AbstractEdge&lt;Integer&gt; e1 = graph.insertEdge(v1, v2, 542);
+AbstractEdge&lt;Integer&gt; e2 = graph.insertEdge(v2, v3, 1462);
+AbstractEdge&lt;Integer&gt; e3 = graph.insertEdge(v1, v3, 1524);&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+AbstractEdge&lt;Integer&gt; e4 = graph.insertEdge(v2, v4, 399);</pre>
+<p>
+	Wie wir sehen gibt es keinen direkten Flug von Nürnberg nach Paris.&nbsp; Aber es gibt den Dijkstra Algorithmus, und der findet uns die beste Verbindung.&nbsp; Zunächst initialisieren wir den Algorithmus:</p>
+<pre style="margin-left: 40px;">
+Dijkstra&lt;Integer, String&gt; dijK = new Dijkstra&lt;Integer, String&gt;(graph);</pre>
+<p>
+	Dann lassen wir uns mal die Distanzen zu allen Flughäfen ausgeben die man von Nürnberg aus direkt und indirekt erreichen kann:</p>
+<pre style="margin-left: 40px;">
+Map&lt;Vertex&lt;String&gt;, Integer&gt; dists = dijK.getAllDistances(v1);
+for (Vertex&lt;String&gt; vx : dists.keySet()) {
+&nbsp;&nbsp; &nbsp;println(&quot;&quot;+v1.getElement()+&quot; -&gt; &quot; + vx.getElement() + &quot;: &quot; + dists.get(vx));
+}</pre>
+<p>
+	Und schließlich würden wir noch unseren genauen Flugplan wissen wollen, wie wir von Nürnberg nach Paris kommen:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Fastest route from &quot;+v1.getElement()+&quot; to &quot;+v4.getElement()+&quot;: &quot;);
+Map&lt;Vertex&lt;String&gt;, Vertex&lt;String&gt;&gt; predcrs = dijK.getAllPredecessors(v1);
+Vertex&lt;String&gt; vTmp = v4;
+while (vTmp != v1) {
+&nbsp;&nbsp; &nbsp;print(vTmp.getElement() + &quot; -&gt; &quot;);
+&nbsp;&nbsp; &nbsp;vTmp = predcrs.get(vTmp);
+}
+println(vTmp.getElement());</pre>
+<p>
+	Gute Reise!</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/SubwayNavigation.png" style="width: 200px; height: 150px; float: right;" />SubwayNavigation</h2>
+<p>
+	Mit den Daten aus dem Projekt Subway können wir auch eine UBahn Navigations Anwendung schreiben.&nbsp; Wir laden wie gehabt die Daten aus der Textdatei in einen Graphen.&nbsp; Allerdings müssen die Elemente der Edges Integer sein, also</p>
+<pre style="margin-left: 40px;">
+GraphEdgeList&lt;Integer, String&gt; graph;</pre>
+<p>
+	sonst ist es nicht möglich die kürzeste Distanz zu berechnen.&nbsp; Idealerweise würde man hier die Fahrtzeiten in Minuten verwenden, da wir aber diese Daten nicht haben, setzen wir einfach alle Distanzen auf 1.&nbsp; Das genügt in einem einfachen Netzwerk, wenn uns nur die Strecke interessiert und nicht die genaue Dauer oder Distanz.&nbsp;</p>
+<p>
+	Dann fragen wir den Nutzer nach Abfahrts- und Zielbahnhof:</p>
+<pre style="margin-left: 40px;">
+Vertex&lt;String&gt; sourceVertex = getVertex(&quot;Leaving from: &quot;);
+Vertex&lt;String&gt; destinationVertex  = getVertex(&quot;Going to: &quot;);</pre>
+<p>
+	Und dann können wir genau wie beim PathFinder Projekt die Anzahl der Stationen und die Route die zum Ziel führt ausgeben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DirtyCity.png" style="width: 200px; height: 150px; float: right;" />DirtyCity</h2>
+<p>
+	Die Stadt DirtyCity [1] hat uns beauftragt einen Plan auszuarbeiten, wie jedes Haus über eine asphaltierte Straße erreichbar ist, aber gleichzeitig die Kosten für die Asphaltierung möglichst niedrig sein sollen.&nbsp; Wir haben mal ausnahmsweise in der Vorlesung aufgepasst, und da war doch was mit dem Minimum Spanning Tree und den Algorithmen von Prim und Kruskal.</p>
+<p>
+	Der Code ist denkbar einfach.&nbsp; Wir übersetzen zunächst die Häuser und ihre Abstände in einen Graphen:</p>
+<pre style="margin-left: 40px;">
+GraphEdgeList&lt;Integer, String&gt; graph = new GraphEdgeList&lt;Integer, String&gt;();
+
+Vertex&lt;String&gt; vA = graph.insertVertex(new Vertex&lt;String&gt;(&quot;A&quot;));
+Vertex&lt;String&gt; vB = graph.insertVertex(new Vertex&lt;String&gt;(&quot;B&quot;));
+Vertex&lt;String&gt; vC = graph.insertVertex(new Vertex&lt;String&gt;(&quot;C&quot;));
+Vertex&lt;String&gt; vD = graph.insertVertex(new Vertex&lt;String&gt;(&quot;D&quot;));
+Vertex&lt;String&gt; vE = graph.insertVertex(new Vertex&lt;String&gt;(&quot;E&quot;));
+Vertex&lt;String&gt; vF = graph.insertVertex(new Vertex&lt;String&gt;(&quot;F&quot;));
+Vertex&lt;String&gt; vG = graph.insertVertex(new Vertex&lt;String&gt;(&quot;G&quot;));
+
+AbstractEdge&lt;Integer&gt; e1 = graph.insertEdge(vA, vB, 1);
+AbstractEdge&lt;Integer&gt; e2 = graph.insertEdge(vA, vD, 2);
+AbstractEdge&lt;Integer&gt; e3 = graph.insertEdge(vB, vC, 3);
+AbstractEdge&lt;Integer&gt; e4 = graph.insertEdge(vB, vD, 4);
+AbstractEdge&lt;Integer&gt; e5 = graph.insertEdge(vB, vE, 2);
+AbstractEdge&lt;Integer&gt; e6 = graph.insertEdge(vB, vF, 2);
+AbstractEdge&lt;Integer&gt; e7 = graph.insertEdge(vC, vE, 2);
+AbstractEdge&lt;Integer&gt; e8 = graph.insertEdge(vD, vF, 3);
+AbstractEdge&lt;Integer&gt; e9 = graph.insertEdge(vE, vF, 2);
+AbstractEdge&lt;Integer&gt; e10 = graph.insertEdge(vE, vG, 1);
+AbstractEdge&lt;Integer&gt; e11 = graph.insertEdge(vF, vG, 3);</pre>
+<p>
+	wenden dann z.B. den Algorithmus von Prim darauf an:</p>
+<pre style="margin-left: 40px;">
+Prim&lt;Integer, String&gt; prim = new Prim&lt;Integer, String&gt;(graph);</pre>
+<p>
+	und lassen uns den Minimum Spanning Tree ausgeben:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Minimum spanning tree using Prim: &quot;);
+Map&lt;Vertex&lt;String&gt;, Vertex&lt;String&gt;&gt; tree = prim.findMSP();
+for (Vertex&lt;String&gt; vx : tree.keySet()) {
+&nbsp;&nbsp; &nbsp;print(vx.getElement() + &quot; &gt; &quot; + tree.get(vx).getElement() + &quot;, &quot;);
+}</pre>
+<p>
+	Jetzt können wir unsere Rechnung stellen.&nbsp; Interessant ist, das Prim einen etwas anderen Minimum Spanning Tree ausgibt als Kruskal.&nbsp; Beide sind aber minimum, bedeutet, der verbaute Asphalt ist der gleiche.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/TopologicalSort.png" style="margin-left: 10px; margin-right: 10px; width: 140px; height: 390px; float: right;" />ProjectManagement</h2>
+<p>
+	Im Projektmanagement möchte man wissen wie lange ein Projekt mindestens dauert.&nbsp; Dazu macht man sich eine Liste von Tasks die zu erledigen sind, schätzt für jeden dieser Tasks ungefähr ab wie lange er dauern wird, und notiert sich Abhängigkeiten, also welche Tasks von anderen Tasks abhängen. Das Resultat einer solchen Schätzung kann man dann in einer Tabelle zusammenfassen:</p>
+<table border="1" cellpadding="1" cellspacing="1" height="170" width="364">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">
+				<strong>Task</strong></td>
+			<td align="center">
+				<strong>Duration (days)</strong></td>
+			<td align="center">
+				<strong>Dependencies</strong></td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T1</td>
+			<td align="center">
+				5</td>
+			<td align="center">
+				&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T2</td>
+			<td align="center">
+				5</td>
+			<td align="center">
+				T1</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T3</td>
+			<td align="center">
+				10</td>
+			<td align="center">
+				T2</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T4</td>
+			<td align="center">
+				15</td>
+			<td align="center">
+				T1</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T5</td>
+			<td align="center">
+				5</td>
+			<td align="center">
+				T4</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T6</td>
+			<td align="center">
+				10</td>
+			<td align="center">
+				T4</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T7</td>
+			<td align="center">
+				15</td>
+			<td align="center">
+				T2, T6</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				T8</td>
+			<td align="center">
+				10</td>
+			<td align="center">
+				T5, T7</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Was für das weitere Projekt jetzt wichtig wäre ist zu wissen in welcher Reihenfolge die Tasks abgearbeitet werden sollen und den kritischen Pfad [15] zu identifizieren.&nbsp; Über den kritischen Pfad kann man dann auch die Mindestlaufzeit des Projektes abschätzen.</p>
+<p>
+	Für den ersten Schritt machen wir aus unsere Taskliste einen DAG, also einen azyklischen Digraphen.&nbsp; Azyklisch deshalb, denn würde die Taskliste eine Kreis enthalten, z.B. T1 hängt von T2 ab und T2 wiederum von T1, dann würde das Projekt nie fertig werden.</p>
+<pre style="margin-left: 40px;">
+DiGraphEdgeList&lt;Integer, String&gt; graph = new DiGraphEdgeList&lt;Integer, String&gt;();
+
+Vertex&lt;String&gt; v1 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T1&quot;));
+Vertex&lt;String&gt; v2 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T2&quot;));
+Vertex&lt;String&gt; v3 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T3&quot;));
+Vertex&lt;String&gt; v4 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T4&quot;));
+Vertex&lt;String&gt; v5 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T5&quot;));
+Vertex&lt;String&gt; v6 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T6&quot;));
+Vertex&lt;String&gt; v7 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T7&quot;));
+Vertex&lt;String&gt; v8 = graph.insertVertex(new Vertex&lt;String&gt;(&quot;T8&quot;));
+
+AbstractEdge&lt;Integer&gt; e1 = graph.insertEdge(v1, v2, 1);
+AbstractEdge&lt;Integer&gt; e2 = graph.insertEdge(v1, v4, 1);
+AbstractEdge&lt;Integer&gt; e3 = graph.insertEdge(v2, v7, 1);
+AbstractEdge&lt;Integer&gt; e4 = graph.insertEdge(v2, v3, 1);
+AbstractEdge&lt;Integer&gt; e5 = graph.insertEdge(v4, v5, 1);
+AbstractEdge&lt;Integer&gt; e6 = graph.insertEdge(v4, v6, 1);
+AbstractEdge&lt;Integer&gt; e7 = graph.insertEdge(v5, v8, 1);
+AbstractEdge&lt;Integer&gt; e8 = graph.insertEdge(v6, v7, 1);
+AbstractEdge&lt;Integer&gt; e9 = graph.insertEdge(v7, v8, 1);</pre>
+<p>
+	Interessant ist hier vielleicht, dass wir die Dauer der Tasks noch gar nicht verwenden.&nbsp; Das hat damit zu tun, dass die Dauer zu den Vertices gehört, nicht den Edges.</p>
+<p>
+	<img alt="" src="images/ProjectManagement2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Die Reihenfolge in der die Tasks abgearbeitet werden sollen ermitteln wir einfach via der topologischen Sortierung:</p>
+<pre style="margin-left: 40px;">
+TopologicalSort&lt;Integer, String&gt; toso =
+&nbsp;&nbsp; &nbsp;new TopologicalSort&lt;Integer, String&gt;(graph);
+println(&quot;First sort: &quot;);
+Collection&lt;Vertex&lt;String&gt;&gt; verts = toso.sort();
+for (Vertex&lt;String&gt; vertex : verts) {
+&nbsp;&nbsp; &nbsp;print(vertex.getElement() + &quot; &gt; &quot;);
+}</pre>
+<p>
+	Die topologischen Sortierung ist nicht ganz eindeutig, es gibt nicht selten mehrere mögliche Antworten.&nbsp; Das Resultat in unserem Beispiel besagt, dass wir mit T1 beginnen sollten, und dass T8 der letzte Task ist.&nbsp; Das ist schon mal nicht schlecht, es sagt uns grob die Reihenfolge in der die Tasks abgearbeitet werden sollten.&nbsp; Allerdings könnten einige Tasks auch parallel abgearbeitet werden.&nbsp;</p>
+<p>
+	Um herauszufinden welche Tasks nicht parallel abgearbeitet werden können, benötigen wir den kritischen Pfad.&nbsp; Hier hilft uns unser alter Freund, der Dijkstra Algorithmus.&nbsp; Wir geben ihm den Anfangs- und Endtask die wir aus der topologischen Sortierung erhalten haben, und lassen uns dann den kürzesten Pfad zwischen den beiden geben:</p>
+<pre style="margin-left: 40px;">
+Dijkstra&lt;Integer, String&gt; dijK = 
+    new Dijkstra&lt;Integer, String&gt;(graph);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+Map&lt;Vertex&lt;String&gt;, Vertex&lt;String&gt;&gt; predcrs =
+&nbsp;&nbsp; &nbsp;dijK.getAllPredecessors(startVertex);
+Vertex&lt;String&gt; vTmp = endVertex;
+while (vTmp != startVertex) {
+&nbsp;&nbsp; &nbsp;print(vTmp.getElement() + &quot; &lt; &quot;);
+&nbsp;&nbsp; &nbsp;vTmp = predcrs.get(vTmp);
+}
+println(vTmp.getElement());</pre>
+<p>
+	Das ist der kürzeste Pfad.&nbsp; Wenn wir jetzt einfach aufaddieren wie lange jeder dieser Tasks benötigt wissen wir auch wie lange unser Projekt mindestens dauern wird.&nbsp; Es kann aber natürlich auch länger dauern!</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/SynonymsBrowser.png" style="width: 200px; height: 200px; float: right;" />SynonymsBrowser</h2>
+<p>
+	Im Beispiel SynonymsBrowser erfolgt die Navigation durch den Synonymgraphen auf visuelle Art und Weise.&nbsp; Dazu stellt man in der Mitte das Ursprungswort dar, und zeichnet im Kreis darum die Synonyme.&nbsp; Der Nutzer kann dann auf die Synonyme klicken, um dann von einem Wort zum nächsten zu gelangen.</p>
+<p>
+	Die Vorarbeit haben wir schon im Projekt <em>Synonyms</em> geleistet, d.h. den Graphen haben wir schon.&nbsp; Wir wollen aber nicht den ganzen Graphen anzeigen, sondern lediglich einen Teil davon.&nbsp; Den besorgen wir uns über die Methode <em>getSubGraph()</em>, die ausgehend von einem Startvertex nach den nächsten Nachbarn sucht, und daraus einen kleinen Graphen macht:</p>
+<pre style="margin-left: 40px;">
+private GraphEdgeList&lt;Integer, String&gt; getSubGraph(String startWord) {
+&nbsp;&nbsp; &nbsp;GraphEdgeList&lt;Integer, String&gt; subGraph = new GraphEdgeList&lt;Integer, String&gt;();
+
+&nbsp;&nbsp; &nbsp;Vertex&lt;String&gt; startVertex = graph.findVertex(startWord);
+&nbsp;&nbsp; &nbsp;subGraph.insertVertex(startVertex);
+&nbsp;&nbsp; &nbsp;List&lt;Vertex&lt;String&gt;&gt; wordsToGo = findWordsToGoTo(startVertex);
+&nbsp;&nbsp; &nbsp;for (Vertex&lt;String&gt; vertex : wordsToGo) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (!subGraph.containsVertex(vertex)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;subGraph.insertVertex(vertex);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;subGraph.insertEdge(startVertex, vertex, null);
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return subGraph;
+}</pre>
+<p>
+	Diesen kleinen Graphen zeichnen wir dann mit der Methode <em>drawGraph()</em>:</p>
+<pre style="margin-left: 40px;">
+private void drawGraph(GraphEdgeList&lt;Integer, String&gt; subGraph) {
+    GraphDrawingAlgorithm&lt;Integer, String&gt; algorithm = 
+        new GraphDrawingAlgorithmBFSRadialMostImportant&lt;Integer, String&gt;(
+            subGraph, EDGE_LENGTH);
+    algorithm.execute();
+
+    removeAll();
+
+    // drawNodes:
+    Collection&lt;Vertex&lt;String&gt;&gt; vertices = subGraph.vertices();
+    for (Vertex&lt;String&gt; vertex : vertices) {
+        HashMap&lt;Vertex&lt;String&gt;, Point&gt; positions = algorithm.getPositions();
+        Point pt = positions.get(vertex);
+        String tmp = vertex.getElement().toString();
+        drawElement(tmp, pt.x, pt.y);
+    }
+
+    // drawEdges:
+    Collection&lt;AbstractEdge&lt;Integer&gt;&gt; edges = subGraph.edges();
+    for (AbstractEdge&lt;Integer&gt; edge : edges) {
+        Vertex&lt;String&gt;[] vtcs = (Vertex&lt;String&gt;[]) edge.getVertices();
+        HashMap&lt;Vertex&lt;String&gt;, Point&gt; positions = algorithm.getPositions();
+        drawEdge(positions.get(vtcs[0]), positions.get(vtcs[1]));
+    }
+}</pre>
+<p>
+	dabei benutzen wir einfach den <em>GraphDrawingAlgorithmBFSRadialMostImportant</em> Algorithmus der die Positionen der Vertices berechnet.&nbsp; Die Methode <em>drawEdge()</em> tut genau das was sie sagt.&nbsp; Was noch fehlt ist der MouseListener, das wird in der Methode <em>drawElement()</em> erledigt:</p>
+<pre style="margin-left: 40px;">
+private void drawElement(String element, int x, int y) {
+    GLabel nodeLbl = new GLabel(element.trim());
+    nodeLbl.setFont(&quot;Courier new-bold-18&quot;);
+    nodeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // System.out.println(((GLabel)e.getSource()).getLabel());
+            reDrawGraph(((GLabel) e.getSource()).getLabel());
+        }
+    });
+    double lblW = nodeLbl.getWidth();
+    double lblH = nodeLbl.getHeight();
+    double lblA = nodeLbl.getAscent();
+
+    int dx = ((int) lblW + 2 * 7);
+    int dy = ((int) lblH + 2 * 2);
+
+    GRoundRect node = new GRoundRect(dx, dy);
+    node.setFilled(true);
+    node.setFillColor(new Color(230, 230, 230));
+
+    add(node, x - dx / 2 - 1 + OFFSET_X, y - dy / 2 + OFFSET_Y);
+    add(nodeLbl, x - lblW / 2 + OFFSET_X, y + lblA / 2 - 1 + OFFSET_Y);
+}</pre>
+<p>
+	Die Methode <em>reDrawGraph(String word)</em> zeichnet den ganzen Graph neu, jetzt aber beginnend mit einem neuen Wort.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Airports.png" style="width: 300px; height: 316px; float: right;" />Airports</h2>
+<p>
+	In diesem Projekt wollen wir eine graphische Version von FlightFinder implementieren.&nbsp; Im ersten Schritt müssen wir uns eine Karte für die Region besorgen die uns interessiert, da ist z.B. OpenStreetMaps ganz nützlich.&nbsp; Hier müssen wir uns natürlich die Längen- und Breitengrade merken.&nbsp; Dann benötigen wir Daten zu den Flughäfen, also den IATA Airport Code, ihre Position, sowie die Distanzen zwischen den Flughäfen, findet man alles im Internet.&nbsp; Das Ganze speichert man am besten in eine Textdatei (oder eine Datenbank):</p>
+<pre style="margin-left: 40px;">
+# size of map
+61, 36,-11, 26
+# location: latitude, longitude (data is only approx. correct)
+FRA, 49.3,&nbsp; 8.4
+NUE, 48.7, 11.1
+HEL, 61.1, 24.8
+LHR, 50.8, -0.37
+AMS, 51.6,&nbsp; 4.8
+DUB, 52.8, -6.7
+MAD, 40.0, -4.0
+CDG, 48.0,&nbsp; 2.1
+FCO, 41.6, 12.2
+ATH, 38.0, 23.8
+# distances
+&nbsp;&nbsp; , LHR, CDG, AMS, FRA, MAD, FCO, DUB, HEL, ATH, NUE
+LHR,&nbsp;&nbsp; 0,&nbsp;&nbsp;&nbsp; , 371,&nbsp;&nbsp;&nbsp; ,1247,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,1847,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; &nbsp;
+CDG,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,1065,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; , 620
+AMS,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0, 365,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; &nbsp;
+FRA,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,&nbsp;&nbsp;&nbsp; , 960,1087,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; , 190
+MAD,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,1332,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; &nbsp;
+FCO,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,1086,&nbsp;&nbsp; &nbsp;
+DUB,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,2023,2877,&nbsp;&nbsp; &nbsp;
+HEL,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,&nbsp;&nbsp;&nbsp; ,1489
+ATH,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0,&nbsp;&nbsp; &nbsp;
+NUE,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp;&nbsp; ,&nbsp;&nbsp; 0</pre>
+<p>
+	Als erstes lesen wir die Ausmaße unserer Map ein:</p>
+<pre style="margin-left: 40px;">
+private double latMin = 0;
+private double latMax = 0;
+private double lonMin = 0;
+private double lonMax = 0;
+
+private void getBoundaries(String line) {
+&nbsp;&nbsp; &nbsp;String[] data = line.split(&quot;,&quot;);
+&nbsp;&nbsp; &nbsp;latMax = Double.parseDouble(data[0].trim());
+&nbsp;&nbsp; &nbsp;latMin = Double.parseDouble(data[1].trim());
+&nbsp;&nbsp; &nbsp;lonMin = Double.parseDouble(data[2].trim());
+&nbsp;&nbsp; &nbsp;lonMax = Double.parseDouble(data[3].trim());
+}</pre>
+<p>
+	Danach merken wir uns für später die Positionen unserer Flughäfen:</p>
+<pre style="margin-left: 40px;">
+private Map&lt;String, Location&gt; airportLocations = new HashMap&lt;String, Location&gt;();
+&nbsp;&nbsp; &nbsp;
+private void addToCities(String line) {
+&nbsp;&nbsp; &nbsp;String[] data = line.split(&quot;,&quot;);
+&nbsp;&nbsp; &nbsp;Location loc = new Location(Double.parseDouble(data[1].trim()),
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Double.parseDouble(data[2].trim()));
+&nbsp;&nbsp; &nbsp;airportLocations.put(data[0].trim(), loc);
+}</pre>
+<p>
+	Hier haben wir die kleine, private Hilfsklasse <em>Location</em> eingeführt, die ganz nützlich ist, man hätte aber auch die AWT-Klasse <em>Point</em> verwenden können:</p>
+<pre style="margin-left: 40px;">
+private class Location {
+    public double latitude;
+    public double longitude;
+
+    public Location(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+}</pre>
+<p>
+	Nach diesen Vorarbeiten müssen wir unseren Graphen konstruieren. Die Flughäfen werden die Vertices und die Verbindungsstrecken werden die Edges, mit den Entfernungen als Element:</p>
+<pre style="margin-left: 40px;">
+private GraphEdgeList&lt;Integer, String&gt; graph;
+private Map&lt;String, Vertex&lt;String&gt;&gt; vertices;
+private boolean firstDistanceLine = true;
+private String[] airportKeys = null;
+
+private void addToDistances(String line) {
+&nbsp;&nbsp; &nbsp;if (firstDistanceLine) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;airportKeys = line.split(&quot;,&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; airportKeys.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;airportKeys[i] = airportKeys[i].trim();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;firstDistanceLine = false;
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String[] data = line.split(&quot;,&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String from = data[0].trim();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 1; i &lt; data.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String to = airportKeys[i];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (data[i].trim().length() &gt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int distance = Integer.parseInt(data[i].trim());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (distance &gt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (!vertices.containsKey(from)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Vertex&lt;String&gt; vtx = graph
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;.insertVertex(new Vertex&lt;String&gt;(from));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;vertices.put(from, vtx);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (!vertices.containsKey(to)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Vertex&lt;String&gt; vtx = graph
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;.insertVertex(new Vertex&lt;String&gt;(to));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;vertices.put(to, vtx);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;graph.insertEdge(vertices.get(from), vertices.get(to),
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;distance);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Im nächsten Schritt müssen wir uns um die GUI kümmern.&nbsp; Wir laden als erstes die Karte als Bild und fügen sie unserem Canvas hinzu:</p>
+<pre style="margin-left: 40px;">
+private void loadMap(String fileName) {
+    GImage map = new GImage(fileName);
+    this.setSize((int) map.getWidth(), (int) map.getHeight());
+    add(map);
+}</pre>
+<p>
+	Dann zeichnen wir die Flughäfen als GOvals ein:</p>
+<pre style="margin-left: 40px;">
+private Map&lt;GObject, String&gt; airportNames = new HashMap&lt;GObject, String&gt;();
+
+private void displayAirports() {
+    for (String city : airportLocations.keySet()) {
+        Location loc = airportLocations.get(city);
+        Point p = scalePoint(loc);
+        GOval airport = new GOval(p.x - RADIUS, p.y - RADIUS, RADIUS * 2,
+                RADIUS * 2);
+        airport.setFilled(true);
+        airport.setFillColor(Color.GREEN);
+        airport.addMouseListener(new MouseAdapter() {
+            ...
+        });
+        add(airport);
+        airportNames.put(airport, city);
+    }
+
+}</pre>
+<p>
+	Die Map <em>airportNames</em> benötigen wir, wenn wir später auf Mouseklicks reagieren wollen.&nbsp; Denn beim Mouseklick bekommen wir eine Referenz auf den GOval, der weiß aber nicht was sein Name ist.&nbsp; Deswegen brauchen wir die Map. Die Methode <em>scalePoint()</em> sorgt dafür, dass die Flughäfen an die richtige Stelle skaliert werden:</p>
+<pre style="margin-left: 40px;">
+private Point scalePoint(Location loc) {
+    double scaleY = getHeight() / (latMax - latMin);
+    double scaleX = getWidth() / (lonMax - lonMin);
+    int y = (int) (getHeight() - (loc.latitude - latMin) * scaleY + 40);
+    int x = (int) ((loc.longitude - lonMin) * scaleX + 5);
+    Point p = new Point(x, y);
+    return p;
+}</pre>
+<p>
+	Jetzt sehen wir also die Map und die Flughäfen.&nbsp; Es fehlen noch die Verbindungsstrecken:</p>
+<pre style="margin-left: 40px;">
+private void displayConnections() {
+    Collection&lt;AbstractEdge&lt;Integer&gt;&gt; edges = graph.edges();
+    for (AbstractEdge&lt;Integer&gt; edge : edges) {
+        int distance = edge.getElement();
+        Vertex&lt;?&gt;[] vtcs = edge.getVertices();
+        Vertex&lt;String&gt; from = (Vertex&lt;String&gt;) vtcs[0];
+        Vertex&lt;String&gt; to = (Vertex&lt;String&gt;) vtcs[1];
+
+        Location locFrom = airportLocations.get(from.getElement());
+        Location locTo = airportLocations.get(to.getElement());
+        drawLine(locFrom, locTo, Color.GRAY);
+    }
+}</pre>
+<p>
+	Jetzt steht die UI und es fehlt lediglich die Interaktion, also die Mouseklicks.&nbsp; Dafür haben wir in der Methode <em>displayAirports()</em> aber schon Vorkehrungen getroffen, wir müssen lediglich das folgende ergänzen:</p>
+<pre style="margin-left: 40px;">
+private int clickCount = 0;
+private String departure;
+private String destination;
+
+private void displayAirports() {
+    ...
+
+        airport.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                ((GOval) e.getSource()).setFillColor(Color.RED);
+                if (clickCount % 2 == 0) { // first
+                    departure = airportNames.get(((GOval) e.getSource()));
+                } else { // second
+                    destination = airportNames.get(((GOval) e.getSource()));
+                    findBestRoute(departure, destination);
+                }
+                clickCount++;
+            }
+        });
+    ...
+}</pre>
+<p>
+	In der Methode <em>findBestRoute()</em> rufen wir wie im Projekt FlightFinder einfach den Dijkstra Algorithmus auf, der uns dann auf der Konsole die kürzeste Distanz und die Strecke ausgibt:</p>
+<pre style="margin-left: 40px;">
+Shortest distance from ATH to LHR: 2782
+LHR &lt; AMS &lt; FRA &lt; FCO &lt; ATH</pre>
+<p>
+	Man kann die Strecke natürlich auch noch visuell markieren.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ElectricCircuit.png" style="width: 200px; height: 175px; float: right;" />ElectricCircuit</h2>
+<p>
+	Elektrische Schaltkreise können auch durch Graphen dargestellt werden.&nbsp; Z.B., könnte man einen Schaltkreis wie folgt beschreiben:</p>
+<pre style="margin-left: 40px;">
+String edges = &quot;EC_Battery-EC_LED-EC_Resistor-EC_LED-EC_Resistor-EC_Switch&quot;;</pre>
+<p>
+	Im Fall des elektrischen Schaltkreises sind es die Edges die alle Informationen enthalten, in diesem Fall welches Bauelement an welche Stelle kommt.&nbsp; Dabei ist aber die genaue Position egal, es kommt lediglich auf die relative Position an.&nbsp; Auch ein schönes Beispiel wie vielseitig unsere Graph Klassen sind.</p>
+<p>
+	.</p>
+<h2>
+	Graph Datastructures</h2>
+<p>
+	In allen Beispielen die wir bisher verwendet haben, war die zugrundliegende Datenstruktur für die Graphen immer eine sogenannte <em>EdgeList</em>.&nbsp; Das hat bisher ganz gut funktioniert.&nbsp; Ähnlich wie bei ArrayList und LinkedList, gibt es aber auch für Graphen unterschiedliche Datenstrukturen, mit unterschiedlichen Eigenschaften.&nbsp; Wir werden diese im Folgenden kurz darlegen, und die Idee hinter dieser Übung ist, diese dann auch zu implementieren, weitere Details finden sich in [2].</p>
+<h3>
+	<img alt="" src="images/EdgeList.png" style="width: 200px; height: 157px; float: right;" />Edge List</h3>
+<p>
+	Die Edge List ist die einfachste Art einen Graphen darzustellen.&nbsp; Sie besteht aus zwei Listen (oder Sets), eine für die Vertices und eine für die Edges.&nbsp; Die Vertices sind ganz einfach und enthalten lediglich Information zu ihren Elementen.&nbsp; Die Edges haben zum einen Platz für ihre Elemente, aber sie haben auch je eine Referenz auf die beiden Vertices die sie miteinander verbinden.&nbsp; Die Edge List benötigt wenig Platz, O( n+m ), wobei n die Anzahl der Vertices und m die Anzahl der Edges ist.&nbsp; Diese Datenstruktur ist einfach zu implementieren und von der Geschwindigkeit her durchaus akzeptabel.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<h3>
+	<img alt="" src="images/AdjacencyList.png" style="width: 200px; height: 153px; float: right;" />Adjacency List</h3>
+<p>
+	Die Adjacency List ist eine weitere Art einen Graphen darzustellen. Sie besteht auch aus zwei Listen, je eine für die Vertices und eine für die Edges.&nbsp; Zusätzlich gibt es aber noch Adjacency-Objekte: diese erlauben es z.B. sehr schnell die Edges die zu einem Vertex gehören zu finden, und damit dann die Vertices zu finden die benachbart, also adjacent sind.&nbsp; Sie ist etwas komplizierter zu implementieren, ist aber dafür für die meisten Anforderungen die effizienteste.&nbsp; Die Platzanforderungen liegen auch bei O( n+m ).</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<h3>
+	<img alt="" src="images/AdjacencyMatrix.png" style="width: 200px; height: 160px; float: right;" />Adjacency Matrix</h3>
+<p>
+	Die Adjacency Matrix ist eigentlich die natürlichste Art einen Graphen darzustellen, und war auch die erste.&nbsp; Sie besteht auch aus zwei Listen, je eine für die Vertices und eine für die Edges.&nbsp; Ausserdem gibt es aber noch eine Matrix, eben besagte Adjacency Matrix, die Nullen enthält falls zwei Vertices nicht adjacent sind, und Einsen falls schon.&nbsp; Sie ist einfach zu implementieren und besonders nützlich wenn man die Methode <em>areAdjacent()</em> häufig benötigt.&nbsp; Ein Nachteil ist allerdings, dass sie viel Platz braucht, O( n^2 ), und für Schreiboperationen sehr langsam ist.</p>
+<h3>
+	Asymptotic Performance</h3>
+<p>
+	Die folgende Tabelle [2] gibt einen Überblick über die Performanz der verschiedenen Implementierungen, was einem bei der Wahl behilflich sein kann.</p>
+<table border="1" cellpadding="1" cellspacing="1" style="width: 471px; height: 180px;">
+	<tbody>
+		<tr>
+			<td>
+				&nbsp;</td>
+			<td align="center">
+				<b>Edge List</b></td>
+			<td align="center">
+				<b>Adjacency List</b></td>
+			<td align="center">
+				<b>Adjacency Matrix</b></td>
+		</tr>
+		<tr>
+			<td>
+				Space</td>
+			<td align="center">
+				n+m</td>
+			<td align="center">
+				n+m</td>
+			<td align="center">
+				n^2</td>
+		</tr>
+		<tr>
+			<td>
+				incidentEdges()</td>
+			<td align="center">
+				m</td>
+			<td align="center">
+				deg(v)</td>
+			<td align="center">
+				n</td>
+		</tr>
+		<tr>
+			<td>
+				areAdjacent()</td>
+			<td align="center">
+				m</td>
+			<td align="center">
+				min( deg(v), deg(w) )</td>
+			<td align="center">
+				1</td>
+		</tr>
+		<tr>
+			<td>
+				insertVertex()</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				n^2</td>
+		</tr>
+		<tr>
+			<td>
+				insertEdge()</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				1</td>
+		</tr>
+		<tr>
+			<td>
+				removeVertex()</td>
+			<td align="center">
+				m</td>
+			<td align="center">
+				deg(v)</td>
+			<td align="center">
+				n^2</td>
+		</tr>
+		<tr>
+			<td>
+				removeEdge()</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				1</td>
+			<td align="center">
+				1</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Was ist der Unterschied zwischen Dijkstras Algorithmus und Kruskals Algorithmus?<br />
+		&nbsp;</li>
+	<li>
+		Hat der folgende Pfad Cyclen?&nbsp; Mit welchem Algorithmus findet man Cyclen?<br />
+		<pre style="margin-left: 40px;">
+P1 = (U,f,X,g,V,b,W)</pre>
+	</li>
+	<li>
+		Zeichnen Sie den Graphen, der sich&nbsp; aus der nachfolgenden Nachbarschaftsmatrix ergibt.<br />
+		<pre style="margin-left: 40px;">
+     A    B    C     D     E
+A    0    3  infty infty infty
+B         0    2   infty   6
+C              0     4     3
+D                    0     3
+E                          0</pre>
+	</li>
+	<li>
+		Finden Sie den kürzesten Weg von A nach E in der obigen Grafik, und erklären Sie den Algorithmus den Sie verwenden.<br />
+		&nbsp;</li>
+	<li>
+		Für die folgenden Beispiele identifizieren Sie die Ecken und die Kanten.
+		<ul>
+			<li>
+				Beziehungen zwischen Forschern, z.B. über gemeinsame Papers oder Bücher</li>
+			<li>
+				Vererbung zwischen Klassen in einer objektorientierten Sprache</li>
+			<li>
+				Elektrische Verdrahtung oder Wasserleitungen</li>
+			<li>
+				Einen Stadtplan</li>
+			<li>
+				Das Internet<br />
+				&nbsp;</li>
+		</ul>
+	</li>
+	<li>
+		Alice liebt Fremdsprachen und will ihren Vorlesungsplan für die nächsten Jahre festlegen. Sie interessiert sich für die folgenden Kurse: L15, L16, L22, L31, L32, L169 und L141. Es gibt allerdings gewisse Abhängigkeiten zwischen den Vorlesungen.&nbsp; Finden Sie die Reihenfolge der Kurse, die Alice erlaubt, alle Voraussetzungen zu erfüllen (verwenden Sie einen Graphen).
+		<ul>
+			<li>
+				&nbsp;L15: L16</li>
+			<li>
+				&nbsp;L16: (none)</li>
+			<li>
+				&nbsp;L22: L15</li>
+			<li>
+				&nbsp;L31: L16</li>
+			<li>
+				&nbsp;L32: (none)</li>
+			<li>
+				&nbsp;L169: L22</li>
+			<li>
+				&nbsp;L141: L31, L32</li>
+		</ul>
+	</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Es werden wieder weniger Referenzen, bedeutet wohl, dass wir langsam zum Ende des Buches kommen.</p>
+<p>
+	[1] Computer Science Unplugged, <a href="http://csunplugged.com/">http://csunplugged.com/</a></p>
+<p>
+	[2] Data Structures and Algorithms in Java, M.T. Goodrich and R. Tamassia</p>
+<p>
+	[3] Edsger W. Dijkstra, <a href="https://en.wikipedia.org/wiki/Edsger_W._Dijkstra">https://en.wikipedia.org/wiki/Edsger_W._Dijkstra</a></p>
+<p>
+	[4] Dijkstra&#39;s algorithm, <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm</a></p>
+<p>
+	[5] A* search algorithm, <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">https://en.wikipedia.org/wiki/A*_search_algorithm</a></p>
+<p>
+	[6] Prim&#39;s algorithm, <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm">https://en.wikipedia.org/wiki/Prim%27s_algorithm</a></p>
+<p>
+	[7] Algorithmus von Prim, <a href="https://de.wikipedia.org/wiki/Algorithmus_von_Prim">https://de.wikipedia.org/wiki/Algorithmus_von_Prim</a></p>
+<p>
+	[8] Kruskal&#39;s algorithm, <a href="https://en.wikipedia.org/wiki/Kruskal's_algorithm">https://en.wikipedia.org/wiki/Kruskal&#39;s_algorithm</a></p>
+<p>
+	[9] Disjoint-set data structure, <a href="https://en.wikipedia.org/wiki/Disjoint-set_data_structure">https://en.wikipedia.org/wiki/Disjoint-set_data_structure</a></p>
+<p>
+	[10] Directed acyclic graph, <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">https://en.wikipedia.org/wiki/Directed_acyclic_graph</a></p>
+<p>
+	[11] Topological sorting, <a href="https://en.wikipedia.org/wiki/Topological_sorting">https://en.wikipedia.org/wiki/Topological_sorting</a></p>
+<p>
+	[12] What is WordNet?, <a href="https://wordnet.princeton.edu">https://wordnet.princeton.edu</a></p>
+<p>
+	[13] George A. Miller (1995). WordNet: A Lexical Database for English. Communications of the ACM Vol. 38, No. 11: 39-41.</p>
+<p>
+	[14] Christiane Fellbaum (1998, ed.) WordNet: An Electronic Lexical Database. Cambridge, MA: MIT Press.</p>
+<p>
+	[15] Critical path method, <a href="https://en.wikipedia.org/wiki/Critical_path_method">https://en.wikipedia.org/wiki/Critical_path_method</a></p>
+<p>
+	[16] OpenStreetMap, <a href="https://www.openstreetmap.org/">https://www.openstreetmap.org/</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

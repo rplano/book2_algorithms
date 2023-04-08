@@ -1,0 +1,995 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html" class="active">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/HashFunction.png" style="display: block; margin-left: auto; margin-right: auto; width: 294px; height: 187px;" /></p>
+<h1>
+	Containers: Maps &amp; Sets</h1>
+<p>
+	Nach den sequentiellen Containern wollen wir uns nun mit den assoziativen Containern beschäftigen.&nbsp; Beispiele für assoziative Container sind Maps und Sets.&nbsp; Assoziative Container haben keine Reihenfolge, dafür haben sie aber eine Beziehung, in der Regel durch Schlüssel-Wert Paare.&nbsp; Assoziative Container sind extrem schnell, sowohl beim Lesen als auch beim Schreiben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Dictionary.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Maps</h2>
+<p>
+	Eine Map ist eine Sammlung von Schlüssel-Wert Paaren (key-value pairs), die manchmal auch als Wörterbuch (dictionary) bezeichnet wird.&nbsp; Sie hat die Eigenschaft, dass mit jedem Schlüssel genau ein Wert assoziiert ist.&nbsp; Und die Schlüssel sind eindeutig, es kann also keine zwei Schlüssel mit dem gleichen Wert geben. Die grundlegenden Methoden, die von einer Map unterstützt werden, sind:</p>
+<ul>
+	<li>
+		<strong>size():</strong> gibt die Anzahl der Schlüssel (und/oder Werte) in einer Map;</li>
+	<li>
+		<strong>put( key, value ):</strong> fügt ein neues Schlüssel-Wert Paar in die Map ein;</li>
+	<li>
+		<strong>get( <strong>key</strong> ):</strong> gibt den Wert zurück, der unter diesem Schlüssel gespeichert ist;</li>
+	<li>
+		<strong>remove( key ):</strong> entfernt den entsprechenden Schlüssel und damit natürlich auch den dazugehörigen Wert;</li>
+	<li>
+		<strong>containsKey( <strong><strong>key</strong></strong> ):</strong> stellt fest ob der gegeben Schlüssel in der Map vorhanden ist. Ist extrem schnell.</li>
+</ul>
+<p>
+	In Java gibt es mehrere Implementierungen des Map Interfaces: die wichtigsten sind die <em>HashMap</em> und die <em>TreeMap</em>.</p>
+<p>
+	Sehen wir uns einfach mal ein Beispiel an.&nbsp; Wir verwenden eine <em>HashMap</em> für ein deutsch-englisches Wörterbuch:</p>
+<pre style="margin-left: 40px;">
+// init map
+Map&lt;String, String&gt; dictionary = new HashMap&lt;String, String&gt;();
+
+// add words
+dictionary.put(&quot;hund&quot;, &quot;dog&quot;);
+dictionary.put(&quot;katze&quot;, &quot;cat&quot;);
+dictionary.put(&quot;fisch&quot;, &quot;fish&quot;);
+println(&quot;There is a total of &quot; + dictionary.size()
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;+ &quot; words in the dictionary.&quot;);
+
+// translate a word
+println(&quot;&#39;hund&#39; translates to: &quot; + dictionary.get(&quot;hund&quot;));
+
+// remove a word
+dictionary.remove(&quot;hund&quot;);
+
+// list all remaining words
+println(&quot;All remaining words:&quot;);
+for (String word : dictionary.keySet()) {
+&nbsp;&nbsp; &nbsp;println(word + &quot;: &quot; + dictionary.get(word));
+}</pre>
+<p>
+	Typische Anwendung für Maps sind z.B.,</p>
+<ul>
+	<li>
+		ein Wörterbuch, das ein deutsches Wort auf ein englisches Wort abbildet;</li>
+	<li>
+		ein Telefonbuch, das einen Namen auf eine Telefonnummer abbildet;</li>
+	<li>
+		ein Thesaurus, der ein Wort auf seine Synonyme abbildet.</li>
+</ul>
+<p>
+	Mit Maps kann man aber auch alles machen, was man auch mit Listen machen kann.&nbsp; Da Maps aber um einiges schneller sind, sollten wir eigentlich nur noch Maps verwenden.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/HashFunction.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 127px; float: right;" />HashMap</h2>
+<p>
+	Die Map die wir am häufigsten verwenden werden ist die <em>HashMap</em> (auf Deutsch Streuwerttabelle).&nbsp; Die zugrundeliegende Datenstruktur einer HashMap ist ein ganz normales Array.&nbsp; Das wird ähnlich wie bei der ArrayList am Anfang mit einer gewissen Anfangsgröße, der Capacity, angelegt.&nbsp; Was allerdings ganz anders ist, wie auf das Array zugegriffen wird.&nbsp; Hier verwendet die HashMap eine sogenannt <em>Hash-Funktion</em>.</p>
+<p>
+	Um zu verstehen wie das funktioniert, nehmen wir mal an wir möchten ein umgekehrtes Telefonbuch implementieren, d.h., wir sehen die Nummer einer Person die uns anruft auf dem Display, und wir möchten wissen wer das ist:</p>
+<pre style="margin-left: 40px;">
+12345  -&gt;  Lisa
+22222  -&gt;  Mike
+43434  -&gt;  Don
+</pre>
+<p>
+	Wenn jetzt die Capacity unseres zugrundeliegenden Arrays 10 ist, dann könnte man folgende Funktion als <em>Hash-Funktion</em> verwenden,</p>
+<pre style="margin-left: 40px;">
+int index = number % 10;</pre>
+<p>
+	und <em>index</em> wäre dann die Position im Array unter der wir den Namen speichern würden, also Lisa an Index 5, Mike an Index 2 und Don an Index 4.</p>
+<p>
+	<img alt="" src="images/SimpleHashMap.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 92px; float: right;" />Wir können das auch ganz einfach in Code umsetzen: Wir definieren eine Klasse <em>SimpleHashMap</em> wie folgt:</p>
+<pre style="margin-left: 40px;">
+public class SimpleHashMap {
+
+&nbsp;&nbsp; &nbsp;private String[] data;
+&nbsp;&nbsp; &nbsp;private int capacity = 10;
+
+&nbsp;&nbsp; &nbsp;public SimpleHashMap() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;data = new String[capacity];
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	D.h. wir haben ein String-Array angelegt für zehn Strings.&nbsp; Zusätzlich definieren wir unsere Hash-Funktion,</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private int <span style="color:#0000ff;">hashCode(int key)</span> {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return key % capacity;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Was noch fehlt sind die <em>put()</em> und <em>get()</em> Methode, die sind trivial:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; private void put(int key, String value) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;data[<span style="color:#0000ff;">hashCode(key)</span>] = value;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;private String get(int key) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return data[<span style="color:#0000ff;">hashCode(key)</span>];
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Das war&#39;s schon.&nbsp; Wir können jetzt unsere <em>SimpleHashMap</em> wie jede normal Map verwenden:</p>
+<pre style="margin-left: 40px;">
+SimpleHashMap reversePhoneBook = new SimpleHashMap();
+
+reversePhoneBook.put(12345, &quot;Lisa&quot;);
+reversePhoneBook.put(22222, &quot;Mike&quot;);
+reversePhoneBook.put(43434, &quot;Don&quot;);
+
+println(&quot;22222: &quot; + reversePhoneBook.get(22222));</pre>
+<p>
+	Der Vorteil der HashMap ist, dass sie sehr schnell beim Lesen und sehr schnell beim Schreiben ist, also das Beste was uns passieren kann.&nbsp;</p>
+<p>
+	Allerdings hat auch die HashMap ein paar Einschränkungen:</p>
+<ol>
+	<li>
+		Wenn wir mehr als 10 Elemente in unserer <em>SimpleHashMap</em> schreiben wollen, dann geht uns der Platz aus.&nbsp; Das ist aber das gleiche Problem bei der ArrayList.&nbsp; Wir lösen es, in dem wir einfach ein größeres Array nehmen.</li>
+	<li>
+		Es kann zu sogenannten Collisions kommen, das ist wenn zwei verschiedene Nummern auf den gleichen Index zeigen würden.&nbsp; Z.B. bei unserer einfachen Hash-Funktion oben, würden die beiden Nummer 12345 und 55555 beide auf den Index 5 gemappt werden, wir würden also versuchen zwei Einträge an der gleichen Stelle zu speichern.&nbsp; Zum Einen versucht man Kollisionen durch die Wahl guter Hash-Funktionen zu minimieren.&nbsp; Kommen sie trotzdem vor, dann kann man das auch lösen, indem man z.B. am Index 5 einfach eine Liste speichert, und dort dann beide Werte reinschreibt.</li>
+	<li>
+		HashMaps haben keine Ordnung: d.h. wenn wir über die Elemente der Map iterieren, ist die Reihenfolge nicht vorhersehbar.&nbsp; Bei einer HashMap ist das einfach so.&nbsp; Aber es gibt die Klasse <em>LinkedHashMap</em> bei der die Reihenfolge in der die Elemente eingefügt wurden beibehalten wird, und es gibt die <em>TreeMap</em>, die ihre Elemente sortiert.&nbsp; Beide sind aber nicht ganz so schnell wie die normale HashMap.</li>
+</ol>
+<p>
+	Zum Schluss noch eine kleine Anmerkung bzgl. guter Hash-Funktionen: Hier kann man sich von Java selbst inspirieren lassen, im Source Code der OpenJDK findet man die Implementierung der <em>hashCode()</em> Funktion der Klasse String:</p>
+<pre style="margin-left: 40px;">
+public int hashCode() {
+&nbsp;&nbsp;&nbsp; int h = hash;
+&nbsp;&nbsp;&nbsp; if (h == 0 &amp;&amp; value.length &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char val[] = value;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (int i = 0; i &lt; value.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h = 31 * h + val[i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hash = h;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return h;
+}</pre>
+<p>
+	Der Algorithmus erinnert etwas an den ISBN Algorithmus.&nbsp; Es sei angemerkt, wenn wir vorhaben, unsere selbst geschriebenen Klassen in einer HashMap zu speichern dann sollten wir unbedingt die <em>hashCode()</em> Methode unserer Klasse überschreiben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ecc3c104-5381-45c1-ac5d-404f0c7ed750.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 133px; float: right;" />Sets</h2>
+<p>
+	Kommen wir zur zweiten Datenstruktur in diesem Kapitel, den <em>Sets</em> (Mengen auf Deutsch).&nbsp; Sets sind amputierte Maps, ihnen fehlen die Werte.&nbsp; Ein Set ist also keine Sammlung von Schlüsselwertpaaren, sondern eine Sammlung von nur Schlüsseln.&nbsp; Das hört sich jetzt schlimm an und scheint auch nutzlos zu sein, ist es aber nicht, ganz im Gegenteil.</p>
+<p>
+	Die Schlüssel bei den Sets sind wie bei den Maps auch eindeutig, es kann also keine zwei Schlüssel mit dem gleichen Wert geben.&nbsp; Das ist auch schon eine der ersten praktischen Eigenschaften wofür man Sets verwenden kann: zum Entfernen von Duplikaten.&nbsp; Sets verwendet man auch wenn man feststellen möchte ob ein Element in einem Set ist oder nicht.&nbsp; Das geht extrem schnell.&nbsp; Und wenn man zwei Sets hat, kann man diese Zusammenfügen (Union), die Schnittmenge der beiden bilden (Intersection), oder die eine von der anderen abziehen (Difference).&nbsp; Man kann auch feststellen ob zwei Sets gleich sind, oder ob ein Set eine Untermenge des anderen ist.&nbsp; All diese Operationen sind extrem schnell.</p>
+<p>
+	Welche Methoden braucht ein Set?&nbsp; Die einfacheren sind,</p>
+<ul>
+	<li>
+		<strong>size():</strong> gibt die Größe des Sets zurück;</li>
+	<li>
+		<strong>add( key ):</strong> fügt ein neues Element ins Set ein;</li>
+	<li>
+		<strong>remove( key ):</strong> entfernt das Element <em>key</em> aus dem Set;</li>
+	<li>
+		<strong>contains( <strong><strong>key</strong></strong> ):</strong> stellt fest ob das Element <em>key</em> im Set ist. Extrem schnell.</li>
+</ul>
+<p>
+	In Java verwenden wir normalerweise das <em>HashSet</em>, wenn&#39;s sortiert sein soll auch mal das <em>TreeSet</em>.</p>
+<p>
+	<img alt="" src="images/Pizza2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Um zu sehen, wie dies in der realen Welt verwendet wird, schauen wir uns ein Beispiel an:</p>
+<pre style="margin-left: 40px;">
+// init set
+Set&lt;String&gt; pizza = new HashSet&lt;String&gt;();
+
+// add entries
+pizza.add(&quot;tomato&quot;);
+pizza.add(&quot;olives&quot;);
+pizza.add(&quot;cheese&quot;);
+pizza.add(&quot;anchovies&quot;);
+println(&quot;Pizza has &quot; + pizza.size() + &quot; toppings.&quot;);
+
+println(&quot;Pizza has anchovies: &quot; + pizza.contains(&quot;anchovies&quot;));
+
+// remove one topping
+pizza.remove(&quot;olives&quot;);
+println(&quot;Pizza has &quot; + pizza.size() + &quot; toppings.&quot;);
+
+// list all remaining toppings
+println(&quot;All remaining toppings:&quot;);
+for (String topping : pizza) {
+&nbsp;&nbsp; &nbsp;print(topping + &quot;, &quot;);
+}</pre>
+<p>
+	.</p>
+<p>
+	Das ist zwar alles sehr nett, aber nicht wirklich nützlich. Was wirklich den Unterschied macht sind die erweiterten Funktionen:</p>
+<ul>
+	<li>
+		<strong>addAll( set ):</strong> fügt eine ganzes Set diesem hinzu, wird auch als <em>Union</em> bezeichnet;</li>
+	<li>
+		<strong>retainAll( <strong>set</strong> ):</strong> behalte nur die Elemente die in beiden Sets sind, wird auch <em>Intersection</em> genannt;</li>
+	<li>
+		<strong>removeAll( <strong>set</strong> ):</strong> entferne alle Elemente die in dem anderen Set sind, bezeichnet man auch als <em>Subtraction</em>;</li>
+	<li>
+		<strong>equals( <strong>set</strong> ):</strong> stellt fest ob die zwei Sets identisch sind;</li>
+	<li>
+		<strong>containsAll( <strong>set</strong> ):</strong> stelle fest ob das Set <em>set</em> eine Untermenge ist.</li>
+</ul>
+<p>
+	<img alt="" src="images/PizzaParty.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Alle diese Operationen sind sehr schnell!</p>
+<p>
+	Um zu sehen, wie wir diese Methoden verwenden, kehren wir noch einmal zu unserem Pizzabeispiel zurück:</p>
+<pre style="margin-left: 40px;">
+// init set
+Set&lt;String&gt; pizza = initPizza();
+println(pizza);
+
+Set&lt;String&gt; allergic = new HashSet&lt;String&gt;();
+allergic.add(&quot;anchovies&quot;);
+allergic.add(&quot;peanuts&quot;);
+println(allergic);
+
+pizza.removeAll(allergic);
+//pizza.addAll(allergic);
+//pizza.retainAll(allergic);
+println(pizza);</pre>
+<p>
+	Wie praktisch das ist sieht man erst, wenn man sich nur einmal ansatzweise überlegt wie man das denn mit Arrays umsetzen wollte.&nbsp; Das Set ist unberechtigter Weise eine etwas vernachlässigte Datenstruktur.&nbsp; Es lohnt sich sie kennenzulernen, denn sie ist bei weitem das schnellste was es so an Datenstrukturen gibt.</p>
+<p>
+	.</p>
+<h2>
+	Iterator</h2>
+<p>
+	Die Existenz des Iterators haben wir bisher unterschlagen, obwohl wir ihn schon zweimal verwendet haben.&nbsp; Als wir im letzten Kapitel alle Städte unserer Rundreise auflisten wollten, hätten wir einen ganz normalen for-Loop verwenden können:</p>
+<pre style="margin-left: 40px;">
+// list all cities via normal for loop:
+for (int i = 0; i &lt; cities.size(); i++) {
+&nbsp;&nbsp; &nbsp;String city = cities.get(i);
+&nbsp;&nbsp; &nbsp;print(city + &quot;, &quot;);
+}</pre>
+<p>
+	Anstelle haben wir aber den <em>for-each</em> Loop verwendet:</p>
+<pre style="margin-left: 40px;">
+// list all cities via for-each loop:
+for (<span style="color:#0000ff;">String city : cities</span>) {
+&nbsp;&nbsp; &nbsp;print(city + &quot;, &quot;);
+}</pre>
+<p>
+	Man liest das so: &quot;für jede <em>city</em> aus der Liste <em>cities</em> tue das folgende...&quot;.&nbsp; Es ist super-praktisch und erspart einem viel unnötige Schreibarbeit.&nbsp;</p>
+<p>
+	Woher kommt das aber?&nbsp; Der for-each Loop benutzt implizit den <em>Iterator</em>:</p>
+<pre style="margin-left: 40px;">
+// list all cities via iterator:
+<span style="color:#0000ff;">Iterator iter = cities.iterator();</span>
+while (<span style="color:#0000ff;">iter.hasNext()</span>) {
+&nbsp;&nbsp; &nbsp;String city = (String) <span style="color:#0000ff;">iter.next()</span>;
+&nbsp;&nbsp; &nbsp;print(city + &quot;, &quot;);
+}</pre>
+<p>
+	Sowohl Listen, als auch Maps und Sets stellen einen Iterator über die Methode <em>iterator()</em> zu Verfügung.&nbsp; Dieser erlaubt es durch die Liste oder Map durchzuiterieren, d.h. beginnend vom ersten Element, eine Element nach dem anderen aufzulisten.&nbsp; Dazu gibt es die zwei Methoden:</p>
+<ul>
+	<li>
+		<strong>hasNext():</strong> gibt true zurück, falls&nbsp; es noch weitere Elemente gibt und</li>
+	<li>
+		<strong>next():</strong> gibt das nächste Element zurück.</li>
+</ul>
+<p>
+	Die beiden erinnern eine bischen an die <em>hasMoreTokens()</em> und <em>nextToken()</em> Methoden des StringTokenizer, und effektiv sind sie nichts anderes.&nbsp; Bei Listen haben wir die Wahl, ob wir mit einem klassischen for Loop oder dem for-each Loop iterieren wollen.&nbsp; Bei Maps oder Sets können wir nur mit dem for-each Loop iterieren, denn es gibt keine <em>get(i)</em> Methode für Map oder Set.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Maps und Sets sind die wichtigsten Datenstrukturen überhaupt.&nbsp; Sie sind schnell, effizient und einfach zu benutzen.&nbsp; Man kann grob sagen, dass in 80% aller Fälle in denen wir nach einer Container Datenstruktur suchen, die Map die richtige Wahl ist.&nbsp; Dann kommen Sets, und eigentlich kann man davon ausgehen, wenn man eine Liste nimmt, dass man die falsche Datenstruktur gewählt hat.&nbsp; Bei Arrays sowieso, die verwenden nur Programmierer aus dem letzten Jahrhundert.&nbsp; Natürlich sind die Container Klassen für sich alleine schon cool genug, richtig interessant wird es aber erst wenn man anfängt sie zu kombinieren.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	Es gibt unzählige Anwendungen für Maps und Sets.&nbsp; Um ein bischen ein Gefühl zu entwickeln wofür sie eigentlich gut sein könnten sehen wir uns ein paar einfache Beispiele an.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/stateLookup.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 100px;" />StateLookup</h2>
+<p>
+	Eine typische Anwendung für HashMaps ist die Suche.&nbsp; Z.B. haben wir den Kürzel eines US-Bundesstaates (z.B. &quot;NY&quot;) und würden gerne wissen um welchen Bundesstaat es sich denn handelt.&nbsp; Im Internet findet man Tabellen mit der Liste aller Bundesstaaten, z.B. in der Form:</p>
+<pre style="margin-left: 40px;">
+AL,Alabama
+AK,Alaska
+AZ,Arizona
+...</pre>
+<p>
+	Wir lesen also Zeile für Zeile, und fügen diese in unsere HashMap ein:</p>
+<pre style="margin-left: 40px;">
+private void readStateEntry(String line) {
+&nbsp;&nbsp;&nbsp; int comma = line.indexOf(&quot;,&quot;);
+&nbsp;&nbsp;&nbsp; String stateInitial = line.substring(0, comma).trim();
+&nbsp;&nbsp;&nbsp; String stateName = line.substring(comma + 1).trim();
+&nbsp;&nbsp;&nbsp; states.put(stateInitial, stateName);
+}</pre>
+<p>
+	(das kann man natürlich auch mit der split() Methode oder dem StringTokenizer machen).&nbsp; Der Rest funktioniert dann genauso wie im Projekt Dictionary.</p>
+<p>
+	Dieses Projekt ist ein Beispiel für eine ganze Klasse von ähnlichen Lookups:</p>
+<ul>
+	<li>
+		Postleitzahl und Stadt</li>
+	<li>
+		Länder und der Hauptstädte</li>
+	<li>
+		Ländercodes und Länder</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/trains.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 200px;" />Trains</h2>
+<p>
+	Eine typische Anwendung für HashMaps sind Fahrpläne.&nbsp; Nehmen wir an wir wollen von München nach Berlin und es gibt aber keine direkte Verbindung.&nbsp; Dann sehen wir im Fahrplan nach und sehen, dass man von München nach Nürnberg fahren kann, und von Nürnberg gibt es einen Zug nach Berlin.&nbsp; So eine einfacher Fahrplan könnte eine Textdatei sein, die alle Verbindung enthält:</p>
+<pre style="margin-left: 40px;">
+Nuremberg &gt; Berlin
+Nuremberg &gt; Frankfurt
+Nuremberg &gt; Munich
+Munich &gt; Nuremberg
+Hamburg &gt; Berlin</pre>
+<p>
+	Wichtig ist hier, dass die Verbindungen zwischen Städten eine Richtung haben, also der Zug geht von Nürnberg nach Berlin, muss aber nicht zurück gehen.&nbsp;</p>
+<p>
+	Der nächste Schritt ist sich zu überlegen wie man so einen Fahrplan in einer HashMap unterbringt.&nbsp; Es ist klar, dass der Key der Ausgangsbahnhof sein muss. Da es aber mehrere Zielbahnhöfe geben kann, müssen wir hier eine Liste verwenden:</p>
+<pre style="margin-left: 40px;">
+private HashMap&lt;String, ArrayList&lt;String&gt;&gt; connections;</pre>
+<p>
+	Außerdem macht es auch noch Sinn eine Liste von allen Bahnhöfen irgendwo zu haben:</p>
+<pre style="margin-left: 40px;">
+private ArrayList&lt;String&gt; cities;</pre>
+<p>
+	Im <em>setup()</em> lesen wir also den Fahrplan und befüllen unsere beiden Datenstrukturen.&nbsp; Mit dem StringTokenizer trennen wir source von destination:</p>
+<pre style="margin-left: 40px;">
+StringTokenizer st = new StringTokenizer(line, &quot;&gt;&quot;);
+String source = st.nextToken().trim();
+String destination = st.nextToken().trim();</pre>
+<p>
+	Dann sollten wir checken, ob es den Ausgangsbahnhof schon gibt</p>
+<pre style="margin-left: 40px;">
+if (!cities.contains(source)) {
+&nbsp;&nbsp;&nbsp; cities.add(source);
+&nbsp;&nbsp;&nbsp; connections.put(source, new ArrayList&lt;String&gt;());
+}</pre>
+<p>
+	und schließlich müssen wir die neue Verbindung hinzufügen:</p>
+<pre style="margin-left: 40px;">
+ArrayList&lt;String&gt; cits = connections.get(source);
+cits.add(destination);
+</pre>
+<p>
+	Nachdem die Daten jetzt geladen sind, können wir mit dem eigentlichen Programm fortfahren.&nbsp; Als erstes sollten wir dem Nutzer eine Liste aller Ausgangsbahnhöfe auflisten.&nbsp; Daraus sollte er seinen Ausgangbahnhof wählen.&nbsp; Im nächsten Schritt listen wir die möglichen Zielbahnhöfe auf, und lassen den Nutzer wieder wählen.&nbsp; Das machen wir so lange, bis der Nutzer seinen Zielbahnhof erreicht hat, also den leeren String eingibt.</p>
+<p>
+	Erweiterungen: Was natürlich cool wäre, wenn der Nutzer einfach nur seinen Ausgangsbahnhof und Zielbahnhof eingeben könnte, und das Programm dann automatisch eine Route vorschlägt.&nbsp; Im Kapitel zu Graphen lernen wir wie.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/adventure.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 200px;" />Adventure</h2>
+<p>
+	Auch eine schöne Anwendung für HashMaps sind Abenteuer Spiele.&nbsp; In vielen von diesen text-basierten Spielen geht es darum eine Welt zu erkunden, und Gegenstände einzusammeln.&nbsp; Wir konzentrieren uns hier auf den Erkunden-Teil, aber der Einsammel-Teil ist auch nicht so schwer.</p>
+<p>
+	Ähnlich wie beim <em>Trains</em> Projekt benötigen wir eine Beschreibung der Umgebung.&nbsp; Am einfachsten ist da eine Beschreibung unserer Wohnung.&nbsp; Also bei uns zu hause sieht das so aus:</p>
+<pre style="margin-left: 40px;">
+hallway &gt; kitchen
+hallway &gt; living room
+hallway &gt; bath room
+kitchen &gt; hallway
+living room &gt; hallway
+bath room &gt; hallway
+bath room &gt; kitchen</pre>
+<p>
+	Auch hier verwenden wir wieder eine HashMap die den Plan unserer Wohnung wiedergibt:</p>
+<pre style="margin-left: 40px;">
+private HashMap&lt;String, ArrayList&lt;String&gt;&gt; roomMap;</pre>
+<p>
+	Da es sich um ein Erkundungsspiel handelt, benötigen wir keine Liste aller Räume, anstelle lassen wir den Spieler einfach in der Küche mit seiner Erkundung beginnen.&nbsp; Wir listen dann die Räume auf die von der Küche aus zu erreichen sind, und bitten den Spieler eine Wahl zu treffen.&nbsp; Auf diese Art und Weise kann der Spieler nach und nach unsere ganz Wohnung erkunden.&nbsp; Mit der Eingabe des leeren Strings endet das Spiel.</p>
+<p>
+	Erweiterungen:&nbsp; Für diesen Spieletyp gibt es zahllose Erweiterungen.&nbsp; Man könnte zum Beispiel die Welt aus StarWars oder Herr der Ringe auf diese Art abbilden.&nbsp; In den verschiedenen Räumen könnte man magische Gegenstände verstecken.&nbsp; Und manche Räume kann man nur betreten wenn man einen bestimmten Gegenstand hat, usw...</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/buildIndex.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 100px;" />BuildIndex</h2>
+<p>
+	Bücher aus Papier kann man nicht so leicht durchsuchen wie elektronische Bücher.&nbsp; Deswegen haben die meisten Bücher hinten einen Index, auch Stichwortverzeichnis genannt.&nbsp; Als Beispiel wollen wir eine Liste von Stichwörtern für das Buch &quot;TomSawyer.txt&quot; [4] erstellen.&nbsp;</p>
+<p>
+	Wie üblich gehen wir Zeile für Zeile durch das Buch und benutzen den StringTokenizer</p>
+<pre style="margin-left: 40px;">
+StringTokenizer st = new StringTokenizer(line, &quot;[]\&quot;&#39;,;:.!?()-/ \t\n\r\f&quot;);</pre>
+<p>
+	um die Wörter aus einer Zeile zu extrahieren.&nbsp; Das ist eines der wenigen Male wo die <em>split()</em> Methode der String Klasse nicht funktionieren würde (es sei denn man beherrscht Reguläre Ausdrücke).</p>
+<p>
+	Wir gehen also alle Zeilen und alle Wörter (Tokens) durch und speichern diese in einer HashMap</p>
+<pre style="margin-left: 40px;">
+private Map&lt;String, Integer&gt; words = new HashMap&lt;String, Integer&gt;();</pre>
+<p>
+	Diese HashMap befüllen wir dann mit der folgenden Methode:</p>
+<pre style="margin-left: 40px;">
+private void addWordToHashMap(String word) {
+&nbsp;&nbsp;&nbsp; if (word != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (words.containsKey(word)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int count = words.get(word);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words.put(word, ++count);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words.put(word, 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	denn wir wollen zählen, wie häufig ein bestimmtes Wort vorkommt.&nbsp; Jetzt müssen wir nur noch die Map auf der Konsole ausgeben.</p>
+<p>
+	Für unseren BuildIndex gibt es ganz viel Verbesserungspotential:</p>
+<ul>
+	<li>
+		Wenn wir unsere Liste von Wörtern betrachten, stellen wir fest, dass die meisten Wörter mit weniger als acht Buchstaben eigentlich nichts in einem Index verloren haben.&nbsp; Also sollten wir sie gar nicht erst in die Liste mit aufnehmen.</li>
+	<li>
+		Man könnte noch Wörter die im Plural enden herausfiltern (das ist im Englischen relativ einfach).</li>
+	<li>
+		Man könnte Wörter mit nutzlosen Endungen (im Englischen &quot;ly&quot;, &quot;ial&quot;, &quot;ive&quot;, &quot;ous&quot;, &quot;ed&quot;) herausfiltern.</li>
+	<li>
+		Man kann auch eine Liste von Stoppwörtern haben und diese dann herausfiltern [1].</li>
+	<li>
+		Sortieren: wenn wir anstelle von HashMap eine TreeMap verwenden, dann ist der Index auf einmal sortiert.&nbsp;</li>
+	<li>
+		Man könnte sich auch noch die Zeile (oder Seite) merken in der das Wort vorgekommen ist.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Lottery.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 100px;" />Lottery</h2>
+<p>
+	In der Lottery geht es darum 6 Zufallszahlen zwischen 1 und 49 zu generieren.&nbsp; Selbstverständlich sollte es keine Duplikate geben.&nbsp; Am Einfachsten setzt man das mit einem Set um.&nbsp; Wenn man möchte, dass die Zahlen sortiert sein sollen, verwendet man ein <em>TreeSet</em>, ansonsten tut es auch ein normales <em>HashSet</em>.</p>
+<pre style="margin-left: 40px;">
+private Set&lt;Integer&gt; generateLotteryNumbers() {
+&nbsp;&nbsp; &nbsp;Set&lt;Integer&gt; nrs = new TreeSet&lt;Integer&gt;();
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;while ( nrs.size() &lt; 6 ) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int r = rgen.nextInt(1, 49);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;nrs.add(r);
+&nbsp;&nbsp; &nbsp;}&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+
+&nbsp;&nbsp; &nbsp;return nrs;
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	Man sollte sich wirklich überzeugen wie einfach diese Lösung ist indem man versucht das gleiche Problem mit einem Array oder einer Liste zu lösen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/SpellChecker.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />SpellChecker</h2>
+<p>
+	Eine ganz einfache Anwendung für die <em>Set</em> Klasse ist ein SpellChecker.&nbsp; Dazu befüllen wir zunächst ein Set mit allen Wörter der englischen Sprache,</p>
+<pre style="margin-left: 40px;">
+Set&lt;String&gt; words = buildIndexFromFile(&quot;dictionary_en_de.txt&quot;);
+</pre>
+<p>
+	und verwenden dann die <em>contains()</em> Methode um festzustellen ob das Wort richtig geschrieben wurde:</p>
+<pre style="margin-left: 40px;">
+String word = readLine(&quot;Enter word to check: &quot;);
+if (words.<span style="color:#0000ff;">contains</span>(word.toLowerCase())) {
+&nbsp;&nbsp; &nbsp;println(&quot;Spelling is correct.&quot;);
+} else {
+&nbsp;&nbsp; &nbsp;println(&quot;Spelling is NOT correct.&quot;);
+}</pre>
+<p>
+	Ganz einfach.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/StopWords.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />StopWords</h2>
+<p>
+	Wenn wir auf Google etwas suchen, dann nimmt Google nicht alle Wörter die wir tippen für die Suche, sondern entfernt erst einmal die sogenannten &quot;Stop-Words&quot; [1,2]: das sind Wörter die eigentlich keine Bedeutung für die Suche haben, wie z.B.</p>
+<pre style="margin-left: 40px;">
+a about above after again against all am ...</pre>
+<p>
+	Wir wollen also aus einem gegebenen Satz oder Suchanfrage die Stop-Words herausfiltern.&nbsp; Dazu verwenden wir am besten ein Set,</p>
+<pre style="margin-left: 40px;">
+Set&lt;String&gt; stopWords = buildIndexFromFile(&quot;StopWords.txt&quot;);
+</pre>
+<p>
+	das wir mit den Stoppwörtern befüllen.&nbsp; Danach gehen wir einfach Wort für Wort durch und checken ob es ein Stoppwort ist:</p>
+<pre style="margin-left: 40px;">
+String sentence = readLine(&quot;Enter a sentence: &quot;);
+StringTokenizer st = new StringTokenizer(sentence);
+while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;String word = st.nextToken().toLowerCase();
+&nbsp;&nbsp; &nbsp;if (!stopWords.contains(word)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(word + &quot; &quot;);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Man kann genau das gleich Verfahren verwenden um Schimpfwörtern und/oder Obszönitäten zu finden und zu filtern.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ArrayListVsHashMap.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />ArrayListVsHashMap</h2>
+<p>
+	Wir haben schon mehrmals erwähnt, dass die HashMap sehr schnell ist, speziell im Vergleich zu Listen.&nbsp; Das müssen wir natürlich beweisen.&nbsp; Der Test ist identisch mit dem aus dem letzten Kapitel in welchem wir ArrayList und LinkedList verglichen haben.&nbsp; Der Test der HashMap ist beim Schreiben ein klein wenig anders, wir brauchen ja einen Key, dafür verwenden wir einfach den Zähler:</p>
+<pre style="margin-left: 40px;">
+private static long testReadHashMap() {
+&nbsp;&nbsp; &nbsp;HashMap&lt;Integer,Integer&gt; al = new HashMap&lt;Integer,Integer&gt;();
+
+&nbsp;&nbsp; &nbsp;// fill list with some dummy data:
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 1000000; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;al.put(i, 42);
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// start the read test:
+&nbsp;&nbsp; &nbsp;long start = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 100000; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// read an element at a random position:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int randomPos = (int) (100000.0 * Math.random());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;al.get(randomPos);
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;long end = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;return (end - start);
+}</pre>
+<p>
+	Beim Lesen schlägt sich die ArrayList noch recht wacker, aber beim Schreiben ist sie tausend mal langsamer.&nbsp; Das sollte genügen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ListVsSet1.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />ListVsSet</h2>
+<p>
+	Kommen wir zu unserem nächsten Duell: List vs Set.&nbsp; Es geht darum, dass wir feststellen wollen ob ein bestimmtes Wort in einem Text vorkommt.&nbsp; Als Text nehmen wir <em>Ulysses</em> von James Joyce [3].&nbsp; In einem ersten Schritt lesen wir das Buch von Datei,</p>
+<pre style="margin-left: 40px;">
+String text = readTextFromFile(&quot;Ulysses.txt&quot;);</pre>
+<p>
+	und in einem zweiten Schritt bauen wir daraus einen Index, einmal mithilfe einer <em>ArrayList</em> und einmal mit einem <em>HashSet</em>:</p>
+<pre style="margin-left: 40px;">
+List&lt;String&gt; indexList = buildIndexUsingList(text);
+Set&lt;String&gt; indexSet = buildIndexUsingSet(text);</pre>
+<p>
+	Wir verwenden den StringTokenizer,</p>
+<pre style="margin-left: 40px;">
+private List&lt;String&gt; buildIndexUsingList(String text) {
+&nbsp;&nbsp; &nbsp;ArrayList&lt;String&gt; al = new ArrayList&lt;String&gt;();
+    //HashSet&lt;String&gt; al = new HashSet&lt;String&gt;();
+&nbsp;&nbsp; &nbsp;StringTokenizer st = new StringTokenizer(text);
+&nbsp;&nbsp; &nbsp;long startTime = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String word = st.nextToken();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;al.add(word);
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;long time = System.currentTimeMillis() - startTime;
+&nbsp;&nbsp; &nbsp;println(&quot;Time with List: &quot; + time + &quot; ms.&quot;);
+&nbsp;&nbsp; &nbsp;return al;
+}</pre>
+<p>
+	und fügen die Tokens der Liste oder dem Set hinzu.&nbsp; Der Code für das Set sieht genauso aus, nur ArrayList wird durch HashSet ersetzt.&nbsp;</p>
+<p>
+	Als erstes Resultat sehen wir, dass beim reinen Hinzufügen List und Set faktisch gleich schnell sind.&nbsp; Aber wir sehen auch, dass die Liste viel größer geworden ist als das Set: das hat damit zu tun, dass es in der Liste Duplikate gibt, die gibt es im Set nicht.</p>
+<p>
+	<img alt="" src="images/ListVsSet.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Da das eigentlich Platzverschwendung ist, fügen wir die Zeilen</p>
+<pre style="margin-left: 40px;">
+if (!al.contains(word)) {
+&nbsp;&nbsp;&nbsp; al.add(word);
+}</pre>
+<p>
+	in den Code mit der ArrayList ein (ist beim Set ja nicht nötig). Jetzt sehen wir, dass beide gleich groß sind, aber jetzt braucht die List viel länger.&nbsp; Das wollen wir jetzt aber mal übersehen.</p>
+<p>
+	.<img alt="" src="images/ListVsSet2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" /></p>
+<p>
+	Kommen wir zu unserem eigentlichen Auftrag: wir sollen feststellen ob ein bestimmtes Wort in einem Text vorkommt oder nicht.&nbsp; Dafür gibt es die <em>contains()</em> Methode, sowohl bei der Liste als auch beim Set.&nbsp; Wir lassen das zehntausend mal durchlaufen und messen die Zeit:</p>
+<pre style="margin-left: 40px;">
+private long testContainsList(List&lt;String&gt; al) {
+&nbsp;&nbsp; &nbsp;long start = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 10000; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (al.contains(&quot;marvel&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// we found it!
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;long end = System.currentTimeMillis();
+&nbsp;&nbsp; &nbsp;return (end - start);
+}</pre>
+<p>
+	Das Ergebnis spricht für sich: Das Set ist ca. tausendmal schneller!</p>
+<p>
+	.</p>
+<h2>
+	HashList</h2>
+<p>
+	Im Prinzip bräuchte man eigentlich gar keine ArrayLists, man könnte sie durch eine HashMap ersetzen. Um das zu demonstrieren implementieren wir eine Klasse HashList,</p>
+<pre style="margin-left: 40px;">
+public class HashList {
+
+&nbsp;&nbsp; &nbsp;private HashMap&lt;Integer, Object&gt; map;
+&nbsp;&nbsp; &nbsp;private int position = -1;
+    ...
+</pre>
+<p>
+	die eine HashMap für die Datenhaltung verwendet, aber ansonsten ein List Interface implementiert, ähnlich wie unsere HomemadeArrayList Klasse im letzten Kapitel, d.h. folgende Methoden müssen wir implementieren:</p>
+<ul>
+	<li>
+		size()</li>
+	<li>
+		add( object )</li>
+	<li>
+		get( i )</li>
+	<li>
+		set( i, object )</li>
+</ul>
+<p>
+	Die <em>remove()</em> Methode lassen wir absichtlich wieder weg, da die etwas komplizierter ist.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/languages.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 200px;" />Languages</h2>
+<p>
+	Was ist schon ein Wörterbuch, das von einer Sprache in eine andere übersetzt?&nbsp; Wir wollen ein Wörterbuch, das von einer Sprache in zehn andere übersetzt!&nbsp; Dazu muss man aber erst mal irgendwo die nötigen Daten finden.&nbsp; Glücklicherweise gibt es auf dem Website zu dem Buch &quot;Introduction to Programming in Java&quot; von Robert Sedgewick und Kevin Wayne [5] eine Datei die die Übersetzungen von über 800 englischen Wörtern in zehn andere Sprachen enthält [6].</p>
+<p>
+	Die Datei &quot;Languages.csv&quot; enthält diese Daten:</p>
+<pre style="margin-left: 40px;">
+&quot;cat&quot;,&quot;kat&quot;,&quot;kattekop&quot;,&quot;kissa&quot;,<span style="color:#0000ff;">&quot;chat, matou, rosse&quot;</span>,&quot;Katze&quot;,...</pre>
+<p>
+	Das erste Wort in jeder Zeile ist das englische Wort, gefolgt von der dänischen, der holländischen, usw., Übersetzung.&nbsp; Welche Sprache an welcher Stelle kommt steht in der ersten Zeile der Datei.&nbsp; Die Daten zu parsen wird nicht ganz einfach, wenn wir uns die französische Übersetzung für Katze ansehen, denn es gibt anscheinend mindestens drei Worte für Katze.&nbsp; Aber wenn wir nach Anführungsstrichen mit der <em>indexOf()</em> Methode suchen,</p>
+<pre style="margin-left: 40px;">
+private ArrayList&lt;String&gt; parseLine(String line) {
+&nbsp;&nbsp;&nbsp; ArrayList&lt;String&gt; translations = new ArrayList&lt;String&gt;();
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int begin = line.indexOf(&quot;\&quot;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (begin &lt; 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int end = line.indexOf(&quot;\&quot;&quot;, begin + 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String s = line.substring(begin + 1, end);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; line = line.substring(end + 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; translations.add(s);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return translations;
+}</pre>
+<p>
+	dann ist das durchaus machbar.&nbsp; Die Methode <em>parseLine()</em> zerlegt also eine Zeile aus unserer Datei, und wandelt sie in eine ArrayList von Strings um.&nbsp; Diese ArrayList enthält also das englische Wort mit all seinen Übersetzungen.&nbsp; Deutsch ist an sechster Stelle, d.h. mit</p>
+<pre style="margin-left: 40px;">
+ArrayList&lt;String&gt; translations = parseLine(line);
+String german = translations.get(5);</pre>
+<p>
+	erhalten wir die deutsche Übersetzung des Wortes.&nbsp; So Parsen ist erledigt.</p>
+<p>
+	Ähnlich wie bei unserem einfach Dictionary Projekt, wollen wir ja nach Wörtern suchen, und dafür verwenden wir die HashMap:&nbsp;</p>
+<pre style="margin-left: 40px;">
+private Map&lt;String, List&lt;String&gt;&gt; dictionary;</pre>
+<p>
+	Allerdings speichern wir jetzt eben nicht nur ein Wort pro englischem, sondern zehn, und deswegen steht da auch <em>List&lt;String&gt;</em>.&nbsp; Die Liste zu befüllen ist ganz einfach:</p>
+<pre style="margin-left: 40px;">
+ArrayList&lt;String&gt; translations = parseLine(line);
+dictionary.put(translations.get(0), translations);</pre>
+<p>
+	Um zu übersetzen müssen wir nur wissen welche Sprache gewünscht ist (also z.B. 5 für Deutsch) und welches Wort übersetzt werden soll:</p>
+<pre style="margin-left: 40px;">
+private String translate(String english, int lang) {
+&nbsp;&nbsp;&nbsp; List&lt;String&gt; words = dictionary.get(english);
+&nbsp;&nbsp;&nbsp; if (words != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return words.get(lang);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return null;
+}</pre>
+<p>
+	Das <em>if</em> ist nötig um zu verhindern, dass unser Programm abstürzt falls wir nach einem Wort suchen, das nicht in unserer Datenbank ist.&nbsp;</p>
+<p>
+	Mögliche Erweiterungen zu unserem &quot;Uber&quot;setzungsprogamm könnten sein:</p>
+<ul>
+	<li>
+		Wie könnte man von jeder der zehn Sprachen in jede andere der zehn Sprachen übersetzen?</li>
+	<li>
+		Könnte man nicht nur Wörter, sondern ganze Sätze übersetzen?</li>
+	<li>
+		Man könnte natürlich auch eine hübsche UI Anwendung dafür schreiben.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/HashBag.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 121px;" />Bag</h2>
+<p>
+	Manchmal benötigt man eine Datenstruktur die es bei Java gar nicht gibt.&nbsp; Ein Beispiel ist die <em>Bag</em>, auch Multiset, oder auf Deutsch &quot;Multimenge&quot; genannt. Dabei handelt es sich im Prinzip um ein Set das seine Elemente zählt, oder anders ausgedrückt, ein Set das auch Duplikate erlaubt.&nbsp; Eine praktische Anwendung hätten wir schon gehabt, und zwar das Histogram im letzten Kapitel oder BuildIndex in diesem.&nbsp;</p>
+<p>
+	Da es die <em>Bag</em> in Java nicht gibt, müssen wir die halt selbst schreiben.&nbsp; Überlegen wir uns wie das Interface der Bag aussehen sollte, also was sie alles können soll:</p>
+<ul>
+	<li>
+		<strong>add( object ):</strong> füge ein neues <em>object</em> Element hinzu;</li>
+	<li>
+		<strong>add( object, n ):</strong> füge <em>n</em> neue <em>object</em> Elemente hinzu;</li>
+	<li>
+		<strong>remove( object, i ):</strong> entferne <em>n</em> Elemente;</li>
+	<li>
+		<strong>getCount( object ):</strong> wieviele <em>object</em> Elemente sind in der Bag.</li>
+</ul>
+<p>
+	Ganz richtig ist das nicht, denn eigentlich ist eine Bag ja ein Set, und Sets sollen ja <em>addAll()</em>, <em>retainAll()</em>, <em>removeAll()</em> und <em>containsAll()</em> können. Also müsste unsere Bag das auch.&nbsp; Das wird aber jetzt ein bischen viel, deswegen bleiben wir beim Wesentlichen.</p>
+<p>
+	Mit einem kleinen Beispiel Code wird sofort klar wie eine Bag funktioniert:</p>
+<pre style="margin-left: 40px;">
+HashBag&lt;String&gt; b = new HashBag&lt;String&gt;();
+b.add(&quot;a&quot;, 8);      // add eight times &quot;a&quot;
+b.remove(&quot;a&quot;, 2);   // remove two of the &quot;a&quot;
+System.out.println(b.getCount(&quot;a&quot;));
+b.remove(&quot;a&quot;, 7);   // remove seven of the &quot;a&quot; (we only have 6 left!)
+System.out.println(b.getCount(&quot;a&quot;));
+System.out.println(b.getCount(&quot;b&quot;));</pre>
+<p>
+	Es gibt jetzt zwei Möglichkeiten die Bag umzusetzen, entweder via Composition oder via Generalization.&nbsp;</p>
+<h3>
+	Composition</h3>
+<p>
+	Composition bedeutet, dass wir mit einer Instanzvariable arbeiten. Mit etwas Glück finden wir eine Klasse die schon das meiste von dem was wir brauchen kann.&nbsp; Und wir haben Glück, denn die HashMap eignet sich hervorragend um als Bag verwendet zu werden.&nbsp; Wir deklarieren also unsere Klasse und instanziieren die Map,</p>
+<pre style="margin-left: 40px;">
+public class HashBag&lt;K&gt; {
+
+&nbsp;&nbsp; &nbsp;private HashMap&lt;K, Integer&gt; map;
+
+&nbsp;&nbsp; &nbsp;public HashBag() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;map = new HashMap&lt;K, Integer&gt;();
+&nbsp;&nbsp; &nbsp;}
+    ...
+</pre>
+<p>
+	In die Bag wollen wir Instanzen vom Typ <em>K</em> speichern, wobei <em>K</em> für irgendeine Klasse steht, z.B. String.&nbsp; Unsere Map hat Integer als Wert, das ist praktisch für&#39;s Zählen.&nbsp; Implementieren wir die <em>add()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void add(K key, int i) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (map.containsKey(key)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;i += map.get(key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;map.put(key, i);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Wir stellen erst fest, ob wir vielleicht schon gleiche Elemente in unserer Liste haben, falls ja müssen wir deren Anzahl dazu addieren.&nbsp; Ansonsten speichern wir einfach den Schlüssel mit der Anzahl in unserer Map.&nbsp; Die <em>getCount()</em> ist auch ganz einfach:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public int getCount(K key) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (map.containsKey(key)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return map.get(key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return -1;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Falls wir ein Element haben, geben wir einfach den Wert zurück den wir gespeichert haben, ansonsten -1, wenn es den Key gar nicht gibt.&nbsp; Bleibt noch <em>remove()</em>:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void remove(K key, int i) throws Exception {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (map.containsKey(key)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int count = map.get(key) - i;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (count &lt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;count = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;map.put(key, count);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;throw new Exception(&quot;bag does not contain element &quot; + key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Hier müssen wir zwei Dinge beachten: darf die Zahl eines Elements negativ werden: Wir sagen mal Nein.&nbsp; Und was passiert, wenn es das Element gar nicht gibt?&nbsp; Wir übertreiben hier ein bischen und schmeißen eine Exception.&nbsp; Das muss man aber nicht, man kann das auch einfach ignorieren.&nbsp; Das war&#39;s.</p>
+<h3>
+	Generalization</h3>
+<p>
+	Generalization bedeutet, dass wir Vererbung verwenden.&nbsp; Wir sagen also:</p>
+<pre style="margin-left: 40px;">
+public class HashBag2&lt;K&gt; <span style="color:#0000ff;">extends</span> HashMap&lt;K, Integer&gt; {
+
+&nbsp;&nbsp; &nbsp;public HashBag2() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;super();
+&nbsp;&nbsp; &nbsp;}
+    ...
+</pre>
+<p>
+	also unsere HashBag2 ist eine HashMap.&nbsp; Implementieren wir die <em>add()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void add(K key, int i) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">this</span>.containsKey(key)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;i += <span style="color:#0000ff;">this</span>.get(key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">this</span>.put(key, i);
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	die sieht genauso aus wie oben, nur <em>map</em> wurde durch <em>this</em> ersetzt.&nbsp; Das Gleiche ist bei der <em>getCount()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public int getCount(K key) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">this</span>.containsKey(key)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return <span style="color:#0000ff;">this</span>.get(key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return -1;
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	und auch bei der <em>remove()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; public void remove(K key, int i) throws Exception {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (this.containsKey(key)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int count = this.get(key) - i;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (count &lt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;count = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.put(key, count);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;throw new Exception(&quot;bag does not contain element &quot; + key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Was ist jetzt der Unterschied zwischen Composition und Generalization?&nbsp; Im ersten Fall kann die <em>HashBag</em> nur das was wir ihr beigebracht haben, also es gibt nur die <em>add()</em>, <em>getCount()</em> und <em>remove()</em> Methoden.&nbsp; Beim zweiten Fall ist das anders: die <em>HashBag2</em> kann viel mehr, und zwar alles was die <em>HashMap</em>&nbsp; kann.&nbsp; Das kann praktisch sein, z.B. wenn wir durch alle Element iterieren wollen:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp; &nbsp;for (String word : b.keySet()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;System.out.println(word+&quot;: &quot;+b.getCount(word));
+&nbsp;&nbsp; &nbsp;}</pre>
+<p>
+	Das geht mit der <em>HashBag</em> nicht.&nbsp; Dort müssten wir das alles noch implementieren.&nbsp; Der Nachteil der Vererbung liegt aber darin, dass alle Methoden der <em>HashMap</em> zur Verfügung stehen, also z.B. auch <em>containsValue()</em> etc. sind verwendbar was evtl. nicht gewünscht ist.</p>
+<p>
+	Abschließend sei noch bemerkt, dass es ausser den Collections die Java zur Verfügung stellt, auch noch andere Bibliotheken gibt die zusätzliche Collections zur Verfügung stellen, z.B. die <em>Apache Commons</em> Bibliothek [7] oder auch der <em>Guava</em> Teil der Google Core Libraries for Java [8].</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/MultiHashMap.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 121px;" />MultiMap</h2>
+<p>
+	In einer HashMap kann ein Schlüssel immer nur einen Wert haben.&nbsp; In der <em>MultiMap</em> kann es zu einem Key auch mehrere Werte geben.&nbsp; Als Beispiel betrachten wir ein Wörterbuch, in dem es zu einem Wort mehrere Übersetzungen geben kann:</p>
+<pre style="margin-left: 40px;">
+MultiHashMap&lt;String, String&gt; map = new MultiHashMap&lt;String, String&gt;();
+map.put(&quot;trip&quot;, &quot;Reise&quot;);
+map.put(&quot;trip&quot;, &quot;Trip&quot;);
+map.put(&quot;trip&quot;, &quot;Fahrt&quot;);
+map.put(&quot;trip&quot;, &quot;Ausflug&quot;);
+Collection c = map.get(&quot;trip&quot;);
+System.out.println(c);
+map.remove(&quot;trip&quot;, &quot;Ausflug&quot;);   // just remove one of the values
+c = map.get(&quot;trip&quot;);
+System.out.println(c);</pre>
+<p>
+	Das Einfachste ist es Composition zu verwenden.&nbsp; Wir müssen lediglich überlegen welche Datenstruktur unseren Anforderungen am nähesten kommt.&nbsp; Eine Möglichkeit ist eine Map mit Listen als Werte zu nehmen:</p>
+<pre style="margin-left: 40px;">
+public class MultiHashMap&lt;K, V&gt; {
+
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">private HashMap&lt;K, List&lt;V&gt;&gt; map;</span>
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;public MultiHashMap() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;map = new HashMap&lt;K, List&lt;V&gt;&gt;();
+&nbsp;&nbsp; &nbsp;}
+    ...
+}</pre>
+<p>
+	Der Rest ist dann ein Klacks.&nbsp; Aber natürlich kann man auch Generalization verwenden.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/BidirectionalHashMap.png" style="margin-left: 10px; margin-right: 10px; width: 200px; float: right; height: 121px;" />BidirectionalMap</h2>
+<p>
+	Bei einer Map kann man immer nur ein eine Richtung suchen: ich kann nur nach dem Schlüssel suchen, nie nach dem Wert.&nbsp;&nbsp; Bei einer BidirectionalMap geht das aber: da kann man sowohl nach den Schlüsseln als auch nach den Werten suchen.&nbsp; Z.B. in einem Wörterbuch, möchten wir sowohl nach den englischen als auch nach den deutschen Wörtern suchen können:</p>
+<pre style="margin-left: 40px;">
+BidirectionalHashMap&lt;String, String&gt; map = new BidirectionalHashMap&lt;String, String&gt;();
+map.put(&quot;dog&quot;, &quot;hund&quot;);
+map.put(&quot;cat&quot;, &quot;katze&quot;);
+map.put(&quot;fish&quot;, &quot;fisch&quot;);
+map.remove(&quot;fish&quot;);
+System.out.println(map.get(&quot;dog&quot;));
+System.out.println(map.getKey(&quot;hund&quot;));</pre>
+<p>
+	Wir verwenden wieder Composition.&nbsp; Hier ist die Idee zwei Maps als Instanzvariablen zu verwenden, und zwar eine für die Vorwärtssuche und eine für die Rückwärtssuche:</p>
+<pre style="margin-left: 40px;">
+public class BidirectionalHashMap&lt;K, V&gt;{
+
+<span style="color:#0000ff;">&nbsp;&nbsp; &nbsp;private HashMap&lt;K, V&gt; forwardMap;
+&nbsp;&nbsp; &nbsp;private HashMap&lt;V, K&gt; reverseMap;</span>
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;public BidirectionalHashMap() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;forwardMap = new HashMap&lt;K, V&gt;();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;reverseMap = new HashMap&lt;V, K&gt;();
+&nbsp;&nbsp; &nbsp;}
+    ...
+}</pre>
+<p>
+	Wenn immer wir also einen Wert einfügen oder löschen, müssen wir das in beiden Maps machen.&nbsp; Der Rest ist wieder ganz einfach.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	In diesem Kapitel gibt es wieder ein bischen was zu erforschen.&nbsp;</p>
+<p>
+	.</p>
+<h2>
+	Animations</h2>
+<p>
+	Im Internet finden sich zahlreiche Beispiel die versuchen verschieden Datenstrukturen und Algorithmen zu visualisieren.&nbsp; Versuchen Sie zwei oder drei Sites zu finden, die die eine oder andere Datenstruktur visualisieren.</p>
+<p>
+	.</p>
+<h2>
+	Minecraft</h2>
+<p>
+	Wie groß ist das Spielfeld von Minecraft?&nbsp; D.h. wie weit kann man denn in die x-, y- und z-Richtung gehen?&nbsp; Wenn wir das grob wissen, können wir abschätzen wieviel Speicher (RAM) ein Array benötigen würde in dem wir das gesamte Spielfeld speichern könnten.&nbsp; Selbst wenn wir annehmen, dass wir nur ein Byte pro Spielfeld Speicher benötigen, werden wir feststellen, dass unser Speicher nicht ausreichen würde.&nbsp; Wie machen die das dann? (Hinweis: Map)</p>
+<p>
+	.</p>
+<h2>
+	SpellChecker</h2>
+<p>
+	Wir haben oben ja einen einfachen SpellChecker geschrieben.&nbsp; Wie funktionieren denn die echten?&nbsp; Dazu können wir etwas in Referenz [9] nachlesen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Schreiben Sie Pseudo-Code für ein Wörterbuch.<br />
+		&nbsp;</li>
+	<li>
+		Beschreiben Sie in Ihren eigenen Worten was die drei Datencontainer List, Map und Set voneinander unterscheidet.<br />
+		&nbsp;</li>
+	<li>
+		BlackLists werden z.B. verwendet um Webseiten zu filtern, oder Kreditkarten die gestohlen wurden oder aus anderen Gründen ungültig sind zu erkennen.&nbsp; Welche Datenstruktur verwendet man am besten um eine BlackList umzusetzen?<br />
+		&nbsp;</li>
+	<li>
+		Welche Datenstruktur würden Sie verwenden um Duplikate zu vermeiden?<br />
+		&nbsp;</li>
+	<li>
+		Bei der Rechtschreibprüfung (spell checker) geht es darum festzustellen ob ein Wort richtig geschrieben wurde.&nbsp; Welche Datenstruktur ist dafür am besten geeignet?&nbsp; Gehen Sie davon aus, dass es sich um eine einfache Sprache wie das Englische handelt. (Mit kompliziert sind die Endungen der Wörter gemeint.)<br />
+		&nbsp;</li>
+	<li>
+		Ihre Firma hat Sie beauftragt ein Programm zu schreiben, dass einen Text aus dem Englischen ins Deutsche übersetzen kann.&nbsp; Dabei geht es nicht um eine grammatikalisch richtige Übersetzung, sondern Sie sollen lediglich Wort für Wort übersetzen.&nbsp; Im Internet haben Sie eine Datei gefunden, die 50.000 englische-deutsche Wörterpaare enthält.&nbsp; Beschreiben Sie grob wie Sie das Problem lösen würden.&nbsp; Welche Datenstruktur würden Sie verwenden?<br />
+		&nbsp;</li>
+	<li>
+		Sie sollen einen Generator für Lottozahlen (6 aus 49) schreiben. Welche Datenstruktur ist dafür am besten geeignet?<br />
+		&nbsp;</li>
+	<li>
+		Beim Auswählen einer Datenstruktur, können Sie zwischen einem Array, einer Arraylist, einer LinkedList und einer HashMap wählen. Welche dieser vier Datenstrukturen sollten Sie eigentlich nie benutzen? Welche dieser vier Datenstrukturen ist in 80% aller Fälle die richtige Wahl?<br />
+		&nbsp;</li>
+	<li>
+		Ihre Firma hat Sie beauftragt ein Programm zu schreiben, dass feststellen kann ob ein gegebener Vorname männlich oder weiblich ist. Im Internet haben Sie zwei Dateien gefunden, eine mit männlichen, die andere mit weiblichen Vornamen. Beschreiben Sie grob wie Sie das Problem lösen würden. Welche Datenstruktur würden Sie verwenden?</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Die folgenden Referenzen sind relevant für dieses Kapitel.</p>
+<p>
+	[1] Stop words, <a href="https://en.wikipedia.org/wiki/Stop_words">https://en.wikipedia.org/wiki/Stop_words</a></p>
+<p>
+	[2] Google stop word list, <a href="https://meta.wikimedia.org/wiki/Stop_word_list/google_stop_word_list">https://meta.wikimedia.org/wiki/Stop_word_list/google_stop_word_list</a></p>
+<p>
+	[3] Ulysses, James Joyce, <a href="https://en.wikipedia.org/wiki/Ulysses_(novel)">https://en.wikipedia.org/wiki/Ulysses_(novel)</a></p>
+<p>
+	[4] Tom Sawyer, <a href="https://en.wikipedia.org/wiki/Tom_Sawyer">https://en.wikipedia.org/wiki/Tom_Sawyer</a></p>
+<p>
+	[5] Introduction to Programming in Java, von Robert Sedgewick und Kevin Wayne</p>
+<p>
+	[6] Real-World Data Sets, <a href="http://introcs.cs.princeton.edu/java/data/">introcs.cs.princeton.edu/java/data/</a></p>
+<p>
+	[7] Apache Commons Collections, <a href="https://commons.apache.org/proper/commons-collections/">https://commons.apache.org/proper/commons-collections/</a></p>
+<p>
+	[8] Guava: Google Core Libraries for Java, <a href="https://github.com/google/guava">https://github.com/google/guava</a></p>
+<p>
+	[9] Kukich, Karen (1992). &quot;Techniques for Automatically Correcting Words in Text&quot; (PDF). ACM Computing Surveys 24 (4).</p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

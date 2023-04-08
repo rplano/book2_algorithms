@@ -1,0 +1,959 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html" class="active">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/Maze3.png" style="display: block; margin-left: auto; margin-right: auto; width: 209px; height: 210px;" /></p>
+<h1>
+	Techniques</h1>
+<p>
+	Wir haben bisher schon einige algorithmische Techniken gesehen und uns ausführlich mit ihnen beschäftigt, als da waren die Iteration, die Rekursion, der Divide and Conquer Algorithmus und die Dynamische Programmierung.&nbsp; Diese Techniken sind sozusagen unsere Basics, die brauchen wir immer.&nbsp; Darüber hinaus gibt es aber noch andere Klassen von Algorithmen, die sich als sehr hilfreich herausgestellt haben.&nbsp; Meist arbeiten diese mit den anderen zusammen, sind also nicht unabhängig von ihnen.</p>
+<p>
+	Eine Methode die im Prinzip immer funktioniert ist <em>Brute Force</em>, d.h., einfach alle Möglichkeiten ausprobieren.&nbsp; Das Problem mit Brute Force ist wenn es viele Möglichkeiten gibt.&nbsp; Dann kann das Ausprobieren nämlich sehr lange dauern.&nbsp; Es gibt aber glücklicherweise auch noch andere Verfahren, als da sind <em>Greedy</em> Algorithmen, <em>Back Tracking</em> Algorithmen und <em>Randomized</em> Algorithmen.&nbsp; Natürlich gibt es auch noch andere, wir beschränken uns aber auf diese.&nbsp; Diese Algorithmen funktionieren nicht immer, und sie finden nicht notwendigerweise die beste Lösung, aber sehr häufig finden sie akzeptable Lösungen, und das genügt meistens.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Greedy Algorithms</h1>
+<p>
+	Greedy Algorithmen, auch gierige Algorithmen genannt, sind Algorithmen die bei jedem möglichen Schritt immer die gerade am besten erscheinende Alternative wählen.&nbsp; Ein ganz einfaches Beispiel ist der Selection Sort: der sagt einfach &quot;suche nach der kleinsten Zahl und setze sie an den Anfang&quot;.&nbsp; Die Greediness besteht hier darin die kleinste Zahl zu nehmen.&nbsp; Greediness bedeutet es muss irgendein Auswahl- oder Bewertungkriterium geben.&nbsp; Zwei andere Beispiele für Greedy Algorithmen die wir schon gesehen haben sind der Dijkstra, der Prim und der Kruskal Algorithmus.&nbsp; Das sind Beispiele wo der Greedy Algorithmus immer eine Lösung liefert.&nbsp; Das muss aber nicht immer so sein.</p>
+<p>
+	Andere Beispiele die sich mit einem Greedy Algorithmus lösen lassen sind:</p>
+<ul>
+	<li>
+		Rucksackproblem [3]</li>
+	<li>
+		Problem des Handlungsreisenden</li>
+	<li>
+		Huffman coding [1]</li>
+	<li>
+		Greedy coloring [2]</li>
+	<li>
+		Tic-Tac-Toe [3]</li>
+	<li>
+		Graph Layout</li>
+	<li>
+		Optimales Kommunikationsnetz [3]</li>
+</ul>
+<p>
+	Wir wollen uns die Technik etwas genauer anhand von ein paar Beispielen ansehen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/CountingMoney.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />CountingMoney</h2>
+<p>
+	Für einen automatischen Kaffeeautomaten wollen wir einen Algorithmus entwickeln, der das richtige Rückgeld berechnet.&nbsp; Unser Automat ist gefüllt mit einer bestimmten Anzahl von verschiedenen Euro und Cent Münzen.&nbsp; Wir nehmen einfach mal an, unser Automat hätte vier 5-Cent-Münzen, fünf 10-Cent-Münzen, zwei 20-Cent-Münzen, eine 50-Cent-Münze, zwei 1-Euro-Münzen und drei 2-Euro-Münzen.&nbsp; Ein Kaffee soll 1,15 Euro kosten.&nbsp; Wenn jetzt ein Kaffeesüchtiger eine 2-Euro-Münze einwirft, dann soll unser Algorithmus das richtige Wechselgeld liefern, also je eine 50-Cent, 20-Cent, 10-Cent- und 5-Cent Münze.</p>
+<h3>
+	Brute-Force</h3>
+<p>
+	Ein möglicher Algorithmus wäre ein <em>Brute Force</em> Algorithmus [14]: der probiert einfach alle möglichen Münzkombinationen aus, bis 85 Cent rauskommt.&nbsp; Wieiviele Möglichkeiten gibt es?&nbsp; Wenn wir 17 Münzen haben (wie im Beispiel oben), also</p>
+<pre style="margin-left: 40px;">
+Coins = { 5, 5, 5, 5, 10, 10, 10, 10, 10, 20, 20, 50, 100, 100, 200, 200, 200 }
+</pre>
+<p>
+	dann gibt es 2<sup>n</sup>, also&nbsp; 2<sup>17</sup> oder 131072 mögliche Kombinationen.&nbsp; Wenn unser Computer für die Berechnung einer Kombination eine Millisekunde benötigen würde, dann müssten wir ungefähr zwei Minuten warten bis wir unser Wechselgeld bekommen würden.&nbsp; Hätten wir aber z.B. 30 Münzen in unserem Automaten, dann müssten wir 12 Tage auf unser Wechselgeld warten, der Kaffee wäre dann schon kalt!&nbsp; Also das taugt nicht.</p>
+<h3>
+	Greedy</h3>
+<p>
+	Die greedy Version des Algorithmus, macht eigentlich genau das, was wir normalerweise auch machen würden, wenn wir Geld zurückgeben sollen: wir suchen nach der größten Münze.&nbsp; Also wenn wir 85 Cent zurückgeben sollen, dann würden mit der 50 Cent Münze anfangen, und nicht mit den 5 Cent Münzen.&nbsp; Danach würden wir die 20 Cent, dann die 10 und schließlich die 5 Cent Münze nehmen, also</p>
+<pre style="margin-left: 40px;">
+50&cent;, 20&cent;, 10&cent;, 5&cent;</pre>
+<p>
+	Der Greedy Algorithmus für die Münzrückgabe funktioniert demnach wie folgt:</p>
+<ol>
+	<li>
+		nimm die größte Münze die Du hast;</li>
+	<li>
+		subtrahiere sie vom Rückgeld;</li>
+	<li>
+		solange der Betrag größer gleich null ist
+		<ol>
+			<li>
+				gib die Münze aus und</li>
+			<li>
+				ziehe den Wert vom Rückgeld ab und gehe zurück zu 2.</li>
+		</ol>
+	</li>
+	<li>
+		wenn der Betrag kleiner als null ist, dann gehe zur nächst kleineren Münze und gehe zurück zu 2.</li>
+</ol>
+<p>
+	Bevor wir das in Code umsetzen, ein paar Fragen: Funktioniert der Algorithmus immer? Gibt der Algorithmus immer die geringste Anzahl von Münzen zurück?&nbsp; Was passiert wenn nicht genug Münzen im Automaten sind?</p>
+<p>
+	Wir werden zwei Versionen vorstellen wie man den Algorithmus umsetzen kann.&nbsp; Die erste verwendet Arrays, was wir ja eigentlich nicht tun sollen, aber didaktisch ist es damit viel einfacher zu verstehen.&nbsp; Wir haben ein Array mit den Münzwerten, also 200 steht für den Wert einer zwei Euro Münze, usw.:</p>
+<pre style="margin-left: 40px;">
+private int[] coinValues = { 200, 100, 50, 20, 10, 5 };
+</pre>
+<p>
+	und dann haben wir noch ein Array für die Anzahl der jeweiligen Münzen,</p>
+<pre style="margin-left: 40px;">
+private int[] coinNumbers = { 3, 2, 1, 2, 15, 4 };
+</pre>
+<p>
+	also wir haben 3 von den zwei Euro Münzen, usw.&nbsp; Ganz wichtig ist hier die Reihenfolgen, also einmal dass das erste Element in beiden Arrays sich auf die zwei Euro Münze bezieht.&nbsp; Und die Reihenfolge ist auch wichtig für die Greediness: wir wollen ja bei der Rückgabe immer mit der größten Münze beginnen, deswegen sind die Münzen sortiert in absteigender Reihenfolge.&nbsp;&nbsp; Wenn wir die Reihenfolge ändern würden, wäre der Algorithmus nicht mehr greedy.</p>
+<p>
+	Mit diesen Voraussetzungen ist der eigentliche Algorithmus recht überschaubar:</p>
+<pre style="margin-left: 40px;">
+private void giveChange(int amount) {
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; coinValues.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while ((coinNumbers[i] &gt; 0) &amp;&amp; ((amount - coinValues[i]) &gt;= 0)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;amount = amount - coinValues[i];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;coinNumbers[i]--;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(coinValues[i] + &quot;&cent;, &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	Kommen wir zur zweiten Version: hier verwenden wir anstelle zweier Arrays eine <em>TreeMap</em>:</p>
+<pre style="margin-left: 40px;">
+private TreeMap&lt;Integer, Integer&gt; coins;
+</pre>
+<p>
+	Tree deswegen weil wir möchten, dass die Münzen der Größe nach sortiert sind.&nbsp; Der Key in der Map ist der Münzwert, und der Value ist die Anzahl der Münzen.&nbsp; Wir befüllen unsere Kaffeemaschine mit Geld in der <em>initMap()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+private void initMap() {
+&nbsp;&nbsp; &nbsp;// this is a dirty trick, to reverse the order the treemap is traversed:
+&nbsp;&nbsp; &nbsp;coins = new TreeMap&lt;Integer, Integer&gt;(<span style="color:#0000ff;">Collections.reverseOrder()</span>);
+
+&nbsp;&nbsp; &nbsp;coins.put(5, 4); // four 5-cent coins
+&nbsp;&nbsp; &nbsp;coins.put(10, 15); // fifteen 10-cent coins,
+&nbsp;&nbsp; &nbsp;coins.put(20, 2); // two 20-cent coins,
+&nbsp;&nbsp; &nbsp;coins.put(50, 1); // one 50-cent coin,
+&nbsp;&nbsp; &nbsp;coins.put(100, 2); // two 1-euro coins,
+&nbsp;&nbsp; &nbsp;coins.put(200, 3); // three 2-euro coins
+}
+</pre>
+<p>
+	wobei wir der TreeMap explizit sagen müssen, dass die Münzen absteigend und nicht aufsteigend sortiert werden sollen.&nbsp;</p>
+<p>
+	Auch hier ist dann der eigentliche Algorithmus sehr überschaubar:</p>
+<pre style="margin-left: 40px;">
+private void giveChange(int amount) {
+&nbsp;&nbsp; &nbsp;for (int coin : coins.keySet()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int nrOfCoins = coins.get(coin);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while ((nrOfCoins &gt; 0) &amp;&amp; ((amount - coin) &gt;= 0)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;amount = amount - coin;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;nrOfCoins--;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(coin + &quot;&cent;, &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;coins.put(coin, nrOfCoins);
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	Soviel zum Kaffeeautomaten.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Scheduling.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Scheduling</h2>
+<p>
+	Wir wollen einen Greedy Algorithmus entwickeln der unseren Terminkalender organisiert.&nbsp; Dabei beschränken wir uns auf eine Woche.&nbsp; Die Woche unterteilen wir in Zeitschlitze, z.B. jeweils einstündige.&nbsp; Der Tag beginnt im 6 Uhr morgens und endet um 24 Uhr.&nbsp;</p>
+<p>
+	Als Erstes generieren wir eine Liste von <em>Tasks</em>, also Aufgaben, die wir erledigen müssen:</p>
+<ul>
+	<li>
+		Frühstück, dauert 1h, hohe Priorität, jeden Tag, um 7:00 Uhr;</li>
+	<li>
+		Programmieren 2 Vorlesung, dauert 2h, mittlere Priorität, Fretag, um 8:00 Uhr;</li>
+	<li>
+		Party, dauert 4h, niedrige Priorität, beliebiger Tag, beliebige Uhrzeit.</li>
+</ul>
+<p>
+	Der zweite Schritt ist dann diese Aufgabenliste zu nehmen und auf die Woche so zu verteilen, dass es möglichst keine Konflikte gibt.</p>
+<p>
+	Auch hier könnte man wieder einen <em>Brute Force</em> Ansatz wählen, aber ohne ins Detail zu gehen, dürfte schnell klar sein, dass wir auch hier wieder sehr lange auf unsere Antwort warten müssten.</p>
+<p>
+	Für den Greedy Ansatz benötigen wir wieder irgendein Auswahl- oder Bewertungkriterium mit dem wir Prioritäten setzen können, und natürlich bieten sich die Prioritäten (also Frühstück hohe Priorität) dafür an.</p>
+<p>
+	Wir beginnen damit, dass wir aus unseren <em>Tasks</em> erst einmal eine Klasse machen:</p>
+<pre style="margin-left: 40px;">
+private class Task implements <span style="color:#0000ff;">Comparable</span> {
+&nbsp;&nbsp; &nbsp;protected String name;  // name of task, eg &quot;breakfast&quot;, &quot;prog2&quot;, ...
+&nbsp;&nbsp; &nbsp;protected int duration; // in hours
+&nbsp;&nbsp; &nbsp;protected int priority; // 0 is high, 1 is medium, 2 is low
+&nbsp;&nbsp; &nbsp;protected String day;   // &quot;EveryDay&quot;, &quot;Friday&quot;, &quot;AnyDay&quot;
+&nbsp;&nbsp; &nbsp;protected int time;     // 7 for 7:00 am or 13 for 1pm or -1 for anytime
+
+&nbsp;&nbsp; &nbsp;public Task(String name, int duration, int priority, String day, int time) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;super();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;public int <span style="color:#0000ff;">compareTo</span>(Object o) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (o instanceof Task) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return this.priority - ((Task) o).priority;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 0;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Die Klasse hat also die gewünschten Attribute.&nbsp; Aus den Prioritäten haben wir Zahlen gemacht.&nbsp; Es stört vielleicht, dass die Attribute <em>protected</em> sind, da die Klasse aber private ist, und es sich um eine lokale Klasse handelt ist das nicht so schlimm.&nbsp; Wir können mal ein paar Tasks anlegen:</p>
+<pre style="margin-left: 40px;">
+new Task(&quot;Buy Food&quot;, 4, 2, &quot;AnyDay&quot;, -1);
+new Task(&quot;Breakfast&quot;, 1, 0, &quot;EveryDay&quot;, 7);
+new Task(&quot;Prog 2&quot;, 2, 1, &quot;Friday&quot;, 8);</pre>
+<p>
+	Kommen wir zum <em>Comparable</em> Interface: wir wollen zwei Tasks vergleichen können, und zwar über ihre Prioritäten.&nbsp; Das machen wir in der <em>compareTo()</em> Methode: die gibt Null (also 0) zurück wenn die beiden Tasks gleiche Priorität haben, eine positive Zahl falls unsere Priorität höher ist, und andernfalls eine negative Zahl.</p>
+<p>
+	Dieses Interface benötigen wir, weil wir mit einer <em>PriorityQueue</em> arbeiten wollen, und zwar einer <em>PriorityQueue</em> von Tasks:</p>
+<pre style="margin-left: 40px;">
+private PriorityQueue&lt;Task&gt; tasks = new PriorityQueue&lt;Task&gt;();</pre>
+<p>
+	Eine PriorityQueue ist wie eine Queue, also first-in-first-out, aber zusätzlich berücksichtigt sie noch die Prioritäten, d.h. kommt ein zusätzlicher Task, der aber eine höhere Priorität hat, dann kommt der an den Anfang der Queue.&nbsp; Ist so ein bischen wie mit den Sanitätern.&nbsp; Wir befüllen dann einfach unsere Queue mit den Tasks:</p>
+<pre style="margin-left: 40px;">
+tasks.add(new Task(&quot;Buy Food&quot;, 4, 2, &quot;AnyDay&quot;, -1));
+tasks.add(new Task(&quot;Breakfast&quot;, 1, 0, &quot;EveryDay&quot;, 7));
+tasks.add(new Task(&quot;Prog 2&quot;, 2, 1, &quot;Friday&quot;, 8));</pre>
+<p>
+	Die Greediness kommt in diesem Beispiel also zum Einen über die Priorität, aber zum Anderen auch über die Reihenfolge mit der wie die Tasks in die Queue einfügen.&nbsp; Das Hinzufügen geschieht in zwei Schritten.&nbsp; Erst einmal gehen wir alle Tasks durch:</p>
+<pre style="margin-left: 40px;">
+Task task;
+while ((task = tasks.poll()) != null) {
+
+&nbsp;&nbsp; &nbsp;if (task.day.contains(&quot;EveryDay&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; weekdays.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addToCalendar(i, task);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;} else if (task.day.contains(&quot;AnyDay&quot;)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addToCalendar(task);
+
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; weekdays.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (task.day.contains(weekdays[i])) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;addToCalendar(i, task);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	und versuchen für jeden einen Platz im Kalendar zu finden.&nbsp; Die normale addToCalendar() Methode versucht den Task an den vorgegeben Tag und Uhrzeit einzufügen,</p>
+<pre style="margin-left: 40px;">
+private void addToCalendar(int day, Task task) {
+&nbsp;&nbsp; &nbsp;if (!insertTaskIntoCal(day, task.time, task)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;Conflict: &quot; + task);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	während die allgemeinere <em>addToCalendar()</em> Methode, die bei AnyDay aufgerufen wird, irgendeinen Zeitschlitz versucht zu finden:</p>
+<pre style="margin-left: 40px;">
+private void addToCalendar(Task task) {
+&nbsp;&nbsp;&nbsp; int day = 0;
+&nbsp;&nbsp;&nbsp; int hour = 7;
+&nbsp;&nbsp;&nbsp; while (!insertTaskIntoCal(day, hour, task)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hour++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (hour &gt; 23) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; day++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hour = 7;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (day &gt; 4) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;Conflict: &quot; + task);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Das eigentliche Einfügen passiert in der <em>insertTaskIntoCal()</em> Methode:</p>
+<pre style="margin-left: 40px;">
+private boolean insertTaskIntoCal(int day, int hour, Task task) {
+&nbsp;&nbsp; &nbsp;boolean success = true;
+    // test if insert is possible
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; task.duration; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (calendar[day][hour + i] != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;success = false;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+    // do the insert
+&nbsp;&nbsp; &nbsp;if (success) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; task.duration; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;calendar[day][hour + i] = task.name;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return success;
+}</pre>
+<p>
+	Unser Greedy Algorithmus funktioniert überraschend gut.&nbsp; Allerdings kann er im Gegensatz zum Backtracking Algorithmus einmal getroffene Entscheidungen nicht mehr rückgängig machen.&nbsp; D.h., wenn er sich einmal verrannt hat, dann muss man von Hand nachhelfen.</p>
+<p>
+	Das Scheduling Problem gibt es in ganz vielen verschiedenen Varianten, und in Referenz [4] wird die Version des Interval Scheduling sehr anschaulich behandelt.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Knapsack.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 150px; float: right;" />Knapsack</h2>
+<p>
+	Beim Knapsack Problem, auch Rucksackproblem genannt, geht es darum nach einem gewissem Maximierungskriterium z.B. einen Rucksack zu befüllen.&nbsp; Angenommen unser Meisterdieb (Daniel &quot;Danny&quot; Ocean from Ocean&#39;s Eleven) will den Louvre ausrauben. Sein Team kann aber nur 300 kg tragen. Deswegen hat er uns als Computer-Experten geheuert, damit wir ihm sagen was er mitnehmen soll, um seinen Profit zu maximieren.&nbsp;</p>
+<p>
+	Danny hat im Internet eine Liste von Kunstwerken gefunden die es im Louvre gibt:</p>
+<table border="1" cellspacing="0" cols="5">
+	<colgroup width="223">
+	</colgroup>
+	<colgroup width="215">
+	</colgroup>
+	<colgroup span="3" width="85">
+	</colgroup>
+	<tbody>
+		<tr>
+			<td align="LEFT" height="17">
+				<strong>Artwork</strong></td>
+			<td align="LEFT">
+				<strong>Artist</strong></td>
+			<td align="LEFT">
+				<strong>Type</strong></td>
+			<td align="LEFT">
+				<strong>Weight / kg</strong></td>
+			<td align="LEFT">
+				<strong>Price / euro</strong></td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Venus de Milo</td>
+			<td align="LEFT">
+				Found in Melos</td>
+			<td align="LEFT">
+				sculpture</td>
+			<td align="RIGHT">
+				315</td>
+			<td align="RIGHT">
+				20000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Mona Lisa</td>
+			<td align="LEFT">
+				Leonardo da Vinci</td>
+			<td align="LEFT">
+				painting</td>
+			<td align="RIGHT">
+				10</td>
+			<td align="RIGHT">
+				9000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="16">
+				Liberty Leading the People</td>
+			<td align="LEFT">
+				Eugene Delacroix</td>
+			<td align="LEFT">
+				painting</td>
+			<td align="RIGHT">
+				14</td>
+			<td align="RIGHT">
+				2000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Psyche Revived By the Kiss of Love</td>
+			<td align="LEFT">
+				Antonio Canova</td>
+			<td align="LEFT">
+				sculpture</td>
+			<td align="RIGHT">
+				545</td>
+			<td align="RIGHT">
+				5000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="16">
+				Oedipus and the Sphinx</td>
+			<td align="LEFT">
+				Jean-Auguste-Dominique Ingres</td>
+			<td align="LEFT">
+				painting</td>
+			<td align="RIGHT">
+				23</td>
+			<td align="RIGHT">
+				4000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				The Raft of the Medusa</td>
+			<td align="LEFT">
+				Theodore Gericault</td>
+			<td align="LEFT">
+				painting</td>
+			<td align="RIGHT">
+				9</td>
+			<td align="RIGHT">
+				3000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Milon de Crotone</td>
+			<td align="LEFT">
+				Pierre Puget</td>
+			<td align="LEFT">
+				sculpture</td>
+			<td align="RIGHT">
+				332</td>
+			<td align="RIGHT">
+				4000000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Louis XIV (1638-1715)</td>
+			<td align="LEFT">
+				Hyacinthe Rigaud</td>
+			<td align="LEFT">
+				painting</td>
+			<td align="RIGHT">
+				17</td>
+			<td align="RIGHT">
+				100000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Death of the Virgin</td>
+			<td align="LEFT">
+				Michelangelo Merisi</td>
+			<td align="LEFT">
+				painting</td>
+			<td align="RIGHT">
+				32</td>
+			<td align="RIGHT">
+				50000</td>
+		</tr>
+		<tr>
+			<td align="LEFT" height="17">
+				Cy Twombly&#39;s Ceiling</td>
+			<td align="LEFT">
+				The Louvre&#39;s Cy Twombly Ceiling</td>
+			<td align="LEFT">
+				ceiling</td>
+			<td align="RIGHT">
+				10000</td>
+			<td align="RIGHT">
+				10000</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	(Die Liste der Kunstwerke stammt aus [5], das Gewicht und die Preise sind rein zufällig.)</p>
+<h3>
+	Brute-Force</h3>
+<p>
+	Wieder kann dieses Problem durch Brute-Force gelöst werden, d.h. einfach alle möglichen Kombinationen ausprobieren.&nbsp; Das findet mit Sicherheit die beste Lösung. Das Problem ist, dass es 2<sup>n</sup> mögliche Kombination gibt und damit dieser Ansatz sehr schnell sehr lange dauert.</p>
+<h3>
+	Greedy</h3>
+<p>
+	Die zweite Möglichket ist wieder mal einen Greedy Ansatz zu wählen.&nbsp; Wir benötigen natürlich irgendein Auswahl- oder Bewertungkriterium mit dem wir Prioritäten setzen können. Wir haben drei Möglichkeiten:</p>
+<ul>
+	<li>
+		wir könnten einfach nach dem Preis, also dem Profit maximieren;</li>
+	<li>
+		wir könnten nach dem Gewicht maximieren, also z.B. nur die leichten Sachen mitnehmen;</li>
+	<li>
+		oder wir könnten nach der <em>Profit-Density</em> maximieren, also dem Verhältnis Preis zu Gewicht.</li>
+</ul>
+<p>
+	Alle drei Ansätze können zu einer anständigen Lösung führen, aber es ist nicht garantiert, dass es wirklich die beste Lösung ist.</p>
+<p>
+	Wenn wir das in Code umsetzen wollen, benötigen wir erst wieder eine Klasse um die Kunstwerke zu repräsentieren:</p>
+<pre style="margin-left: 40px;">
+private class Valuable {
+&nbsp;&nbsp; &nbsp;protected String name;
+&nbsp;&nbsp; &nbsp;protected double weight;
+&nbsp;&nbsp; &nbsp;protected double price;
+
+&nbsp;&nbsp; &nbsp;public Valuable(String name, double weight, double price) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.name = name;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.weight = weight;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.price = price;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;public String toString() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return name + &quot;: &quot; + weight + &quot;kg, &euro;&quot; + price + &quot;&quot;;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Für uns relevante Daten sind der Name, das Gewicht und der geschätzte Preis des Kunstwerks.&nbsp; Wie bei CountingMoney2 verwenden wir wieder eine TreeMap als Datenstruktur:</p>
+<pre style="margin-left: 40px;">
+private TreeMap&lt;Double, Valuable&gt; valuables;</pre>
+<p>
+	die wir in der <em>initMap()</em> Methode initialisieren:</p>
+<pre style="margin-left: 40px;">
+private void initMap() {
+&nbsp;&nbsp; &nbsp;// this is a dirty trick, to reverse the order the treemap is traversed:
+&nbsp;&nbsp; &nbsp;valuables = new TreeMap&lt;Double, Valuable&gt;(Collections.reverseOrder());
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; piecesOfArt.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;StringTokenizer st = new StringTokenizer(piecesOfArt[i], &quot;,&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String name = st.nextToken().trim();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double weight = Double.parseDouble(st.nextToken().trim());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double price = Double.parseDouble(st.nextToken().trim());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Valuable valubl = new Valuable(name, weight, price);
+<span style="color:#0000ff;">&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;valuables.put(price / weight, valubl);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//valuables.put(price, valubl);</span>
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	In den letzten zwei Zeilen müssen wir uns für unser Gewinnmaximierungskriterium entscheiden, entweder Profit-Density oder Preis.&nbsp; Das ist dann der Schlüssel für unsere TreeMap, nach dem wird also absteigend sortiert.&nbsp; Das ist unsere Greediness.</p>
+<p>
+	Dann haben wir noch das Kriterium, dass wir maximal 300kg tragen können, das wir wie folgt umsetzen:</p>
+<pre style="margin-left: 40px;">
+    ...
+&nbsp;&nbsp;&nbsp; println(&quot;Take the following items:&quot;);
+&nbsp;&nbsp; &nbsp;double weight = 0;
+&nbsp;&nbsp; &nbsp;double value = 0;
+&nbsp;&nbsp; &nbsp;for (double key : valuables.keySet()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Valuable val = valuables.get(key);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">weight + val.weight &lt;= 300.0</span>) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;weight += val.weight;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;value += val.price;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;- &quot;+val);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;println(&quot;\nTotal weight: &quot; + weight + &quot;kg, total value: &euro;&quot;+value);</pre>
+<p>
+	Wir iterieren also durch unseres TreeMap und fügen alles in unseren Rucksack was noch reinpasst.</p>
+<p>
+	Die Resultate sind ganz interessant: wenn wir nach Profit-Density optimieren,</p>
+<pre style="margin-left: 40px;">
+Total weight: 105.0kg, total value: &euro;1.815E7</pre>
+<p>
+	dann müssen wir zwar mehr tragen, nehmen aber auch mehr Geld mit nach Hause.&nbsp; Denn wenn wir nach dem Preis optimieren,</p>
+<pre style="margin-left: 40px;">
+Total weight: 82.0kg, total value: &euro;1.415E7</pre>
+<p>
+	dann müssen wir zwar etwas weniger tragen, bekommen aber auch nicht so viel Geld dafür.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Backtracking</h1>
+<p>
+	<img alt="" src="images/Maze3.png" style="width: 200px; height: 201px; float: right;" />Probleme die sich entweder in Form von Permutationen oder Subsets ausdrücken lassen, können sehr häufig durch den sogenannten <em>Backtracking</em> Algorithmus gelöst werden (auf deutsch <em>Rücksetzverfahren</em>).&nbsp; Die Idee ist relativ einfach wenn man sie sich am Beispiel eines Labyrinths veranschaulicht: an jeder Kreuzung hat man mehrere Möglichkeiten: man kann nach links, geradeaus oder nach rechts gehen.&nbsp; Beim Backtracking entscheidet man sich dann, z.B. immer erst mal nach links zu gehen.&nbsp; Das macht man so lange bis man entweder am Ziel ist, oder bis es nicht mehr weitergeht.&nbsp; Wenn es nicht mehr weitergeht, dann muss man einen Schritt zurückgehen, denn an der letzten Kreuzung hat man offensichtlich eine falsche Entscheidung getroffen.&nbsp; Man versucht es also mit einer anderen Möglichkeit, z.B. gerade aus.&nbsp; Kommt man da auch nicht weiter, dann kann man es noch rechts versuchen, und geht das auch nicht, dann muss man noch einen Entscheidungpunkt weiter zurückgehen.&nbsp;</p>
+<p>
+	Backtracking geht also alle Möglichkeiten durch, gehört somit zu den Brute-Force Algorithmen und kann deshalb u.U. sehr lange dauern, aber wenn es eine Lösung gibt, dann findet Backtracking sie.&nbsp; Backtracking ist ein rekursiver Algorithmus, und wir können die Vorgehensweise grob so zusammenfassen:</p>
+<ol>
+	<li>
+		unser Problem muss sich irgendwie als eine Reihe von Entscheidungen darstellen lassen;</li>
+	<li>
+		an jedem möglichen Entscheidungpunkt treffen wir eine Entscheidung, am besten immer nach dem gleichen Prinzip (z.B. immer erst mal links gehen), und versuchen so weit zu gehen wie es geht;</li>
+	<li>
+		wenn wir am Ziel angekommen sind, dann sind wir fertig (base case), wenn es aber nicht mehr weitergeht, dann gehen wir zurück zum letzten Entscheidungpunkt, und versuchen es mit einer anderen Entscheidung (recursive case).</li>
+</ol>
+<p>
+	<img alt="" src="images/TicTacToe.png" style="width: 200px; height: 176px; float: right;" />Backtracking Algorithmen lassen sich immer als Baum oder als Graph visualisieren, wie z.B. die möglichen Spielzüge beim Spiel TicTacToe.&nbsp; Der Backtracking Algorithmus kommt dann einer Tiefensuche in dem Graphen der möglichen Spielzüge gleich.</p>
+<p>
+	Als Brute-Force Algorithmus hat Backtracking zunächst einmal die Tendenz sehr lange zu dauern.&nbsp; Z.B. ein Spiel wie Schach hat viel zu viele Möglichkeiten, als dass man die alle ausprobieren könnte.&nbsp; Aber häufig kann man dem Algorithmus etwas unter die Arme greifen, z.B. durch Pruning oder gewisse Heuristiken, in dem man die am vielversprechenste Wahl trifft.&nbsp; Wir werden bei den Beispielen Anagram, 8-Queens und Sudoku sehen wie man Backtracking implementiert.&nbsp; Auch das Problem des Handlungsreisenden und das Rucksackproblem lassen sich durch Backtracking lösen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Anagrams.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />Anagrams</h2>
+<p>
+	Anagramme sind Wörter mit den gleichen Buchstaben, also z.B. &quot;regal&quot; und &quot;lager&quot;, oder &quot;mary&quot; und &quot;army&quot;.&nbsp; Die einfachste Möglichkeit Anagramme zu finden, ist einfach alle auszuprobieren, also <em>Brute-Force</em>.&nbsp; Dazu bilden wir alle Permutationen mit dem Code aus Kapitel vier, mit einer kleinen Modifikation, wir checken jede gefundene Permutation ob es sich dabei um ein wirkliches Wort handelt:</p>
+<pre style="margin-left: 40px;">
+private void permuteBruteForce(String picked, String remaining) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (remaining.length() == 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String tmp = picked + remaining;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">if (lexicon.contains(tmp)) {</span>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(tmp + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; remaining.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char pick = remaining.charAt(i); // pick a letter
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String front = remaining.substring(0, i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String back = remaining.substring(i + 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;permuteBruteForce(picked + pick, front + back);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Da wir alle Permutationen durchgehen, hat der Algorithmus ein O(n!) Laufzeitverhalten, also schon für Wörter die mehr als zehn Buchstaben haben, kann das sehr lange dauern.</p>
+<p>
+	Im Unterschied dazu versucht der <em>Backtracking</em> Algorithmus nur <em>eine</em> gültige Lösung zu finden, und sobald er die hat hört er auf:</p>
+<pre style="margin-left: 40px;">
+private <span style="color:#0000ff;">boolean</span> permuteBacktracking(String picked, String remaining) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (remaining.length() == 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String tmp = picked + remaining;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (lexicon.contains(tmp)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(tmp + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">return true;</span>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; remaining.length(); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;char pick = remaining.charAt(i); // pick a letter
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String front = remaining.substring(0, i);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String back = remaining.substring(i + 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">if (permuteBacktracking(picked + pick, front + back)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}</span>
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">return false;</span>
+}</pre>
+<p>
+	Die Backtracking Version ist der Brute-Force Variante sehr ähnlich, allerdings eben mit dem Unterschied, dass sie aufhört sobald eine gültige Kombination gefunden wurde.</p>
+<p>
+	Das Anagramm Beispiel ist auch sehr gut geeignet um zu erklären was <em>Pruning</em> ist: das Wort kommt aus der Baumschule, und hat mit dem Zurückschneiden von Bäumen zu tun.&nbsp; Da wir ja beim Backtracking einen Baum (oder Graphen) von Entscheidungen durchlaufen, stellt sich die Frage ob wir alle Äste wirklich bis zum Ende durchgehen müssen, oder ob wir manche Äste abschneiden (prune) dürfen.&nbsp; Nehmen wir z.B. Anagramme zum Wort &quot;mary&quot;:&nbsp; Wir wissen, dass es in der englischen Sprache keine Worte gibt die mit &quot;mr&quot; beginnen.&nbsp; D.h. wir brauchen keine Permutation von Worten die mit &quot;mr&quot; beginnen weiter zu ermitteln und wir können den Teil des Entscheidungsbaumes &quot;abschneiden&quot;.&nbsp; In der Praxis könnte man so etwas mit der <em>Trie</em> Datenstruktur umsetzen, die man mit allen Wörtern der englischen Sprache befüllt.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Queens.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 200px; float: right;" />8-Queens</h2>
+<p>
+	Das <em>Eight Queens Puzzle</em>, auch Damenproblem genannt, ist ein weiteres Beispiel, das sich mit dem Backtracking Algorithmus lösen lässt.&nbsp; In dem Damenproblem geht es darum acht Damen auf einem Schachbrett so zu platzieren, dass sie sich nicht gegenseitig bedrohen.&nbsp; Die Dame im Schach kann sowohl auf den Horizontalen als auch auf den Vertikalen und den Diagonalen schlagen.&nbsp;</p>
+<p>
+	Man sieht eigentlich sofort, dass in einer Reihe jeweils nur eine Dame stehen kann.&nbsp; Überlegen wir uns weiter wie wir hier den Backtracking Algorithmus einsetzen können:&nbsp; Wir beginnen mit der ersten Dame in der ersten Reihe.&nbsp; Im Prinzip haben wir acht Möglichkeiten, aber es macht wohl Sinn links anzufangen, und sie in die erste Spalte zu setzen.&nbsp; Kommen wir zur zweiten Dame: die muss in der zweiten Reihe sein.&nbsp; Auch hier gibt es wieder acht Spalten auf die wir die zweite Dame setzen könnten.&nbsp; Wir beginnen links, und versuchen einfach eine Spalte nach der anderen, bis wir eine finden in der die zweite Dame nicht von der ersten bedroht wird.&nbsp; Das ist die dritte Spalte.&nbsp; Wir machen so weiter mit der dritten Dame, etc., bis wir entweder alle Damen gesetzt haben, oder bis wir eine Dame in keine Spalte setzen können, weil sie überall bedroht wird.&nbsp; Dann müssen wir zurück gehen und eine der vorherigen Damen woanders hinsetzen.&nbsp; Das ist das Backtracking.</p>
+<p>
+	Um das in Code umzusetzen, benötigen wir erst einmal die Positionen der Damen:</p>
+<pre style="margin-left: 40px;">
+private Point[] queens = new Point[NR_OF_QUEENS];</pre>
+<p>
+	Wir beginnen mit der ersten Dame, Dame Nummer Null, und platzieren sie:</p>
+<pre style="margin-left: 40px;">
+placeQueen(0);</pre>
+<p>
+	Die Methode <em>placeQueen()</em> versucht nun rekursiv eine Dame nach der anderen zu setzen:</p>
+<pre style="margin-left: 40px;">
+private boolean <span style="color:#0000ff;">placeQueen(int n)</span> {
+&nbsp;&nbsp; &nbsp;// stop condition, we placed all queens:
+&nbsp;&nbsp; &nbsp;if (n &gt;= NR_OF_QUEENS) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;boolean[][] tmp = markThreatenedFields();
+&nbsp;&nbsp; &nbsp;// every possible choice among the columns in this row
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; NR_OF_QUEENS; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// check if point is safe
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (isSafe(i, n, tmp)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;queens[n] = new Point(i, n);
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">placeQueen(n + 1)</span>) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;queens[n] = null;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return false;
+}</pre>
+<p>
+	Das Abbruchkriterium ist ganz einfach, wenn alle Damen gestetzt sind, sind wir fertig.&nbsp; Andernfalls, markieren wir erst einmal alle Felder die momentan von Damen bedroht werden, das macht die Methode <em>markThreatenedFields()</em>. Dann versuchen wir die momentane Dame auf eine der acht möglichen Spalten zu setzen.&nbsp; Die Methode <em>isSafe()</em> sagt uns ob die Spalte sicher ist.&nbsp; Falls ja, dann platzieren wir die Dame dort, und versuchen die nächste Dame zu platzieren.&nbsp; Wenn das gelingt super, dann war die Wahl der Spalte o.k.,&nbsp; falls das aber nicht gelingt, dann war die Spalte wohl nicht gut, deswegen machen wir die Wahl mit <em>queens[n] = null;</em> rückgängig.&nbsp;</p>
+<p>
+	Die Methode <em>isSafe()</em> ist ganz einfach,</p>
+<pre style="margin-left: 40px;">
+private boolean isSafe(int x, int y, boolean[][] tmp) {
+&nbsp;&nbsp; &nbsp;return !tmp[x][y];
+}</pre>
+<p>
+	und die Methode <em>markThreatenedFields()</em> geht einfach eine Dame nach der anderen durch,</p>
+<pre style="margin-left: 40px;">
+private boolean[][] markThreatenedFields() {
+&nbsp;&nbsp; &nbsp;boolean[][] tmp = new boolean[NR_OF_QUEENS][NR_OF_QUEENS];
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; NR_OF_QUEENS; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (queens[i] != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;markHorizontal(queens[i], tmp);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;markVertical(queens[i], tmp);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;markDiagonal1(queens[i], tmp);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;markDiagonal2(queens[i], tmp);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return tmp;
+}</pre>
+<p>
+	und markiert alle Felder die bedroht werden mit <em>true</em>.&nbsp; Z.B. <em>markHorizontal()</em> macht das folgendermaßen:</p>
+<pre style="margin-left: 40px;">
+private void markHorizontal(Point queen, boolean[][] tmp) {
+&nbsp;&nbsp; &nbsp;for (int x = 0; x &lt; NR_OF_QUEENS; x++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;tmp[x][queen.y] = true;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	So funktioniert ein klassischer Backtracking Algorithmus.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Sudoku.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 222px; float: right;" />Sudoku</h2>
+<p>
+	Bei Sudoku handelt es sich um ein Zahlenrätsel.&nbsp; In der 9x9 Version geht es darum die Zahlen 1 bis 9 so zu verteilen, dass in einer Reihe, einer Spalte und in einem Block jede Zahl nur einmal vorkommt.&nbsp; Es gibt auch eine 12x12 Version, eine 4x4 Version und die 1x1 Spezialversion für Männer [6].&nbsp; Sudoku ist auch wieder eine sehr schöne Anwendung für den Backtracking Algorithmus [7].</p>
+<p>
+	Die Zahlen in unserem Sudoku stellen wir als 9x9 Array von Ganzzahlen dar:</p>
+<pre style="margin-left: 40px;">
+private int[][] grid;</pre>
+<p>
+	wir initialisieren es in dem wir das zu lösende Sudoku Rätsel aus einer Datei lesen:</p>
+<pre style="margin-left: 40px;">
+grid = readGridFromFile(SUDOKU_FILE_NAME);</pre>
+<p>
+	unbesetzte Felder werden dabei auf Null gesetzt.&nbsp; Nach der kurzen Vorarbeit können wir uns dem Lösungsalgorithmus zuwenden:</p>
+<pre style="margin-left: 40px;">
+private boolean <span style="color:#0000ff;">solveSudoku()</span> {
+&nbsp;&nbsp; &nbsp;Point p = new Point(0,0);
+
+&nbsp;&nbsp; &nbsp;if (!findUnassignedLocation(grid, p)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;}
+
+&nbsp;&nbsp; &nbsp;for (int num = 1; num &lt;= SIZE_OF_SUDOKU; num++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (noConflicts(grid, num, p.y, p.x)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;grid[p.y][p.x] = num;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">solveSudoku()</span>) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;grid[p.y][p.x] = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return false;
+}</pre>
+<p>
+	Unser Abbruchkriterium ist durch die <em>findUnassignedLocation()</em> Methode gegeben: Falls es also im ganzen Grid keine &#39;0&#39; mehr gibt, dann sind wir fertig.&nbsp; Andernfalls, gibt die Methode allerdings den Punkt zurück um den wir uns als nächstes kümmern sollten, denn der Punkt <em>p</em> wird als Referenz übergeben, und in der Methode verändert:</p>
+<pre style="margin-left: 40px;">
+private boolean findUnassignedLocation(int[][] grid, <span style="color:#0000ff;">Point p</span>) {
+&nbsp;&nbsp; &nbsp;for (int i = 0; (i &lt; grid.length); i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int j = 0; (j &lt; grid.length); j++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (grid[i][j] == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">&nbsp;p.y = i;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;p.x = j;</span>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return false;
+}</pre>
+<p>
+	Im nächste Schritt versuchen wir dann an diesem Punkt <em>p</em> jede der möglichen Zahlen, also 1 bis 9, zu setzen.&nbsp; Ob das geht sagt uns die Methode <em>noConflicts()</em>:</p>
+<pre style="margin-left: 40px;">
+private boolean noConflicts(int[][] grid, int num, int row, int col) {
+&nbsp;&nbsp; &nbsp;// first check rows
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; grid.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (grid[row][i] == num) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return false;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;// next check cols
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; grid.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (grid[i][col] == num) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return false;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;// finally check blocks
+&nbsp;&nbsp; &nbsp;// first find relevant block:
+&nbsp;&nbsp; &nbsp;int blockLength = (int) Math.sqrt(grid.length);
+&nbsp;&nbsp; &nbsp;int j0 = col / blockLength;
+&nbsp;&nbsp; &nbsp;int i0 = row / blockLength;
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; blockLength; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int j = 0; j &lt; blockLength; j++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (grid[i0 * blockLength + i][j0 * blockLength + j] == num) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return false;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return true;
+}</pre>
+<p>
+	Die prüft einfach die Sudoku Regeln, dass in jeder Reihe, jeder Spalte und in jedem Block jede Zahl nur einmal vorkommen darf.&nbsp; Falls es also gelingt, dann versuchen wir es&nbsp; weiter mit der nächsten freien Stelle.&nbsp; Ansonsten gehen wir zurück (backtracking) und machen unsere letzte Wahl rückgängig.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Randomized Algorithms</h1>
+<p>
+	Eine besondere Klasse sind Algorithmen die den Zufall zu Hilfe nehmen.&nbsp; Erst einmal scheint sich das zu widersprechen, ein Algorithmus ist doch eine genaue Vorschrift wie ich ein Problem löse, und das Gegenteil ist einfach zufällig mal rumprobieren bis man eine Lösung findet.&nbsp; Wie so häufig ist es der goldenen Mittelweg der zum Erfolg führt.&nbsp; Es gibt auch eine ganze Menge von Problemen, die sich&nbsp; überhaupt nur mit Algorithmen lösen lassen die den Zufall verwenden, dafür gibt es zwei Klassen von Algorithmen, die <em>Monte Carlo</em> und die <em>Las Vegas</em> Algorithmen.</p>
+<p>
+	.</p>
+<h2>
+	Review</h2>
+<p>
+	Im ersten Kapitel haben wir bereits Bekanntschaft mit dem Zufall gemacht: das erste Mal als wir Pi ausgerechnet haben.&nbsp; Das ist ein Algorithmus der sich Zufall zuhilfe nimmt um etwas zu berechnen.&nbsp; Auch wenn wir Leute in einem Stadium zählen mittels der Methode, dass alle Leute deren Nachname mit &#39;A&#39; beginnt aufstehen sollen, dann machen wir ein <em>Sampling</em>, und gehen aber davon aus, dass die Nachnamen alle gleichhäufig im Alphabet vorkommen.&nbsp; Das ist auch eine Annahme die mit Zufallsverteilung der Nachnamen zu tun hat.&nbsp; Im ersten Kapitel haben wir auch gesehen wie wir Pseudo-Zufallszahlen erzeugen können, mit Hilfe von Lehmer&#39;s Algorithmus.&nbsp; Wir haben auch gesehen, wie man schlechte Zufallszahlen identifizieren kann.</p>
+<p>
+	Weitere Algorithmen die wir bereits gesehen haben und die sich in der einen oder anderen Form des Zufalls bedienen, waren:</p>
+<ul>
+	<li>
+		Pi</li>
+	<li>
+		RandomArt</li>
+	<li>
+		Tree</li>
+	<li>
+		Maze</li>
+	<li>
+		Lightning</li>
+	<li>
+		PlasmaCloud</li>
+	<li>
+		Shuffle</li>
+	<li>
+		QuickSort</li>
+</ul>
+<p>
+	Man könnte meinen Algorithmen die mit Zufall arbeiten liefern immer nur Näherungen, dass stimmt aber nicht, denn QuickSort verwendet Zufall liefert aber eine genaue Lösung.</p>
+<p>
+	.</p>
+<h2>
+	LoadBalancing</h2>
+<p>
+	Im zweiten Kapitel haben wir uns mit dem Thema <em>LoadBalance</em> kurz beschäftigt. Damals haben wir neue Tasks auf denjenigen Server verteilt, der die geringste Last hat.&nbsp; Nicht immer weiss man aber welche Last welcher Server hat.&nbsp; Dann gibt es prinzipiell zwei Möglichkeiten: Round Robin [8], also einer nach dem anderen,</p>
+<pre style="margin-left: 40px;">
+// round robin assignment of task
+private void addNewServerTask() {
+&nbsp;&nbsp;&nbsp; int serverNr = currentTaskNr % NR_OF_SERVERS;
+&nbsp;&nbsp;&nbsp; currentTaskNr++;
+&nbsp;&nbsp;&nbsp; serverQueues[serverNr].add(&quot;Task Nr.&quot; + currentTaskNr);
+}</pre>
+<p>
+	oder zufällige Verteilung,</p>
+<pre style="margin-left: 40px;">
+// random assignment of task
+private void addNewServerTaskRandom() {
+&nbsp;&nbsp; &nbsp;int serverNr = (int) (Math.random() * NR_OF_SERVERS);
+&nbsp;&nbsp; &nbsp;currentTaskNr++;
+&nbsp;&nbsp; &nbsp;serverQueues[serverNr].add(&quot;Task Nr.&quot; + currentTaskNr);
+}</pre>
+<p>
+	Letzterer ist ein Algorithmus der sich den Zufall zu Hilfe nimmt.</p>
+<p>
+	.</p>
+<h2>
+	Minimum, Maximum and Average</h2>
+<p>
+	Im Kapitel &quot;Algorithmic Analysis&quot; haben wir gesehen, dass die Berechnung von Minimum, Maximum und Average linear in der Zeit ist, also O(n), es sei denn die Daten sind sortiert.&nbsp; Wenn wir jetzt aber nicht sortieren wollen, und uns eine ungefähre Antwort, also eine Näherung, genügt, dann geht das auch schneller.</p>
+<p>
+	Nehmen wir an wir wollen den ungefähren Durchschnitt für eine Array von Ganzzahlen berechnen:</p>
+<pre style="margin-left: 40px;">
+int[] arr = { 5, 55, 2, 7, 45, 3, 1, 8, 23, 12 };</pre>
+<p>
+	Eine Möglichkeit ist einfach das erste, das mittlere und das letzte Element zu nehmen und den Durchschnitt zu bilden:</p>
+<pre style="margin-left: 40px;">
+double average = ( arr[0] + arr[arr.length/2] + arr[arr.length-1] ) / 3.0;</pre>
+<p>
+	Ein andere Möglichkeit ist drei zufällige Elemente (drei Samples) zu wählen und den Durchschnitt zu bilden:</p>
+<pre style="margin-left: 40px;">
+private static double averageRandom(int[] arr) {
+&nbsp;&nbsp; &nbsp;int total = 0;
+&nbsp;&nbsp; &nbsp;int len = arr.length;
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; 3; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;total += arr[(int) (len * Math.random())];
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;double average = total / 3.0;
+&nbsp;&nbsp; &nbsp;return average;
+}</pre>
+<p>
+	Das funktioniert für beliebig große Arrays, und je mehr Samples wir nehmen, desto genauer wird es. Die Geschwindigkeit dieses Algorithmus hängt nur von der Anzahl der Samples ab, und nicht von der Größe des Arrays, d.h. er wird in der Regel O(1) Laufzeitverhalten haben.</p>
+<p>
+	.</p>
+<h2>
+	Monte Carlo and Las Vegas</h2>
+<p>
+	Was Zufalls-Algorithmen angeht unterscheidet man grundsätzlich zwei Klassen: die <em>Monte Carlo</em> und die <em>Las Vegas</em> Algorithmen [9,10].&nbsp; Der Hauptunterschied liegt darin, dass man bei den <em>Las Vegas</em> Algorithmen verifizieren kann, dass die Antwort richtig ist.&nbsp; QuickSort ist z.B. solch ein Algorithmus.&nbsp; Bei <em>Monte Carlo</em> Algorithmen kann man das nicht, z.B. die Berechnung von Pi fällt in diese Kategorie.</p>
+<p>
+	Interessant ist auch, dass es eine ganze Reihe von Problemen gibt, die sich sinnvoll überhaupt nur mit Zufalls-Algorithmen lösen lassen.&nbsp; Das ist sehr häufig bei Problemen der Fall die ein exponentielles Laufzeit Verhalten haben.&nbsp; Die kann man zwar im Prinzip lösen, allerdings nur wenn man sehr, sehr, sehr viel Zeit hat.&nbsp; In der Regel hat man aber nicht so viel Zeit, und deswegen ist man froh, wenn man zwar keine exakte, aber doch eine annehmbare Lösung hat.&nbsp; Z.B. das Traveling Salesman Problem [11], das Scheduling Problem und das Planning Problem fallen alle in diese Kategorie.</p>
+<p>
+	Algorithmen die versuchen eine annehmbare Lösung zu finden, meist mit Hilfe des Zufalls arbeiten, sind z.B.</p>
+<ul>
+	<li>
+		Genetic Programming [12]</li>
+	<li>
+		Particle Swarm Optimization [13]</li>
+</ul>
+<p>
+	Vielleicht sehen wir den einen oder anderen etwas später noch.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	In diesem Kapitel haben wir etwas von Brute Force, Greedy, Back Tracking und Randomized Algorithmen gehört.&nbsp; Zu den Anwendungen gehört das Geld Zählen, das Planen, das Stehlen und das Spielen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Was ist ein &ldquo;gieriger&rdquo; (greedy) Algorithmus? Erklären Sie, wie diese funktionieren, evtl mit einem Beispiel.<br />
+		&nbsp;</li>
+	<li>
+		Was ist ein Rucksackproblem? Beschreiben Sie es mit einem Beispiel.<br />
+		&nbsp;</li>
+	<li>
+		Geben Sie zwei Beispiele für einen Greedy Algorithmus.<br />
+		&nbsp;</li>
+	<li>
+		Welchen Algorithmus würden Sie verwenden, um das 4 Queens Problem zu lösen?<br />
+		&nbsp;</li>
+	<li>
+		Liste Sie alle möglichen Permutationen der drei Buchstaben &quot;car&quot;.<br />
+		&nbsp;</li>
+	<li>
+		Erläutern Sie den Unterschied zwischen Combinations, Permutations und Subsets. Geben Sie evtl je ein Beispiel an.<br />
+		&nbsp;</li>
+	<li>
+		Können Sie das Konzept des &quot;Pruning&quot; erklären?&nbsp; Warum ist das überhaupt so wichtig?<br />
+		&nbsp;</li>
+	<li>
+		Welchen Algorithmus würden Sie benutzen, um einen Weg aus einem Labyrinth zu finden? Bitte erklären Sie grob, wie Ihr Algorithmus funktionieren würde.</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Fast fertig, zum Schluss noch ein paar Referenzen.</p>
+<p>
+	[1] Huffman coding, <a href="https://en.wikipedia.org/wiki/Huffman_coding">https://en.wikipedia.org/wiki/Huffman_coding</a></p>
+<p>
+	[2] Greedy coloring, <a href="https://en.wikipedia.org/wiki/Greedy_coloring">https://en.wikipedia.org/wiki/Greedy_coloring</a></p>
+<p>
+	[3] Algorithmen und Datenstrukturen, Gunter Saake und Kai-Uwe Sattler</p>
+<p>
+	[4] Jon Kleinberg, Eva Tardos, Kevin Wayne, Algorithm Design, GREEDY ALGORITHMS I, <a href="https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/04GreedyAlgorithmsI.pdf">https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/04GreedyAlgorithmsI.pdf</a></p>
+<p>
+	[5] 10 Must-See Works Of Art At The Louvre, Huffington <a href="http://www.huffingtonpost.com/2012/08/10/happy-birthday-museum-cen_n_1761094.html">http://www.huffingtonpost.com/2012/08/10/happy-birthday-museum-cen_n_1761094.html</a></p>
+<p>
+	[6] Private communication, Weber-Wulff, D.</p>
+<p>
+	[7] Computer Science II: Programming Abstractions, Julie Zelenski, Stanford, <a href="https://see.stanford.edu/materials/icspacs106b/Lecture11.pdf">https://see.stanford.edu/materials/icspacs106b/Lecture11.pdf</a></p>
+<p>
+	[8] Round-robin scheduling, <a href="https://en.wikipedia.org/wiki/Round-robin_scheduling">https://en.wikipedia.org/wiki/Round-robin_scheduling</a></p>
+<p>
+	[9] Monte Carlo algorithm, <a href="https://en.wikipedia.org/wiki/Monte_Carlo_algorithm">https://en.wikipedia.org/wiki/Monte_Carlo_algorithm</a></p>
+<p>
+	[10] Las Vegas algorithm, <a href="https://en.wikipedia.org/wiki/Las_Vegas_algorithm">https://en.wikipedia.org/wiki/Las_Vegas_algorithm</a></p>
+<p>
+	[11] Travelling salesman problem, <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">https://en.wikipedia.org/wiki/Travelling_salesman_problem</a></p>
+<p>
+	[12] Genetic programming, <a href="https://en.wikipedia.org/wiki/Genetic_programming">https://en.wikipedia.org/wiki/Genetic_programming</a></p>
+<p>
+	[13] Particle swarm optimization, <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">https://en.wikipedia.org/wiki/Particle_swarm_optimization</a></p>
+<p>
+	[14] Brute-Force and Greedy Algorithms, <a href="http://www.brpreiss.com/books/opus5/html/page433.html#31938">http://www.brpreiss.com/books/opus5/html/page433.html#31938</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>

@@ -1,0 +1,1634 @@
+<!DOCTYPE html><html lang="de"><head>
+  <title>Variationen zum Thema: Algorithmen</title>
+  <meta name="title" content="Variationen zum Thema: Algorithmen">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="Eine Einführung anhand von Beispielen">
+  <meta name="keywords" content="Java,Algorithmen,Datenstrukturen">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+<body><center>
+<div id="wrap">
+	<ul class="sidenav">
+	  <p><a href="index.html">Variationen zum Thema</a><a href="index.html">Algorithmen</a></p>
+	  <li><a href="Introduction.html">Introduction</a></li>
+	  <li><a href="Lists.html">Lists</a></li>
+	  <li><a href="Maps.html">Maps</a></li>
+	  <li><a href="Recursion.html">Recursion</a></li>
+	  <li><a href="Algorithms.html">Algorithms</a></li>
+	  <li><a href="Sorting.html">Sorting</a></li>
+	  <li><a href="Trees.html" class="active">Trees</a></li>
+	  <li><a href="Graphs.html">Graphs</a></li>
+	  <li><a href="Text.html">Text</a></li>
+	  <li><a href="Techniques.html">Techniques</a></li>
+	</ul>
+<div class="content"><p>
+	<img src="images/TreeNice.png" style="display: block; margin-left: auto; margin-right: auto; width: 215px; height: 175px;" /></p>
+<h1>
+	Trees</h1>
+<p>
+	Ich liebe Bäume. In meinem Garten habe ich ein paar Kirschbäume, einen Maulbeerbaum, einen Mispelbaum, natürlich ein paar Äpfelbäume, einen kleinen Pfirsich-, und einen Feigenbaum, der jetzt schon drei Winter überlebt hat.&nbsp; Aber da das hier kein Buch für Hobbygärtner ist sondern für angehende Algorithmiker, geht es in diesem Kapitel um die Datenstruktur Baum, auf Englisch <em>Tree</em>.&nbsp;</p>
+<p>
+	Bei Trees handelt es sich um eine hierarchische Datenstruktur, die wenn man sie ausdruckt etwas an Bäume erinnert, daher der Name.&nbsp; So wie es bei richtigen Bäumen ganz viele Arten von Bäumen gibt, ist das auch bei der Datenstruktur, da gibt es BinaryTrees, QuadTrees, Splay Trees, Red-Black Trees, usw.&nbsp; Und je nachdem welches Obst man essen möchte muss man auch die richtige Baumart auswählen.&nbsp; Darum geht es in diesem Kapitel, um das Hegen und Pflegen von Bäumen.</p>
+<p>
+	.</p>
+<h2>
+	Examples</h2>
+<p>
+	Beginnen wir mit ein paar Beispielen:&nbsp; die Dateien und Verzeichnisse auf unserem Computer sind ein Baum.&nbsp; Wenn wir unsere Erde in Kontinente, Staaten, Bundesländer, usw. unterteilen, dann ist das auch ein Baum.&nbsp; Oder z.B. die Züge in einem Spiel, wie z.B. Tic-Tac-Toe, bilden auch eine Baumstruktur:</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: top;">
+				<img src="images/FileSystem.png" style="width: 110px; height: 155px;" /></td>
+			<td style="text-align: center; vertical-align: top;">
+				<img src="images/Countries.png" style="width: 255px; height: 99px;" /></td>
+			<td style="text-align: center; vertical-align: middle;">
+				<img src="images/TicTacToe.png" style="width: 218px; height: 192px;" /></td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	Es gibt noch viele weitere Beispiele:</p>
+<ul>
+	<li>
+		Familienbäume, also gemeint sind Stammbäume.</li>
+	<li>
+		Ein Buch bestehend aus Titel, Inhaltsverzeichnis, Kapiteln, Unterkapiteln und Paragraphen.</li>
+	<li>
+		Entscheidungsbäume, basierend auf mehreren konsekutiven Ja/Nein Fragen kann man eine Entscheidung oder Diagnose treffen.</li>
+	<li>
+		Mathematische arithmetische Ausdrücke haben eine Baumstruktur.</li>
+	<li>
+		Und viele Spiele lassen sich in eine Baumstruktur abbilden.</li>
+</ul>
+<p>
+	Allerdings nicht alles was wie ein Baum aussieht ist wirklich ein Baum, deswegen wollen wir erst einmal definieren, was wir unter einem Baum verstehen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/a1367c64-6a62-4937-bf05-a9c5cc3e3ede.png" style="width: 200px; height: 130px; float: right;" />Terminology</h2>
+<p>
+	Ein Baum ist wie eine Eltern-Kind Beziehung.&nbsp; Dabei kann das Elternteil mehrere Kinder haben, aber ein Kind kann nie mehr als ein Elternteil haben.&nbsp; Das mag etwas ungewöhnlich erscheinen, aber so ist die Definition.&nbsp;</p>
+<p>
+	Ein Baum besteht aus Knoten, <em>Nodes</em> genannt, und Verbindungen, die man <em>Edges</em> nennt.&nbsp; Des weiteren verwendet man folgende Begriffe:</p>
+<ul>
+	<li>
+		Root: die Wurzel ist der Knoten der kein Elternteil hat. In jedem Baum kann es nur ein Wurzel geben.</li>
+	<li>
+		Internal Node: das sind Knoten die selbst Kinder haben.</li>
+	<li>
+		External Node (Leaf): das sind Knoten die keine Kinder haben.</li>
+</ul>
+<p>
+	<img alt="" src="images/cda61fe6-0315-497e-88cc-b5d318d8f32f.png" style="width: 200px; height: 158px; float: right;" />In Anlehnung an Familienbäume, werden dann auch die folgenden Bezeichnungen verwendet:</p>
+<ul>
+	<li>
+		Ancestors: sind die Vorfahren.</li>
+	<li>
+		Descendants: sind die Nachfahren, also Kinder und Kinderskinder.</li>
+	<li>
+		Siblings: nennt man die Geschwister eines Knotens.</li>
+	<li>
+		Subtree: ein Unterbaum oder Teilbaum, ist ein Teil eines größeren Baumes, der selbst wieder ein Baum ist.</li>
+	<li>
+		Depth: bezieht sich auf einen Knoten und ist die Distanz dieses Knotens zum Wurzelknoten.&nbsp; Der Wurzelknoten hat Depth von 0.</li>
+	<li>
+		Height: ist das Gegenstück zur Depth, und bezieht sich auf die externen Knoten.&nbsp; Externe Knoten haben eine Height von 0.&nbsp; Die Height des Baumes entspricht dann der Height des Wurzelknotens.</li>
+</ul>
+<p>
+	Schließlich unterscheidet man noch zwischen geordneten und ungeordneten Bäumen: das bezieht sich auf die Kinder: gibt es da eine Reihenfolge (wie z.B. deren Alter) oder gibt es da keine.&nbsp; Wir werden uns nur mit geordneten Bäumen beschäftigen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Node.png" style="width: 145px; height: 129px; float: right;" />Nodes</h2>
+<p>
+	Die Datenstruktur <em>Node</em> besteht aus folgenden Teilen: es gibt eine Referenz auf das Elternteil, es gibt Referenzen auf mögliche Kinder und es gibt eine Referenz auf das <em>Element</em>, das sind die Daten die im Knoten gespeichert werden.&nbsp; Die Datenstruktur <em>Node</em> unterstützt die folgenden, lesenden Methoden:</p>
+<ul>
+	<li>
+		<strong>isRoot():</strong> gibt an ob es sich bei dem Knoten um den Wurzelknoten handelt;</li>
+	<li>
+		<strong>isInternal():</strong> wenn ein Knoten Kinder hat, dann ist es ein interner Knoten;</li>
+	<li>
+		<strong>isExternal():</strong> wenn ein Knoten keine Kinder hat, dann ist es ein externer Knoten;</li>
+	<li>
+		<strong>getElement():</strong> gibt das Element zurück, das in diesem Knoten gespeichert ist;</li>
+	<li>
+		<strong>getParent():</strong> gibt den übergeordneten Knoten dieses Knotens zurück;</li>
+	<li>
+		<strong>getChildren():</strong> gibt die untergeordneten Knoten dieses Knotens zurück.</li>
+</ul>
+<p>
+	Darüber hinaus kann ein Knoten auch Schreibmethoden haben:</p>
+<ul>
+	<li>
+		<strong>setElement(E element):</strong> setzt das Element dieses Knotens auf einen neuen Wert;</li>
+	<li>
+		<strong>addChild(Node&lt;E&gt; node):</strong> fügt diesem Knoten ein Kind hinzu;</li>
+	<li>
+		<strong>removeChild(Node&lt;E&gt; node):</strong> entfernt das gegebene Kind von diesem Knotens, wenn dieses Kind wiederum Kinder hat, werden diese auch mit entfernt!</li>
+</ul>
+<p>
+	Mit diesen Methoden können wir Strukturen von Knoten zusammen bauen, in dem wir Information in ihnen speichern und sie dann in einer Struktur verbinden. Als Beispiel wollen wir den Baum der ersten biblischen Familie aufbauen:</p>
+<pre style="margin-left: 40px;">
+Node&lt;String&gt; adam = new Node&lt;String&gt;(&quot;Adam&quot;);
+Node&lt;String&gt; abel = new Node&lt;String&gt;(&quot;Abel&quot;);
+adam.addChild(abel);
+Node&lt;String&gt; cain = new Node&lt;String&gt;(&quot;Cain&quot;);
+adam.addChild(cain);
+
+System.out.println(adam.isRoot());
+System.out.println(adam.getChildren());
+
+adam.removeChild(abel);  // Abel was killed by his brother</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/OrderedTree.png" style="width: 200px; height: 162px; float: right;" />Ordered Trees</h2>
+<p>
+	Wenn wir anfangen Knoten zu verbinden, bekommen wir Bäume. Bäume bestehen aus Knoten. Obwohl wir im Prinzip schon mit einem Haufen von Knoten ganz gut arbeiten könnten, bietet die übergreifende <em>Tree</em> Datenstruktur einige zusätzliche, nützliche Funktionen:</p>
+<ul>
+	<li>
+		<strong>root():</strong> gibt den Wurzelknoten des Baums zurück;</li>
+	<li>
+		<strong>size():</strong> gibt die Größe des Baumes, d.h. die Anzahl der Knoten im gesamten Baumes;</li>
+	<li>
+		<strong>height():</strong> gibt die Höhe eines Baumes;</li>
+	<li>
+		<strong>elements():</strong> gibt alle Knoten des Baumes als Collection zurück;</li>
+	<li>
+		<strong>preOrder():</strong> eine Art, einen Baum zu durchqueren;</li>
+	<li>
+		<strong>postOrder():</strong> eine andere Möglichkeit, einen Baum zu durchlaufen;</li>
+	<li>
+		<strong>levelOrder():</strong> noch eine andere Art, durch einen Baum zu iterieren.</li>
+</ul>
+<p>
+	Diese Methoden sind ganz praktisch wie wir in Kürze sehen werden.&nbsp; Verwendet wird die Datenstruktur wie folgt:</p>
+<pre style="margin-left: 40px;">
+Tree&lt;String&gt; humans = new Tree&lt;String&gt;(adam);
+System.out.println(humans.size());
+System.out.println(humans.elements());
+humans.preOrder();</pre>
+<p>
+	Besonders die Traversal, also die Iterationsmethoden werden für uns sehr wichtig werden.&nbsp; Deswegen betrachten wir diese jetzt ein wenig näher.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PreOrderTraversal2.png" style="width: 200px; height: 144px; float: right;" />Pre-Order Traversal</h2>
+<p>
+	Wenn wir durch alle Elemente eines Baumes iterieren wollen, haben wir mehrere Möglichkeiten, eine davon ist das <em>Pre-Order</em> Traversal.&nbsp; Bei dieser Iteration wird der Knoten selbst vor seinen Kindern besucht.</p>
+<pre style="margin-left: 40px;">
+void preOrder(node) {
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">visit(node)</span>
+&nbsp;&nbsp;&nbsp; for (child of node) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; preOrder(child)
+&nbsp;&nbsp;&nbsp; }
+} 
+</pre>
+<p>
+	Mögliche Anwendungen für dieser Art von Traversal sind:</p>
+<ul>
+	<li>
+		das Drucken eines strukturierten Dokuments (wie z.B. eines Buchs);</li>
+	<li>
+		einen Baum als String auszugeben (z.B. new OrderedTreeParser().createStringFromTree());</li>
+	<li>
+		oder einen Baum zu malen (FibonacciTree).</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PostOrderTraversal.png" style="width: 200px; height: 141px; float: right;" />Post-Order Traversal</h2>
+<p>
+	Wenden wir uns der nächsten Form der Iteration zu, dem <em>Post-Order</em> Traversal. In dieser wird der Knoten erst nach seinen Kinder besucht.</p>
+<pre style="margin-left: 40px;">
+void postOrder(node) {
+&nbsp;&nbsp;&nbsp; for (child of node) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; postOrder(child)
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">visit(p)</span>
+}&nbsp; </pre>
+<p>
+	Mögliche Anwendungen dieser Art von Durchquerung sind:</p>
+<ul>
+	<li>
+		das Berechnen des Speicherplatzes von Dateien in Verzeichnissen und deren Unterverzeichnissen;</li>
+	<li>
+		und das Auswerten von arithmetischen Ausdrücken.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/LevelOrderTraversal.png" style="width: 200px; height: 142px; float: right;" />Level-Order Traversal</h2>
+<p>
+	Als letzte wichtige Form der Iteration durch geordente Bäume betrachten wir kurz das <em>Level-Order</em> Traversal.&nbsp; Hier wird zu erst der Wurzelknoten besucht, danach all seine Kinder, dann kommen die Enkelkinder, usw..&nbsp;</p>
+<pre style="margin-left: 40px;">
+void levelOrder(node, level) {
+&nbsp;&nbsp; &nbsp;if (node == null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+&nbsp;&nbsp; &nbsp;} else if (level == 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">visit(node);</span>
+&nbsp;&nbsp; &nbsp;} else if (level &gt; 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (child of node) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;levelOrder(child, level - 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Diese Art von Traversal wird verwendet</p>
+<ul>
+	<li>
+		um z.B. durch einen Baum hierarchisch von oben nach unten durch zu iterieren.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/BinaryTree.png" style="width: 200px; height: 235px; float: right;" />Binary Trees</h2>
+<p>
+	Eine besondere Form von Bäumen sind binäre Bäume:</p>
+<ul>
+	<li>
+		Jeder Knoten hat höchstens zwei Kinder und</li>
+	<li>
+		die Kinder haben eine Ordnung, d.h. es gibt ein linkes und ein rechtes Kind.</li>
+</ul>
+<p>
+	Wenn ein binärer Baum keine oder genau zwei Kinder hat, dann nennt man ihn auch Proper Binary Tree.</p>
+<p>
+	Ein binärer Baum, <em>BinaryTree</em>,&nbsp; besteht aus binären Knoten, <em>BinaryNode</em>. Binäre Knoten haben die gleichen Operationen wie normale Knoten, nur zusätzlich haben sie noch folgende Methoden:</p>
+<ul>
+	<li>
+		<strong>hasLeft():</strong> true, wenn dieser Knoten ein Kind auf der linken Seite hat;</li>
+	<li>
+		<strong>hasRight():</strong> true, wenn dieser Knoten ein Kind auf der rechten Seite hat;</li>
+	<li>
+		<strong>getLeft():</strong> gibt das Kind auf der linken Seite dieses Knotens zurück;</li>
+	<li>
+		<strong>getRight():</strong> gibt das Kind auf der rechten Seite dieses Knotens zurück;</li>
+	<li>
+		<strong>setLeft(BinaryNode&lt;E&gt; node):</strong> fügt ein Kind auf der linken Seite ein;</li>
+	<li>
+		<strong>setRight(BinaryNode&lt;E&gt; node):</strong> fügt ein Kind auf der rechten Seite ein;</li>
+	<li>
+		<strong>removeLeft():</strong> löscht das Kind auf der linken Seite;</li>
+	<li>
+		<strong>removeRight():</strong> löscht das Kind auf der rechten Seite.</li>
+</ul>
+<p>
+	Zusätzlich zu den Methoden, die für generische Bäume definiert sind, haben binäre Bäume die folgende Operation,</p>
+<ul>
+	<li>
+		<strong>inOrder():</strong> eine vierte Möglichkeit, einen Baum zu durchqueren, funktioniert aber nur für binäre Bäume.</li>
+</ul>
+<p>
+	Um zu sehen, wie wir mit binären Bäumen arbeiten, können wir wieder unsere erste Familie betrachten:</p>
+<pre style="margin-left: 40px;">
+BinaryNode&lt;String&gt; adam = new BinaryNode&lt;String&gt;(&quot;Adam&quot;);
+BinaryNode&lt;String&gt; cain = new BinaryNode&lt;String&gt;(&quot;Cain&quot;);
+cain.setLeft(new BinaryNode&lt;String&gt;(&quot;Enoch&quot;));
+adam.setLeft(cain);
+BinaryNode&lt;String&gt; abel = new BinaryNode&lt;String&gt;(&quot;Abel&quot;);
+adam.setRight(abel);
+
+BinaryTree&lt;String&gt; humans = new BinaryTree&lt;String&gt;(adam);
+
+System.out.println(humans);
+System.out.println(humans.size());
+System.out.println(humans.height());
+humans.inOrder();</pre>
+<p>
+	Wie wir sehen werden, haben binäre Bäume viele Anwendungen:</p>
+<ul>
+	<li>
+		Arithmetische Ausdrücke,</li>
+	<li>
+		Entscheidungsprozesse und</li>
+	<li>
+		Suchen.</li>
+</ul>
+<p>
+	Binäre Bäume sind so wichtig, denn sie haben viele schöne Eigenschaften. Darüber hinaus gibt es einen Satz der besagt, dass alle Bäume in binäre Bäume umgewandelt werden können [16].&nbsp; Das ist ganz praktisch.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/1520c4d0-2081-4fb5-80c9-829f4c100d22.png" style="width: 200px; height: 144px; float: right;" />In-Order Traversal</h2>
+<p>
+	Das <em>In-Order</em> Traversal funktioniert nur mit binären Bäumen.&nbsp; Bei ihm wird zuerst die linke Seite besucht, dann wird der Knoten selbst besucht, und danach die rechte Seite.&nbsp; D.h. ein Knoten wird nach seinem linken Teilbaum, aber vor seinem rechten Teilbaum besucht:</p>
+<pre style="margin-left: 40px;">
+void inOrder(p) {
+&nbsp;&nbsp;&nbsp; if hasLeft(p) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inOrder( left(p) );
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;<span style="color:#0000ff;"> visit(p);</span>
+&nbsp;&nbsp;&nbsp; if hasRight(p) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inOrder( right(p) );
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	Mögliche Anwendungen dieser Art von Durchquerung sind:</p>
+<ul>
+	<li>
+		Das Drucken arithmetischer Ausdrücke und andere Binärbäume in einer hübschen Form;</li>
+	<li>
+		Wenn man mit diesem Traversal binäre Suchbäume durchläuft, werden die Elemente in sortierter Reihenfolge ausgegeben (BinarySearchTree.main()).</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/b2d59ce0-48eb-4d9a-82ab-8a4e93035194.png" style="width: 200px; height: 154px; float: right;" />Arithmetic Expression Tree</h2>
+<p>
+	Eine wichtige Anwendung von binären Bäumen ist der arithmetische Ausdruck. Hier repräsentieren interne Knoten Operatoren und externe Knoten entsprechen den Operanden. Zum Beispiel, aus dem Ausdruck</p>
+<pre>
+      5 + ( 3 - 4 ) * 2 - 3 * 4
+</pre>
+<p>
+	wird der binäre Baum rechts. Für arithmetische Ausdrucksbäume haben zwei Arten von Traversals eine besondere Bedeutung:</p>
+<ul>
+	<li>
+		Post-Traversal kann verwendet werden, um arithmetische Ausdrücke zu berechnen;</li>
+	<li>
+		In-Order-Traversal kann verwendet werden, um arithmetische Ausdrücke schön darzustellen oder zu drucken.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PilotChecklist.png" style="width: 200px; height: 130px; float: right;" />Decision Trees</h2>
+<p>
+	Eine weitere schöne Anwendung eines binären Baumes ist der Entscheidungsbaum [15]. Bei einem Entscheidungsbaum sind interne Knoten Fragen.&nbsp; Bei einer Ja-Antwort folgt man dann der Frage auf der linken Seite, bei einer Nein-Antwort folgt man der Frage auf der rechten Seite.&nbsp; Externe Knoten entsprechen dann den Entscheidungen die zu treffen sind. Beispiele beinhalten:</p>
+<ul>
+	<li>
+		Checkliste für ein Flugzeug vor dem Start;</li>
+	<li>
+		Was man essen soll;</li>
+	<li>
+		Welchen Sortieralgorithmus man verwenden soll;</li>
+	<li>
+		Welche Programmiersprache sich für ein bestimmtes Problem am besten eignet.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/07b4edea-c3d4-40f4-8ddb-871ccacc84e0.png" style="width: 200px; height: 215px; float: right;" />Binary Search Trees</h2>
+<p>
+	Eine sehr prominenten Anwendung von Bäumen ist die der Suche. Der <em>Binary Search Tree</em> ist dabei ein Beispiel das einen binären Baum als Datenstruktur verwendet.&nbsp; Dabei werden:</p>
+<ul>
+	<li>
+		interne Knoten verwendet um Einträge zu speichern;</li>
+	<li>
+		neue Einträge, je nachdem ob sie größer oder kleiner sind, in den rechten oder linken Teilbaum eingefügt.</li>
+</ul>
+<p>
+	Bei dieser Baumart werden die &quot;Blätter&quot;, also die externen Knoten, gar nicht genutzt.&nbsp; Betrachten wir folgendes Beispiel:</p>
+<ul>
+	<li>
+		<b>Create:</b> Beginnend mit einem leeren Suchbaum, fügen wir nacheinander die&nbsp; folgenden Zahlen ein:&nbsp; 44, 88, 17, 32, 97, 65, 28, 82, 29, 76, 54, 80.&nbsp; Es entsteht der Baum rechts.</li>
+	<li>
+		<b>Find:</b> Wir versuchen nach den Einträgen 76 und 25 zu suchen indem wir den Baum von oben nach unten durchgehen. Dabei vergleichen wir unsere Suchzahl, z.B. die 76 jeweils mit dem momentanen Knoten, und folgen der linken Seite wenn unsere Suchzahl größer ist und der rechten Seite wenn sie kleiner ist.</li>
+	<li>
+		<b>Insert:</b>&nbsp; Als nächstes fügen wir die Zahl 78 in den Baum ein.</li>
+	<li>
+		<b>Remove:</b>&nbsp; Das Entfernen von Elemente ist die schwierigste Operation. Versuchen wir die Zahlen 32 und 65 zu entfernen.&nbsp; Erst müssen wir die Zahl die wir suchen im Baum finden.&nbsp; Wenn die Suchzahl gar nicht im Baum ist dann ist das einfach.&nbsp; Auch wenn die Suchzahl ganz unten ist, dann löschen wir einfach diesen Knoten aus unserem Baum.&nbsp; Wenn unsere Suchzahl allerdings irgendwo mitten im Baum ist, und vielleicht auch linke und rechte Teilbäume unter sich hat, dann wird das etwas schwieriger.&nbsp; Die einfache Lösung ist einfach diese Teilbäume zu nehmen und ganz neu in den Baum einzufügen.&nbsp; Das ist allerdings nicht besonders schnell.</li>
+</ul>
+<p>
+	Was die Laufzeiten angeht kann man zeigen, dass das Suchen, Einfügen und Entfernen proportional zur Höhe des Baumes dauert, für einen ausgewogenen (well-balanced) Baum bedeutet dies O(log n).</p>
+<p>
+	Es müsste eigentlich klar sein, dass eine der effektivsten Lösungen für das NumberGuessGame nichts anderes als ein binärer Suchbaum ist.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/BinarySearchUsingTreeSet.png" style="width: 200px; height: 100px; float: right;" />TreeSet</h2>
+<p>
+	Wir können zwar unsere eigene Klasse schreiben um die Binäre Suche umzusetzen (was wir später auch tun werden), aber warum das Rad neu erfinden, wenn es schon jemand anderes erfunden hat?&nbsp; In Java gibt es eine Klasse namens <em>TreeSet</em>. Und die macht genau was wir eigentlich wollen.&nbsp; Hier eine Umsetzung der Aufgabe von gerade eben:</p>
+<pre style="margin-left: 40px;">
+int[] nrs = { 44, 88, 17, 32, 97, 65, 28, 82, 29, 76, 54, 80 };
+
+// create tree and insert
+TreeSet&lt;Integer&gt; searchTree = new TreeSet&lt;Integer&gt;();
+for (int i = 0; i &lt; nrs.length; i++) {
+&nbsp;&nbsp; &nbsp;searchTree.add(nrs[i]);
+}
+
+// find the entries: 76 and 25
+println(&quot;Contains 76: &quot; + searchTree.contains(76));
+println(&quot;Contains 25: &quot; + searchTree.contains(25));
+
+// insert the number 78
+searchTree.add(78);
+
+// remove numbers 32 and 65
+searchTree.remove(32);
+searchTree.remove(65);
+
+// print whole tree
+println(&quot;List content of tree: &quot;);
+for (Integer nr : searchTree) {
+&nbsp;&nbsp; &nbsp;print(nr + &quot;,&quot;);
+}
+</pre>
+<p>
+	Der Vorteil des TreeSets ist, dass seine Einträge sortiert sind.&nbsp; Dabei passiert das Sortieren beim Einfügen neuer Elemente.&nbsp; Wenn wir nach einem Eintrag suchen, dann dauert das O( log n ), ist also langsamer als beim HashSet, dafür ist es aber sortiert.&nbsp; Intern verwendet das TreeSet die <em>Red-BlackTrees</em> als Datenstruktur.&nbsp; Das Gleiche gilt auch für die TreeMap.</p>
+<p>
+	.</p>
+<h2>
+	Other Trees</h2>
+<p>
+	Wir haben uns bisher nur mit Trees beschäftigt die auf einer Verlinkung der Knoten beruhen.&nbsp; In den Projekten werden wir noch ein Beispiel sehen, das auf Arrays beruht.&nbsp; Es gibt aber noch ganz viele andere Implementierungen für die Tree Datenstruktur, z.B. sind das:</p>
+<ul>
+	<li>
+		QuadTrees</li>
+	<li>
+		AVL Trees</li>
+	<li>
+		Splay Trees</li>
+	<li>
+		(2,4) Trees</li>
+	<li>
+		Red-Black Trees</li>
+	<li>
+		B-Trees</li>
+</ul>
+<p>
+	Ähnlich wie bei den Sortierverfahren hat jede so ihre Stärken und Schwächen.&nbsp; Aber was der QuickSort für die Sortieralgorithmen ist, das ist der Red-Black Tree für Bäume.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	In diesem Kapitel haben wir uns mit Bäumen angefreundet.&nbsp; Dabei haben wir geordnete Bäume und binäre Bäume gesehen und wir haben von den verschiedenen Traversal-Methoden gehört.&nbsp; Und der Binary Search Tree ist uns kurz über den Weg gelaufen.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projekte</h1>
+<p>
+	Es gibt überraschend viele Anwendungen für Bäume.&nbsp; Sie lassen sich sehr gut dazu verwenden um hierarchische Strukturen abzubilden.&nbsp; Man kann sie für Entscheidungsbäume nutzen. Häufig sind sie das Resultat von Parsern, man kann mit ihnen suchen und sortieren, und sowohl für die Auswertung von arithmetischen Ausdrücken, als auch für Programmiersprachen stellen sie sich als äusserst nützlich heraus.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/UniversityHierarchy.png" style="width: 200px; height: 114px; float: right;" />University</h2>
+<p>
+	Mit Bäumen kann man z.B. Hierarchien in Unternehmen abbilden.&nbsp; Nehmen wir eine Hochschule.&nbsp; Dort gibt es einen Präsidenten, für jede Fakultät einen Dekan, und dann gibt es da noch Professoren und Tutoren.&nbsp; Zunächst legen wir für jedes Mitglied der Hierarchie einen Knoten an.</p>
+<pre style="margin-left: 40px;">
+OrderedNode&lt;String&gt; president = new OrderedNode&lt;String&gt;(&quot;president&quot;);
+OrderedNode&lt;String&gt; dean_A = new OrderedNode&lt;String&gt;(&quot;dean_A&quot;);
+OrderedNode&lt;String&gt; dean_B = new OrderedNode&lt;String&gt;(&quot;dean_B&quot;);
+OrderedNode&lt;String&gt; prof_A = new OrderedNode&lt;String&gt;(&quot;prof_A&quot;);
+...
+</pre>
+<p>
+	Dann verbinden wir die Knoten miteinander:</p>
+<pre style="margin-left: 40px;">
+dean_A.setParent(president);
+...
+prof_B.setParent(dean_A);
+...
+tutor_B.setParent(prof_B);
+tutor_C.setParent(prof_B);</pre>
+<p>
+	<img alt="" src="images/University2.png" style="width: 200px; height: 250px; float: right;" />Und schließlich machen wir daraus einen Baum:</p>
+<pre style="margin-left: 40px;">
+OrderedTree&lt;String&gt; university = new OrderedTree&lt;String&gt;(president);</pre>
+<p>
+	An den Baum können wir jetzt ein paar Fragen stellen.&nbsp; Z.B. wieviele Angestellte gibt es an der Uni:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Number of employees: &quot; + university.<span style="color:#0000ff;">size()</span>);</pre>
+<p>
+	Oder wieviele Hierarchieebenen gibt es:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Number of hierarchy levels: &quot; + university.<span style="color:#0000ff;">height()</span>);</pre>
+<p>
+	Wir können auch alle Angestellten auflisten die es an der Hochschule gibt:</p>
+<pre style="margin-left: 40px;">
+println(&quot;List of all employees: &quot; + university.elements());</pre>
+<p>
+	Wir können auch fragen, wer der Chef von <em>prof_B</em> ist:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Boss of prof_B: &quot; + prof_B.<span style="color:#0000ff;">getParent()</span>.getElement());</pre>
+<p>
+	oder wer die Angestellten von <em>dean_B</em> sind:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Employees of dean_B: &quot; + dean_B.getChildren());</pre>
+<p>
+	wobei hier allerdings nur die direkten Kinder aufgelistet werden, die Enkelkinder, sprich Tutoren sind nicht dabei.&nbsp;</p>
+<p>
+	Wer der Oberboss ist könnten wir mit der <em>isRoot()</em> Methode herausfinden:</p>
+<pre style="margin-left: 40px;">
+println(&quot;Big boss is president: &quot; + president.isRoot());</pre>
+<p>
+	Wenn wir noch alle Angestellten nach Hierarchieebenen sortiert ausgeben wollen, dann verwenden wir den Level-Order Traversal:</p>
+<pre style="margin-left: 40px;">
+university.levelOrder(new VisitorInterface&lt;String&gt;() {
+&nbsp;&nbsp; &nbsp;public void visit(AbstractNode&lt;?&gt; node) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(node.getElement() + &quot;, &quot;);
+&nbsp;&nbsp; &nbsp;}
+});</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/PilotChecklist.png" style="width: 200px; height: 130px; float: right;" />PilotCheckList</h2>
+<p>
+	Bei Entscheidungsbäumen (decision trees) handelt es sich immer um Binärbäume.&nbsp; Als einfaches Beispiel beginnen wir mit einer Pilotencheckliste, die jeder Pilot durchgehen sollte bevor er abhebt.&nbsp; Zunächst legen wir wieder den Baum an, dieses mal mit Hilfe der <em>BinaryTree</em> und <em>BinaryNode</em> Klassen:</p>
+<pre style="margin-left: 40px;">
+BinaryNode&lt;String&gt; root = new BinaryNode&lt;String&gt;(&quot;Wings attached?&quot;);
+BinaryNode&lt;String&gt; wheels = new BinaryNode&lt;String&gt;(&quot;Wheels attached?&quot;);
+root.setLeft(wheels);
+...
+BinaryTree&lt;String&gt; decisions = new BinaryTree&lt;String&gt;(root);</pre>
+<p>
+	Dann folgt der sogenannt &quot;Pilot Walk Through&quot;: beginnend von der Wurzel des Baums, gehen wir eine Frage nach der anderen durch, und je nachdem ob der Nutzer mit Ja oder Nein antwortet, navigieren wir durch den Baum nach links oder rechts:</p>
+<p>
+	<img alt="" src="images/PilotCheckList.png" style="width: 200px; height: 100px; float: right;" />.</p>
+<pre style="margin-left: 40px;">
+private void pilotWalkThrough() {
+&nbsp;&nbsp; &nbsp;println(&quot;Welcome to the pilot check list.&quot;);
+&nbsp;&nbsp; &nbsp;println(&quot;Answer the following questions with yes or no.&quot;);
+&nbsp;&nbsp; &nbsp;// start with the root:
+&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; currentNode = (BinaryNode&lt;String&gt;) decisions.root();
+    while (currentNode.isInternal()) {
+        String answer = readLine(currentNode.getElement() + &quot;(yes/no)&quot;);
+        if (answer.equals(&quot;yes&quot;)) {
+            currentNode = currentNode.getLeft();
+        } else {
+            currentNode = currentNode.getRight();
+        }
+    }
+    println(currentNode.getElement());
+}
+</pre>
+<p>
+	Am Ende geben wir dann die Empfehlung zu fliegen oder nicht zu fliegen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/SortAlgorithm.png" style="width: 200px; height: 150px; float: right;" />SortAlgorithm</h2>
+<p>
+	Machen wir noch ein weiteres Beispiel für einen Entscheidungsbaum: Eine Empfehlung für die richtige Wahl eines Sortieralgorithmuses.&nbsp; Vor ein oder zwei Kapiteln haben wir folgendes gelernt:</p>
+<ul>
+	<li>
+		BubbleSort dauert sehr lange, also nehmen wir es nur, wenn wir viel Zeit haben.</li>
+	<li>
+		Wenn wir die Anzahl der Swaps minimieren müssen, dann verwenden wir SelectionSort.</li>
+	<li>
+		Wenn unsere Eingabedaten fast sortiert sind, dann ist InsertionSort die beste Wahl.</li>
+	<li>
+		Für alles andere verwenden wir QuickSort.</li>
+</ul>
+<p>
+	Daraus machen wir jetzt einen Entscheidungsbaum.&nbsp; Allerdings wollen wir dieses Mal einen Parser verwenden, genauer gesagt den <em>BinaryTreeParser</em>:</p>
+<pre style="margin-left: 40px;">
+decisions = new BinaryTreeParser().parseTree(new File(&quot;sort_algorithm.txt&quot;));</pre>
+<p>
+	Der macht aus einer Textdatei einen Baum.&nbsp; Dabei muss die Textdatei aber gewissen Regeln folgen.&nbsp; Hier ist die Datei für unsere Sortieralgorithmen:</p>
+<pre style="margin-left: 40px;">
+You have time? {
+&nbsp;BubbleSort,
+&nbsp;Do you need to minimize the number of swaps? {
+&nbsp; SelectionSort,
+&nbsp; Data is almost sorted? {
+&nbsp;&nbsp; InsertionSort,
+&nbsp;&nbsp; QuickSort
+&nbsp; }
+&nbsp;}
+}</pre>
+<p>
+	Das Wurzel-Element ist die erste Frage, also &quot;You have time?&quot;.&nbsp; Kinder beginnen mit einer geschweiften Klammer &#39;{&#39; und werden danach aufgelistet, mehrere Kinder werden durch Komma &#39;,&#39; getrennt.&nbsp; Bei Binärbäumen kann es höchstens zwei Kinder geben, dabei ist das erste Kind für den Ja-Fall und das zweite Kind für den Nein Fall.&nbsp; Natürlich muss jede geöffnete Klammer wieder geschlossen werden. Der Walk-Through selbst ist komplett identische wie im vorherigen Beispiel.</p>
+<p>
+	.</p>
+<h2>
+	Noch mehr Decision Trees</h2>
+<p>
+	Man kann aus fast allem Entscheidungsbäume machen. Hier sind ein paar Vorschläge:</p>
+<ul>
+	<li>
+		&quot;So You Need A Typeface&quot; von Julian Hansen ist ein Entscheidungsbaum mit dessen Hilfe man die richtige Schriftart für seine Anwendung findet. [1]</li>
+	<li>
+		Sollte eine Person einen Kredit bekommen? [2]</li>
+	<li>
+		Welche Programmiersprache soll ich für mein Projekt verwenden? [3]</li>
+	<li>
+		Für die Datenvisualisierung können wir zwischen Balkendiagramm, Kreisdiagramm, Baumdiagramm, Linienplot, Streudiagramm, etc. wählen. In dem Buch <em>Data Points</em> von Nathan Yau [4] kann man ab Seite 137 Kriterien nachlesen, wie man die passende Visualisierung auswählt.&nbsp; Daraus kann man einen Entscheidungsbaum machen.</li>
+	<li>
+		Welche Game-Engine soll ich verwenden? Man könnte Kosten, Lizenz, Support, Anzahl der Projekte, etc. als Kriterien verwenden.</li>
+	<li>
+		Was soll ich studieren?&nbsp; Überlegen Sie sich Fragen, die es einem Benutzer helfen zu entscheiden, was er oder sie studieren sollte.</li>
+	<li>
+		Sogar Schach kann man als Entscheidungsbaum darstellen. [5]</li>
+</ul>
+<p>
+	<br />
+	Man könnte sich auch Fragen überlegen mit denen man z.B. Vögel, Bäume, Tiere, Pflanzen, Krankheiten, usw. klassifizieren könnte. Weiter unten werden wir uns damit beschäftigen wie man Wildbienen identifiziert.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/FileSizes.png" style="width: 200px; float: right; height: 100px;" />FileSizes</h2>
+<p>
+	Im Kapitel über Rekursion haben wir schon einmal die Summe der Größe aller Dateien in einem Verzeichnis ermittelt.&nbsp; Wir wollen das jetzt noch einmal machen aber dieses mal mit Hilfe eines Baumes.&nbsp; Wir beginnen damit, dass wir die Verzeichnisse rekursiv durchlaufen:</p>
+<pre style="margin-left: 40px;">
+private void buildFileTreeRecursive(OrderedNode&lt;File&gt; node) {
+&nbsp;&nbsp; &nbsp;File file = node.getElement();
+&nbsp;&nbsp; &nbsp;if (file.listFiles() != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (File child : file.listFiles()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// we are only interested in directories
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (child.isDirectory()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;OrderedNode&lt;File&gt; newDir = new OrderedNode&lt;File&gt;(child);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;node.addChild(newDir);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">buildFileTreeRecursive</span>(newDir);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Unser <em>OrderedNode&lt;File&gt;</em> enthält dieses Mal <em>Files</em> anstelle von Strings.&nbsp; Das ist ganz praktisch wie wir gleich sehen werden.&nbsp; Diese Methode rufen wir von der <em>createFileTree()</em> Methode auf:</p>
+<pre style="margin-left: 40px;">
+private OrderedTree&lt;File&gt; createFileTree(File startFile) {
+&nbsp;&nbsp; &nbsp;OrderedNode&lt;File&gt; directories = new OrderedNode&lt;File&gt;(startFile);
+&nbsp;&nbsp; &nbsp;buildFileTreeRecursive(directories);
+&nbsp;&nbsp; &nbsp;return new OrderedTree&lt;File&gt;(directories);
+}</pre>
+<p>
+	<img alt="" src="images/PostOrderTraversal.png" style="width: 200px; height: 141px; float: right;" />So jetzt haben wir den Baum, was machen wir damit?&nbsp; Oben beim Post-Order Traversal haben wir gehört, dass man damit die Gesamtgröße aller Dateien in einem Verzeichnis, aber auch jeweils aller seiner Unterverzeichnisse ermitteln kann.&nbsp; Das machen wir jetzt:</p>
+<pre style="margin-left: 40px;">
+OrderedTree&lt;File&gt; fileTree = createFileTree(new File(&quot;/home/ralph/&quot;));
+
+fileTree.<span style="color:#0000ff;">postOrder</span>(new VisitorInterface&lt;File&gt;() {
+&nbsp;&nbsp; &nbsp;@Override
+&nbsp;&nbsp; &nbsp;public void visit(AbstractNode&lt;?&gt; node) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long sizeOfFilesInDir = 0;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;File f = (File) node.getElement();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (f.isDirectory()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (File ff : f.listFiles()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (ff.isFile()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;sizeOfFilesInDir += ff.length();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(&quot;we should never get here!&quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;totalSize += sizeOfFilesInDir;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//println(node +&quot;: &quot;+sizeOfFilesInDir);
+&nbsp;&nbsp; &nbsp;}
+});</pre>
+<p>
+	Mit der postOrder() Methode gehen wir also den ganzen Baum rekursiv durch. Wir ermitteln also zunächst die Größe von Knoten &#39;1&#39;, dann die von &#39;2&#39;, danach können wir die von &#39;3&#39; ausrechnen.&nbsp; Das machen wir solange bis wir bei der Wurzel angekommen sind.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/FileSizesGraphical.png" style="width: 200px; float: right; height: 200px;" />FileSizesGraphical</h2>
+<p>
+	Dass sich die ganze Arbeit lohnen kann, sehen wir jetzt: wir wollen alle Verzeichnisse und ihre Größen in einer Art Kuchendiagramm graphisch darstellen.&nbsp; Im Prinzip haben wir im Projekt <em>FileSizes</em> schon fast alles was wir brauchen.&nbsp; Was fehlt ist, dass wir uns irgendwie merken können was denn die Größe aller Dateien in einem gewissen Unterverzeichnis war.&nbsp; Im Projekt <em>FileSizes</em> haben wir die einfach weggeschmissen.&nbsp; Der Trick ist anstelle der Klasse File eine eigene Klasse zu definieren:</p>
+<pre style="margin-left: 40px;">
+class FileAndSize {
+&nbsp;&nbsp; &nbsp;public File file;
+&nbsp;&nbsp; &nbsp;public long size;
+
+&nbsp;&nbsp; &nbsp;public FileAndSize(File file, long size) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.file = file;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.size = size;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Das ist jetzt nicht ganz koscher, weil die Instanzvariablen public sind, da das aber eine lokale Klasse ist, geht das schon in Ordnung. Damit sind die beiden Methoden <em>buildFileTreeRecursive()</em> und <em>createFileTree()</em> vom obigen Beispiel fast identisch, wir müssen lediglich <em>File</em> durch <em>FileAndSize</em> ersetzen und den Konstruktoraufruf durch</p>
+<pre style="margin-left: 40px;">
+OrderedNode&lt;FileAndSize&gt; directories = 
+    new OrderedNode&lt;FileAndSize&gt;(<span style="color:#0000ff;">new FileAndSize(startFile, -1)</span>);</pre>
+<p>
+	Wir erhalten dann also einen Tree der aus Verzeichnissen mit ihren jeweiligen Größen besteht:</p>
+<pre style="margin-left: 40px;">
+OrderedTree&lt;FileAndSize&gt; fileTree = createFileTree(new File(&quot;/home/ralph/&quot;));
+traverseAndDrawArcs(fileTree.root(), 0, 360, 0);</pre>
+<p>
+	<img alt="" src="images/FileSizesGraphical2.png" style="width: 200px; height: 200px; float: right;" />Diesen Baum durchlaufen wir jetzt rekursiv und zeichnen GArcs mit einer Breite die jeweils proportional zur Verzeichnisgröße ist.&nbsp; Das geht automatisch von außen nach innen, da es ja ein rekusiver Algorithmus ist.</p>
+<pre style="margin-left: 40px;">
+private void <span style="color:#0000ff;">traverseAndDrawArcs</span>(AbstractNode&lt;FileAndSize&gt; tree,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double alpha, double sweep, int depth) {
+&nbsp;&nbsp; &nbsp;// base case
+&nbsp;&nbsp; &nbsp;if (depth &gt; 8)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+
+&nbsp;&nbsp; &nbsp;// recursive case
+&nbsp;&nbsp; &nbsp;depth++;
+&nbsp;&nbsp; &nbsp;long parentSize = tree.getElement().size;
+&nbsp;&nbsp; &nbsp;for (AbstractNode&lt;FileAndSize&gt; child : tree.getChildren()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;long childSize = child.getElement().size;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;double deltaAlpha = sweep * childSize / parentSize;
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (deltaAlpha &gt; 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">traverseAndDrawArcs</span>(child, alpha, deltaAlpha, depth);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int radius = depth * DISK_THICKNESS;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;GArc arc = new GArc(centerX - radius / 2, centerY - radius / 2,
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;radius, radius, alpha, deltaAlpha);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arc.setFilled(true);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arc.setColor(rgen.nextColor());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;add(arc);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;alpha += deltaAlpha;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Schaut ganz hübsch aus.&nbsp; Man kann das auch mit GRects machen, ist aber nicht ganz so hübsch.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Fibonacci.png" style="width: 200px; float: right; height: 100px;" />Fibonacci</h2>
+<p>
+	Wir haben ja vor ein paar Kapiteln die Bekanntschaft des Herren Fibonacci gemacht.&nbsp; Das man seine Zahlen auch als Baum darstellen kann wollen wir jetzt zeigen.&nbsp; Wobei das mit dem Baum sehr wörtlich gemeint ist.&nbsp; Der Fibonacci Baum ist ein binärer Baum, und er besteht aus Zahlen, deswegen verwenden wir <em>BinaryNode&lt;Integer&gt;</em> für unsere Knoten als Datentyp.&nbsp; Wir verwenden wieder unsere rekursive Methode <em>fibu()</em> übergeben aber anstelle von Zahlen einen BinaryNode:</p>
+<pre style="margin-left: 40px;">
+private int fibo(BinaryNode&lt;Integer&gt; node) {
+&nbsp;&nbsp; &nbsp;int n = node.getElement();
+&nbsp;&nbsp; &nbsp;switch (n) {
+&nbsp;&nbsp; &nbsp;case 0:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 0;
+&nbsp;&nbsp; &nbsp;case 1:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return 1;
+&nbsp;&nbsp; &nbsp;default:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryNode&lt;Integer&gt; left = new BinaryNode&lt;Integer&gt;(n - 2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;node.setLeft(left);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryNode&lt;Integer&gt; right = new BinaryNode&lt;Integer&gt;(n - 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;node.setRight(right);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return fibo(right) + fibo(left);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Daraus machen wir dann einen BinaryTree:</p>
+<pre style="margin-left: 40px;">
+BinaryNode&lt;Integer&gt; root = new BinaryNode&lt;Integer&gt;(n);
+fibo(root);
+BinaryTree tree = new BinaryTree&lt;Integer&gt;(root);</pre>
+<p>
+	Wie stellen wir nun den Baum dar?&nbsp; Dafür verwenden wir die Hilfsklasse <em>TreePrinter</em>, die uns ein String Array zurückgibt,</p>
+<pre style="margin-left: 40px;">
+String tmp[][] = new tree.TreePrinter().prettyPrintSimple(tree);
+printTreeVertical(tmp);</pre>
+<p>
+	welches wir dann einfach nur noch in unserem ConsoleProgram ausgeben müssen:</p>
+<pre style="margin-left: 40px;">
+private void printTreeVertical(String[][] tmp) {
+&nbsp;&nbsp; &nbsp;for (int i = 0; i &lt; tmp.length; i++) { // 4
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (int j = 0; j &lt; tmp[0].length; j++) { // 7
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;System.out.println();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (tmp[i][j] != null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(tmp[i][j] + &quot; &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print(&quot;&nbsp; &quot;);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println();
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/FibonacciGraphical.png" style="width: 200px; float: right; height: 125px;" />FibonacciGraphical</h2>
+<p>
+	Die Textausgabe von Bäumen, so wie wir es oben gemacht haben ist nicht sehr befriedigend.&nbsp; Viel schöner wäre es wenn man Bäume graphisch ausgeben könnte.&nbsp; Mit dem <em>BinaryTreeDrawerCanvas</em> geht das sogar relativ einfach.&nbsp; Der Code ist fast identisch mit dem obigen. Natürlich muss unser Programm jetzt ein <em>Program</em> sein, also</p>
+<pre style="margin-left: 40px;">
+public class FibonacciGraphical extends <span style="color:#0000ff;">Program</span> { ... }</pre>
+<p>
+	und wir müssen den Baum der <em>BinaryTreeDrawerCanvas</em> Klasse übergeben, die wir dann wie aus dem ersten Semester gewohnt zu unserer UI hinzufügen:</p>
+<pre style="margin-left: 40px;">
+BinaryTree&lt;Integer&gt; tree = new BinaryTree&lt;Integer&gt;(root);
+canvas = new <span style="color:#0000ff;">BinaryTreeDrawerCanvas</span>(tree);
+canvas.setShapeNode(BinaryTreeDrawerCanvas.SHAPE_ROUNDRECT);
+canvas.setOrientation(BinaryTreeDrawerCanvas.VERTICAL);
+canvas.setEdgeStyle(BinaryTreeDrawerCanvas.EDGE_STYLE_DIRECT);
+canvas.setFont(&quot;Courier new-bold-18&quot;);
+add(canvas, CENTER);</pre>
+<p>
+	Auch wieder viel hübscher.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/FibonacciTree_Simple.png" style="width: 200px; float: right; height: 200px;" />FibonacciTree</h2>
+<p>
+	Dass man mit den Fibonacci Zahlen und dem Pre-Order Traversal wirklich Bäume zeichnen kann, wollen wir jetzt zeigen.&nbsp; Wir verwenden wieder unsere <em>fibu()</em> Methode von oben, um unseren Binärbaum zu erzeugen.</p>
+<pre style="margin-left: 40px;">
+private double len = 80;
+private double leftAngle = -40;
+private double rightAngle = 20;
+
+public void run() {
+&nbsp;&nbsp; &nbsp;int n = 5;
+&nbsp;&nbsp; &nbsp;BinaryNode&lt;Integer&gt; root = new BinaryNode&lt;Integer&gt;(n);
+&nbsp;&nbsp; &nbsp;fibo(root);
+&nbsp;&nbsp; &nbsp;preOrderSimple(root, SIZE/2-40, SIZE-44, -Math.toRadians(90));
+}</pre>
+<p>
+	.</p>
+<p>
+	<img alt="" src="images/FibonacciTree_Pretty.png" style="width: 200px; float: right; height: 200px;" />Wir haben auch noch drei Instanzvariablen eingeführt, eine für die Länge der &quot;Zweige&quot;, eine für den Winkel um den sich die Äste nach links lehnen sollen, und einen Winkel für die rechten Äste.&nbsp; Der Pre-Order Traversal sieht dann wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+private void preOrderSimple(BinaryNode&lt;Integer&gt; node, int x0, int y0, double alpha) {
+&nbsp;&nbsp; &nbsp;//visit
+&nbsp;&nbsp; &nbsp;GLine line = new GLine(x1, y1, x1 + len * Math.cos(alpha), y1 + len * Math.sin(alpha));
+&nbsp;&nbsp; &nbsp;add(line);
+&nbsp;&nbsp; &nbsp;x0 += len * Math.cos(alpha);
+&nbsp;&nbsp; &nbsp;y0 += len * Math.sin(alpha);
+ 
+    // recurse
+&nbsp;&nbsp; &nbsp;if (node.hasLeft()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;preOrderSimple(node.getLeft(), x0, y0, alpha+Math.toRadians(leftAngle));
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;if (node.hasRight()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;preOrderSimple(node.getRight(), x0, y0,alpha+Math.toRadians(rightAngle));
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	Mit ein paar kleinen Modifikationen wird das dann ganz ansehnlich und man kann sogar eine gewisse Ähnlichkeit mit Bäumen nicht verleugnen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DrawBinaryTree.png" style="width: 200px; float: right; height: 100px;" />DrawBinaryTree</h2>
+<p>
+	Um Bäume einigermaßen ansprechend darzustellen gibt es die TreeDrawerCanvas und zwar in zwei Versionen, einmal für binären Bäume, <em>BinaryTreeDrawerCanvas</em>, und dann auch für beliebige Bäume, <em>OrderedTreeDrawerCanvas</em>. Verwendet werden beide fast identisch,</p>
+<pre style="margin-left: 40px;">
+public class DrawBinaryTree extends Program {
+&nbsp;&nbsp; &nbsp;public void init() {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryTree&lt;String&gt; tree = 
+            new BinaryTreeParser().parseTree(new File(&quot;eat.txt&quot;));
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryTreeDrawerCanvas canvas = new BinaryTreeDrawerCanvas(tree);
+        canvas.setNodeSeparationX(98);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;add(new JScrollPane(canvas), CENTER);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	<img alt="" src="images/DrawBinaryTree2.png" style="width: 200px; height: 100px; float: right;" />Das Beispiel zeigt einen binären Bäum an, der aus der Datei &quot;eat.txt&quot; erzeugt wurde. Wir können verschiedene Parameter variieren, z.B., können wir bei den Shapes wählen zwischen</p>
+<ul>
+	<li>
+		SHAPE_OVAL</li>
+	<li>
+		SHAPE_RECT</li>
+	<li>
+		SHAPE_ROUNDRECT</li>
+</ul>
+<p>
+	Ausserdem können wir die Farben der internen und externen Knoten setzen, auch deren Hintergrundfarbe:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; canvas.setShapeNode(BinaryTreeDrawerCanvas.SHAPE_OVAL);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;canvas.setColorExternalNodes(Color.BLUE);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;canvas.setColorExternalNodesFill(Color.LIGHT_GRAY);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;canvas.setColorInternalNodes(Color.RED);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;canvas.setGridOn(true);</pre>
+<p>
+	Wir können auch ein Hintergrundgitter anzeigen lassen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/DrawOrderedTree_University.png" style="width: 200px; float: right; height: 300px;" />DrawOrderedTree</h2>
+<p>
+	Geordnete Bäume können im Unterschied zu binären Bäume auch mehr als zwei Kinder haben.&nbsp; Ein Beispiel ist unser Hochschulbeispiel vom Anfang des Kapitels.&nbsp; Es macht Sinn diesen Baum von links nach rechts, also horizontal darzustellen.&nbsp; Und für die Verbindungslinien, Edges, haben wir einen anderen Stil gewählt:</p>
+<pre style="margin-left: 40px;">
+canvas.setOrientation(OrderedTreeDrawerCanvas.HORIZONTAL);
+canvas.setEdgeStyle(OrderedTreeDrawerCanvas.EDGE_STYLE_SQUARE);</pre>
+<p>
+	.</p>
+<p>
+	Wenn wir die Verbindungen zwischen den Knoten lieber mit sogenannten &quot;Quad-Line&quot; Segmenten verbinden möchten,</p>
+<pre style="margin-left: 40px;">
+canvas.setEdgeStyle(OrderedTreeDrawerCanvas.EDGE_STYLE_QUAD);</pre>
+<p>
+	dann eignet sich das recht gut für die Darstellung von Büchern:</p>
+<h2 style="margin-left: 40px;">
+	<img alt="" src="images/DrawOrderedTree_Book.png" style="width: 500px; height: 100px;" /></h2>
+<p>
+	.</p>
+<p>
+	<img alt="" src="images/DrawOrderedTree_Abraham.png" style="width: 200px; float: right; height: 400px;" />Für Genealogien, eignet sich vielleicht wieder die horizontale Auflistung, allerdings machte es hier Sinn, das Alignment anzupassen:</p>
+<pre style="margin-left: 40px;">
+canvas.setOrientation(OrderedTreeDrawerCanvas.HORIZONTAL);
+canvas.setAlignment(OrderedTreeDrawerCanvas.ALIGN_LEFT);
+canvas.setEdgeStyle(OrderedTreeDrawerCanvas.EDGE_STYLE_QUAD);</pre>
+<p>
+	.</p>
+<p>
+	Möchte man aber z.B. phylogenetische Beziehungen zwischen Säugetieren darstellen, dann will man nur die externen Knoten darstellen, interne Knoten sollen unsichtbar bleiben.&nbsp; Die Verbindungslinien sollen wieder rechtwinklig sein, und man möchte keine Umrandung sehen.&nbsp;</p>
+<pre style="margin-left: 40px;">
+canvas.setEdgeStyle(OrderedTreeDrawerCanvas.EDGE_STYLE_SQUARE);
+canvas.setShowInternalNodes(false);
+canvas.setColorExternalNodes(Color.WHITE);</pre>
+<p>
+	Das sieht dann so aus:</p>
+<h2 style="margin-left: 40px;">
+	<img alt="" src="images/DrawOrderedTree_CamelsAndWhales.png" style="width: 200px; height: 200px;" /></h2>
+<p>
+	Ich denke das dürfte genügen, um zu sehen, dass wir wahrscheinlich 80% aller Bäume halbwegs o.k. aussehend darstellen können.</p>
+<p>
+	.</p>
+<h2>
+	Traversals</h2>
+<p>
+	Ein anderes hübsches Beispiel ist es einmal alle different Traversals auszuprobieren.&nbsp; Der folgende Code erlaubt das an einem einfachen Beispiel:</p>
+<pre style="margin-left: 40px;">
+String str = &quot;A{B{C,D},E{F,G,H},I}&quot;;
+OrderedTree&lt;String&gt; tree = new OrderedTreeParser().parseTree(str);
+
+//tree.levelOrder(new VisitorInterface&lt;String&gt;() {
+//tree.postOrder(new VisitorInterface&lt;String&gt;() {
+tree.preOrder(new VisitorInterface&lt;String&gt;() {
+&nbsp;&nbsp; &nbsp;int counter = 1;
+&nbsp;&nbsp; &nbsp;public void visit(AbstractNode&lt;?&gt; node) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;((OrderedNode&lt;String&gt;)node).setElement(&quot;&quot;+counter++);
+&nbsp;&nbsp; &nbsp;}
+});</pre>
+<p>
+	Die Zahl gibt die Reihenfolge an in der die jeweiligen Knoten besucht wurden, als erstes für Pre-Order, gefolgt von Post-Order und schließlich Level-Order Traversal:</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img alt="" src="images/Traversal_PreOrder.png" style="width: 200px; height: 100px;" /></p>
+				<p>
+					Pre-Order</p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img alt="" src="images/Traversal_PostOrder.png" style="width: 200px; height: 100px;" /></p>
+				<p>
+					Post-Order</p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img alt="" src="images/Traversal_LevelOrder.png" style="width: 200px; height: 100px;" /></p>
+				<p>
+					Level-Order</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	.</p>
+<h2>
+	Parsing</h2>
+<p>
+	In dem <em>SortAlgorithm</em> Projekt haben wir einen Parser verwendet, genauer gesagt den <em>BinaryTreeParser</em>:</p>
+<pre style="margin-left: 40px;">
+decisions = new BinaryTreeParser().parseTree(new File(&quot;sort_algorithm.txt&quot;));</pre>
+<p>
+	Wie funktioniert der? Eigentlich haben wir schon einige Parser selbst geschrieben, denn jedesmal wenn wir den <em>StringTokenizer</em> verwendet haben, haben wir irgendetwas geparst.&nbsp; Schauen wir uns erst einmal an was wir parsen wollen:</p>
+<pre style="margin-left: 40px;">
+Are_you_vegetarian? {
+&nbsp;Eat_vegetables!,
+&nbsp;Eat_meat!
+}</pre>
+<p>
+	Daraus wollen wir einen Binärbaum parsen.&nbsp; Die Trennzeichen sind die geschweiften Klammer &#39;{&#39; und &#39;}&#39; und das Komma &#39;,&#39;.&nbsp; Also verwenden wir</p>
+<pre style="margin-left: 40px;">
+StringTokenizer st = new StringTokenizer(line, &quot;{},&quot;, true);</pre>
+<p>
+	dabei ist das letzte <em>true</em> ganz wichtig, denn es besagt, dass auch die Trennzeichen in Tokens verwandelt werden.&nbsp; Wir schleifen dann einfach durch</p>
+<pre style="margin-left: 40px;">
+while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;String token = st.nextToken().trim();
+&nbsp;&nbsp; &nbsp;if (token.length() &gt; 0) {
+    ...
+    }
+}
+</pre>
+<p>
+	und den Rest der Arbeit erledigen wir mit einem <em>switch</em>:</p>
+<pre style="margin-left: 40px;">
+switch (token) {
+case &quot;{&quot;:
+&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;break;
+case &quot;}&quot;:
+&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;break;
+case &quot;,&quot;:
+&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;break;
+default:
+&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;break;</pre>
+<p>
+	Und das ist das Geheimnis eines Parsers.&nbsp; Die können wir auch selber schreiben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/Java.png" style="width: 200px; float: right; height: 200px;" />Java</h2>
+<p>
+	Beginnen wir mit unserem ersten Parser, und zwar einen für Java.&nbsp; Wenn wir uns das folgende einfach Java Programm ansehen,</p>
+<pre style="margin-left: 40px;">
+class Karel {
+  run() {
+    move();
+    move();
+    turnAround();
+  }
+  turnAround() {
+    turnLeft();
+    turnLeft();
+  }
+}</pre>
+<p>
+	dann sehen wir, dass das eigentlich ein Baum ist.&nbsp; Der Tokenizer ist der Gleiche wie eben, nur das Komma ersetzen wir durch einen Strichpunkt:</p>
+<pre style="margin-left: 40px;">
+StringTokenizer st = new StringTokenizer(line, &quot;{};&quot;, true);</pre>
+<p>
+	Wir gehen wie oben einen Token nach dem andern durch und müssen uns nur ein bischen überlegen was bei den geschweiften Klammer passieren soll:</p>
+<pre style="margin-left: 40px;">
+switch (token) {
+case &quot;{&quot;:
+&nbsp;&nbsp; &nbsp;classLevel = !classLevel;
+&nbsp;&nbsp; &nbsp;break;
+case &quot;}&quot;:
+&nbsp;&nbsp; &nbsp;currentNode = (OrderedNode&lt;String&gt;) currentNode.getParent();
+&nbsp;&nbsp; &nbsp;classLevel = !classLevel;
+&nbsp;&nbsp; &nbsp;break;
+case &quot;;&quot;:
+&nbsp;&nbsp; &nbsp;break;
+default:
+&nbsp;&nbsp; &nbsp;if (classLevel ) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;OrderedNode&lt;String&gt; tmp = new OrderedNode&lt;String&gt;(token);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentNode.addChild(tmp);&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentNode = tmp;
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentNode.addChild(new OrderedNode&lt;String&gt;(token));&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;break;
+}</pre>
+<p>
+	Wir haben eine lokale Variable <em>classLevel</em> eingeführt, die vor der <em>while</em> Schleife definiert wird:</p>
+<pre style="margin-left: 40px;">
+boolean classLevel = false;</pre>
+<p>
+	Wenn wir jetzt die erste geschweiften Klammer sehen, dann wird <em>classLevel</em> auf true gesetzt.&nbsp; Im <em>default</em> Zweig heißt das, dass wir es jetzt mit einer neuen Methodendefinition zu tun haben.&nbsp; Wenn wir danach der zweiten geschweiften Klammer begegnen, dann wird <em>classLevel</em> auf false gesetzt, d.h. wir sind jetzt innerhalb einer Methode.&nbsp; Dass bedeutet, dass wir im <em>default</em> Zweig einfach ein Statement nach dem anderen zu unserem <em>currentNode</em> als Kinder hinzufügen. Kommt jetzt eine schließende geschweifte Klammer, dann verlassen wir den Methoden-Modus und sind wieder zurück im Klassen-Modus, also <em>classLevel</em> ist true.&nbsp; Zusätzlich gehen wir aber wieder hoch in unserem Baum, deswegen die Zeile</p>
+<pre style="margin-left: 40px;">
+currentNode = (OrderedNode&lt;String&gt;) currentNode.getParent();</pre>
+<p>
+	Jetzt kann entweder die nächste Methode kommen, oder wir sind fertig. Das ist jetzt nicht der tollste Parser auf der Welt, aber er zeigt das Prinzip.&nbsp; Und wir sollten nicht vergessen, wir sind erst im zweiten Semester!</p>
+<p>
+	Was wir jetzt haben ist ein <em>Abstract Syntax Tree</em> (AST) [6,7].&nbsp; Das ist super-cool, denn damit könnten wir jetzt entweder</p>
+<ul>
+	<li>
+		den Code ausführen oder</li>
+	<li>
+		wieder Code erzeugen.</li>
+</ul>
+<p>
+	Das zweite hört sich jetzt erst mal bescheuert an: wir haben doch gerade erst aus dem Java den AST gemacht.&nbsp; Wieso sollte jetzt irgend jemand aus dem AST wieder Java machen wollen?&nbsp; Wer hat denn gesagt, dass es Java sein muss?&nbsp; Es könnte fast jede beliebige, objekt-orientierte Sprache sein, z.B. C++, Python oder JavaScript.&nbsp;</p>
+<p>
+	Da wir aber nur Java können, machen wir wieder Java daraus.&nbsp; Das geht ganz einfach mit einer abgewandelten Version des Level-Order Traversals:</p>
+<pre style="margin-left: 40px;">
+private String java = &quot;&quot;;
+private void levelOrder(AbstractNode&lt;String&gt; node, int level) {
+&nbsp;&nbsp; &nbsp;if (node == null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;if (level == 2) {           // class level
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;java += node.getElement() + &quot; {\n&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (AbstractNode&lt;String&gt; child : node.getChildren()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;levelOrder(child, level - 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;java += &quot;}\n&quot;;
+&nbsp;&nbsp; &nbsp;} else if (level == 1) {    // method level
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;java += &quot; &quot; + node.getElement() + &quot; {\n&quot;;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for (AbstractNode&lt;String&gt; child : node.getChildren()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;levelOrder(child, level - 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;java += &quot; }\n&quot;;
+&nbsp;&nbsp; &nbsp;} else if (level == 0) {    // statement level
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;java += &quot;&nbsp; &quot; + node.getElement() + &quot;;\n&quot;;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Wenn wir diese Methode mit unserem AST aufrufen,</p>
+<pre style="margin-left: 40px;">
+String javaCode = levelOrder(tree.root(), 2);</pre>
+<p>
+	dann kommt da Java raus.&nbsp; Cool, oder?</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/XML.png" style="width: 200px; float: right; height: 116px;" />XML</h2>
+<p>
+	Als nächstes wollen wir HTML parsen.&nbsp; HTML, eine spezielle Form von XML, ist nämlich auch ein Baum.&nbsp; Unser einfaches HTML sieht wie folgt aus:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp; &lt;head&gt;
+&nbsp; &lt;/head&gt;
+&nbsp; &lt;body&gt;
+&nbsp;&nbsp;&nbsp; My web page.
+&nbsp; &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>
+	Unser Parser müsste also folgende Trennzeichen erkennen: &#39;&lt;&#39;, &#39;&gt;&#39; und &#39;/&#39;. Das erledigen wir mit</p>
+<pre style="margin-left: 40px;">
+OrderedNode&lt;String&gt; root = null;
+OrderedNode&lt;String&gt; currentNode = null;
+StringTokenizer st = new StringTokenizer(line, &quot;&lt;&gt;/&quot;, true);</pre>
+<p>
+	Wir benötigen wieder die <em>while</em> Schleife und das <em>switch</em> wie oben, das ist einfach.&nbsp; Aber wir müssten irgendwie zwischen den öffnenden Tags, z.B. &lt;body&gt;, und den schließenden Tags, z.B. &lt;/body&gt;, unterscheiden können.&nbsp; Das können wir über eine Zustandsvariable <em>state</em> machen,</p>
+<pre style="margin-left: 40px;">
+String state = &quot;&quot;;  // &quot;open&quot;, &quot;close&quot;, &quot;normal&quot;</pre>
+<p>
+	die in den drei Zuständen &quot;open&quot;, &quot;close&quot; oder &quot;normal&quot; sein kann.&nbsp; Zwischen den Zuständen hin- und herschalten tun wir über die Trennzeichen:</p>
+<pre style="margin-left: 40px;">
+switch (token) {
+case &quot;&lt;&quot;:
+&nbsp;&nbsp; &nbsp;state = &quot;open&quot;;
+&nbsp;&nbsp; &nbsp;break;
+case &quot;&gt;&quot;:
+&nbsp;&nbsp; &nbsp;state = &quot;normal&quot;;
+&nbsp;&nbsp; &nbsp;break;
+case &quot;/&quot;:
+&nbsp;&nbsp; &nbsp;state = &quot;close&quot;;
+&nbsp;&nbsp; &nbsp;break;
+default:
+&nbsp;&nbsp; &nbsp;...
+}</pre>
+<p>
+	Alles was jetzt noch zu tun bleibt, ist im <em>default</em> Zweig den Baum zusammenzubauen. Das geht wieder über einen <em>switch</em>, dieses mal abhängig vom Zustand:</p>
+<pre style="margin-left: 40px;">
+switch (state) {
+case &quot;open&quot;:
+&nbsp;&nbsp; &nbsp;if (root == null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;root = new OrderedNode&lt;String&gt;(token);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentNode = root;
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;OrderedNode&lt;String&gt; node = new OrderedNode&lt;String&gt;(token);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentNode.addChild(node);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;currentNode = node;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;break;
+case &quot;close&quot;:
+&nbsp;&nbsp; &nbsp;currentNode = (OrderedNode&lt;String&gt;) currentNode.getParent();
+&nbsp;&nbsp; &nbsp;break;
+default:
+&nbsp;&nbsp; &nbsp;OrderedNode&lt;String&gt; node = new OrderedNode&lt;String&gt;(token);
+&nbsp;&nbsp; &nbsp;currentNode.addChild(node);
+&nbsp;&nbsp; &nbsp;break;
+}</pre>
+<p>
+	Das war&#39;s. Damit wir checken können ob das auch richtig ist, können wir über die Hilfsklasse <em>TreePrinter()</em>,</p>
+<pre style="margin-left: 40px;">
+OrderedTree&lt;String&gt; tree = new OrderedTree&lt;String&gt;(root);
+new TreePrinter().prettyPrintSimpleVertical(tree);</pre>
+<p>
+	eine Textversion des Baums auf der Konsole ausgegeben lassen.&nbsp; Eine Anmerkung: wenn wir schon <em>Regular Expressions</em> kennen würden, dann wäre das Parsen von HTML Pipifax.&nbsp; Was wir hier gebaut haben ist unsere erste <em>State-Machine</em>.&nbsp; War doch gar nicht so schwer.</p>
+<p>
+	Könnten wir aus dem HTML Baum auch wieder HTML generieren?&nbsp; Wie wäre es mit Level-Order Traversal?</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/10SS.Informatik2.InOrderTraversalFirTreeDrawing.png" style="height: 108px; width: 200px; float: right;" />ArithmeticExpression</h2>
+<p>
+	Inzwischen haben wir die Auswertung arithmetischer Ausdrücke schon zweimal gesehen: einmal im Zusammenhang mit der Stack Klasse, und dann im Zusammenhang mit Rekursion.&nbsp; Hier wollen wir das Problem mit einem binären Baum lösen.&nbsp; Dabei geht es uns um drei Dinge:</p>
+<ul>
+	<li>
+		einen String wie z.B. &quot;3+(4*5)&quot; zu parsen,</li>
+	<li>
+		mittel In-Order Traversal aus dem Baum wieder einen arithmetischer Ausdruck zu machen und</li>
+	<li>
+		via Post-Order Traversal den arithmetischen Ausdruck auszuwerten, also zu berechnen.</li>
+</ul>
+<h3>
+	Parsing</h3>
+<p>
+	Das Parsen ist der etwas kompliziertere Teil.&nbsp; Wir beginnen mit der Definition eines Stacks der BinaryNodes enthält:</p>
+<pre style="margin-left: 40px;">
+Stack&lt;BinaryNode&lt;String&gt;&gt; stackOfNodes = new Stack&lt;BinaryNode&lt;String&gt;&gt;();</pre>
+<p>
+	Mit dem StringTokenizer zerlegen wir dann einen Ausdruck wie &quot;3+(4*5)&quot; in seine Einzelteile:</p>
+<pre style="margin-left: 40px;">
+StringTokenizer st = new StringTokenizer(ariExp, &quot; ()+-*/&quot;, true);</pre>
+<p>
+	aus denen wir dann, je nach Token, eine Baumstruktur zusammenbauen:</p>
+<pre style="margin-left: 40px;">
+while (st.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;String tok = st.nextToken();
+&nbsp;&nbsp; &nbsp;switch (tok) {
+&nbsp;&nbsp; &nbsp;case &quot;(&quot;:
+&nbsp;&nbsp; &nbsp;case &quot; &quot;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// do nothing
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;case &quot;)&quot;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; operand1 = stackOfNodes.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; operator = stackOfNodes.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; operand2 = stackOfNodes.pop();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;operator.setLeft(operand2);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;operator.setRight(operand1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stackOfNodes.push(operator);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;default:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; node = new BinaryNode&lt;String&gt;(tok.trim());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stackOfNodes.push(node);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Bei genügenden Klammern sind wir jetzt fertig.&nbsp; Sollten aber nicht genügend Klammern gesetzt worden sein, müssen wir unseren Stack noch etwas aufräumen:</p>
+<pre style="margin-left: 40px;">
+while (stackOfNodes.size() &gt; 1) {
+&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; operand1 = stackOfNodes.pop();
+&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; operator = stackOfNodes.pop();
+&nbsp;&nbsp; &nbsp;BinaryNode&lt;String&gt; operand2 = stackOfNodes.pop();
+&nbsp;&nbsp; &nbsp;operator.setLeft(operand2);
+&nbsp;&nbsp; &nbsp;operator.setRight(operand1);
+&nbsp;&nbsp; &nbsp;stackOfNodes.push(operator);
+}
+return stackOfNodes.pop();</pre>
+<p>
+	Das letzte Element auf dem Stack ist unser gesuchter Binärbaum.&nbsp; Es sei angemerkt, dass unser Parser etwas dumm ist, mit Punkt vor Strich hat er es nicht so.</p>
+<h3>
+	Print</h3>
+<p>
+	Aus dem binären Baum wieder einen arithmetischer Ausdruck zu machen geht ganz einfach via In-Order Traversal:</p>
+<pre style="margin-left: 40px;">
+printExpression(p) {
+&nbsp;&nbsp;&nbsp; if hasLeft(p) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&quot;(&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printExpression( left(p) )
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; print( p.element() )
+&nbsp;&nbsp;&nbsp; if hasRight(p) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printExpression( right(p) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&quot;)&quot;);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<h3>
+	Evaluate</h3>
+<p>
+	Die Auswertung ist eine abgewandelte Version des Post-Order Traversals.&nbsp; In Pseudo-Code sieht das so aus:</p>
+<pre style="margin-left: 40px;">
+int evaluate(p) {
+&nbsp;&nbsp;&nbsp; if isExternal(p) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return( p.element() )
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = evaluate( leftChild(p) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y = evaluate( rightChild(p) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; O &lt;- operator stored at p
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return( x O y )
+&nbsp;&nbsp;&nbsp; }
+}&nbsp; 
+</pre>
+<p>
+	Erinnern wir uns, in den externen Knoten sind die Zahlen gespeichert, deswegen wenn wir einen externen Knoten haben, geben wir einfach den Wert des Knotens zurück.</p>
+<p>
+	Wenn wir einen internen Knoten haben, dann muss es sich um einen Operator handeln, also +, -, * oder /.&nbsp; Zu jedem Operator muss es aber zwei Kinder geben, deswegen besuchen wir erst einmal die Kinder rekursiv, und wenden dann danach (Post) die gewünschte Operation auf die beiden Kinder an.&nbsp; Das war&#39;s.</p>
+<p>
+	.</p>
+<h2>
+	SearchBinaryTree</h2>
+<p>
+	In diesem Projekt wollen wir uns ein bischen mit der binären Suche mit Hilfe eines binären Baumes beschäftigen.&nbsp; Als Suchbeispiel nehmen wir unser Englisch-Deutsches Wörterbuch, <em>dictionary_en_de.txt</em>.&nbsp; Dabei interessieren uns aber nur die deutschen Wörter.</p>
+<h3>
+	<img alt="" src="images/SearchArrayList.png" style="width: 200px; height: 150px; float: right;" />SearchArrayList</h3>
+<p>
+	Zum Aufwärmen verwenden wir eine ganz normale ArrayList. Wir schreiben also eine Klasse <em>SearchArrayList</em>, mit folgender Instanzvariable:</p>
+<pre style="margin-left: 40px;">
+private List&lt;String&gt; al = new ArrayList&lt;String&gt;();</pre>
+<p>
+	Die befüllen wir in einer <em>loadLexiconFromFile()</em> Methode mit deutschen Wörtern aus dem Wörterbuch:</p>
+<pre style="margin-left: 40px;">
+...
+StringTokenizer st = new StringTokenizer(words, &quot;=&quot;);
+String en = st.nextToken();
+String de = st.nextToken();
+al.add(de.toLowerCase().trim());</pre>
+<p>
+	Und dann benutzen wir die <em>contains()</em> Methode um festzustellen ob ein Wort in der Liste ist oder nicht:</p>
+<pre style="margin-left: 40px;">
+...
+boolean found = false;
+long startTime = System.currentTimeMillis();
+for (int i = 0; i &lt; 10; i++) {
+&nbsp;&nbsp; &nbsp;found = al.<span style="color:#0000ff;">contains</span>(searchWord.toLowerCase().trim());&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+}
+long endTime = System.currentTimeMillis();</pre>
+<p>
+	Das Ganze machen wir zehn mal, um aussagekräftige Zeiten zu bekommen.&nbsp; Wir stellen hier fest:</p>
+<ul>
+	<li>
+		Im Durchschnitt dauert es so 30 ms um ein Wort zu finden.</li>
+	<li>
+		Wörter die am Anfang sind, wie &quot;Fanatiker&quot;, werden sehr schnell gefunden.</li>
+	<li>
+		Wörter die am Ende sind, wie &quot;Laster&quot;, dauern etwas länger.</li>
+	<li>
+		Wörter die nicht in der Liste sind dauern auch länger.</li>
+</ul>
+<p>
+	Wenn wir uns überlegen wie die Suche in einer Liste funktioniert, ist das genau was wir erwarten.</p>
+<h3>
+	SearchBinaryTree</h3>
+<p>
+	Versuchen wir es jetzt zum Vergleich mit einem binären Suchbaum.&nbsp; Für den Baum brauchen wir einen Knoten, wir nennen ihn <em>SearchBinaryNode</em>, der folgende Attribute haben soll:</p>
+<pre style="margin-left: 40px;">
+public class SearchBinaryNode&lt;E&gt; {
+&nbsp;&nbsp; &nbsp;private SearchBinaryNode&lt;E&gt; leftChild;
+&nbsp;&nbsp; &nbsp;private SearchBinaryNode&lt;E&gt; rightChild;
+&nbsp;&nbsp; &nbsp;private E element;
+
+    // constructor and methods...
+}
+</pre>
+<p>
+	Damit der Knoten nützlich ist, müssen wir folgende Methoden implementieren:</p>
+<ul>
+	<li>
+		SearchBinaryNode(E element)</li>
+	<li>
+		E getElement()</li>
+	<li>
+		boolean hasLeft()</li>
+	<li>
+		boolean hasRight()</li>
+	<li>
+		SearchBinaryNode&lt;E&gt; getLeft()</li>
+	<li>
+		SearchBinaryNode&lt;E&gt; getRight()</li>
+	<li>
+		setLeft(SearchBinaryNode&lt;E&gt; child)</li>
+	<li>
+		setRight(SearchBinaryNode&lt;E&gt; child)</li>
+</ul>
+<p>
+	Die Namen der Methoden sind ziemlich selbsterklärend.&nbsp; Wir können die jetzt schnell implementieren, oder wir verwenden die <em>tree.BinaryNode</em> Klasse.</p>
+<p>
+	Die eigentliche Suche implementieren wir dann in der Klasse <em>SearchBinaryTree</em>.&nbsp; Wir benötigen wieder eine <em>loadLexiconFromFile()</em> Methode.&nbsp; In der rufen wir eine Methode <em>add()</em> auf die wir schreiben müssen:</p>
+<pre style="margin-left: 40px;">
+public void add(String word) {
+&nbsp;&nbsp; &nbsp;if (root == null) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;root = new SearchBinaryNode&lt;String&gt;(word);
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;SearchBinaryNode&lt;String&gt; current = root;
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// first find if word is already in tree
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// insert element if not already in tree
+
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	Für die Suche müssen wir noch eine <em>contains()</em> Methode schreiben:</p>
+<pre style="margin-left: 40px;">
+public boolean contains(String word) {
+&nbsp;&nbsp; &nbsp;SearchBinaryNode&lt;String&gt; current = root;
+&nbsp;&nbsp; &nbsp;while (true) { // loop and a half
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String x = current.getElement();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;int comparison = x.compareTo(word);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (comparison == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// we found it
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else if (comparison &gt; 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// go to right
+&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; ...
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// go to left
+&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; ...
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return false;
+}</pre>
+<p>
+	<img alt="" src="images/SearchBinaryTree.png" style="width: 200px; height: 150px; float: right;" />Wieder machen wir die Suche zehn mal, um aussagekräftige Zeiten zu bekommen.&nbsp; Wir stellen hier fest:</p>
+<ul>
+	<li>
+		Im Durchschnitt dauert es so 0 ms um ein Wort zu finden.</li>
+	<li>
+		Es macht keinen Unterschied ob Wörter am Anfang oder am Ende sind, oder überhaupt in der Liste.</li>
+</ul>
+<p>
+	Interessant ist auch wieviele Vergleiche notwendig sind: bei unserem Tree sind das im Schnitt so zwischen 5 bis 22 Vergleiche um ein Wort zu finden.&nbsp; Bei der Liste sind das viel mehr: wenn ein Wort am Ende der Liste ist benötigen wir ca. 100000 Vergleiche!&nbsp; Da ist er wieder unser Freund der Logarithmus!</p>
+<p>
+	Wir sehen also, dass Bäume unsere Freunde sind.&nbsp; Allerdings ein Wort der Vorsicht: was passiert wenn wir unser Programm mit den englischen Wörter ausprobieren? Da die Wörter in der Datei <em>dictionary_en_de.txt</em> alphabetisch sortiert sind, führt das dazu, dass unser Baum nicht mehr symmetrisch ist.&nbsp; Was wiederum dazu führt, das unsere Suche langsamer wird.&nbsp; Im schlimmsten Fall genauso langsam wie mit der Liste.&nbsp; Um dieses Problem, der &quot;unbalanced trees&quot; zu vermeiden gibt es ganz viel Forschung, und deswegen gibt es auch so viele verschieden Baumarten, Red-Black Trees wären z.B. eine gute Wahl.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/TreeSetVsHashSet.png" style="width: 200px; height: 100px; float: right;" />TreeSetVsHashSet</h2>
+<p>
+	Der Vorteil des TreeSet ist, dass es sortiert ist, der des HashSets, dass es schneller ist.&nbsp; Um genau zu sein, sowohl Einfügen als auch Suchen ist logarithmisch beim TreeSet, O(log n), während es beim HashSet konstant ist, O(1).&nbsp; Wir können das mit einem kleinen Programm messen (ähnlich wie bei ArrayListVsLinkedList).&nbsp; Wichtig ist allerdings, dass wir nicht nur eine Zahl in die Sets einfügen, sondern viele verschiedene, zufällige.</p>
+<pre style="margin-left: 40px;">
+for (int i = 0; i &lt; 10000000; i++) {
+&nbsp;&nbsp; &nbsp;int randomPos = (int) (100000.0 * Math.random());
+&nbsp;&nbsp; &nbsp;set.add(randomPos);
+}</pre>
+<p>
+	Danach messen wir dann die Zeit die benötigt wird um zu testen ob eine beliebige Zahl in dem Set enthalten ist:</p>
+<pre style="margin-left: 40px;">
+long start = System.currentTimeMillis();
+for (int i = 0; i &lt; 1000000; i++) {
+&nbsp;&nbsp; &nbsp;// read an element at a random position:
+&nbsp;&nbsp; &nbsp;int randomPos = (int) (100000.0 * Math.random());
+&nbsp;&nbsp; &nbsp;st.contains(randomPos);
+}
+long end = System.currentTimeMillis();
+System.out.println(end - start);</pre>
+<p>
+	Das tun wir einmal für eine HashSet und einmal für eine TreeSet.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/wildbienen.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 267px; float: right;" />Wildbienen in Deutschland</h2>
+<p>
+	Den 560 Wildbienenarten in Deutschland geht es nicht so gut, deswegen sollen wir ein Programm schreiben, dass es ermöglicht sieben der häufiger vorkommenden Wildbienen zu identifizieren.&nbsp; Dazu müssen wir erst einmal den Flyer &quot;WILDBIENEN&quot; der Initiative &quot;Deutschland summt!&quot; herunterladen [8].&nbsp; Auf Seite 5 dieses Flyers sehen Sie eine Tabelle mit dem Namen &quot;Wildbienen bestimmen - leicht gemacht!&quot;.&nbsp; Daraus machen wir einen Entscheidungsbaum.</p>
+<h3>
+	1. Schritt: Entscheidungsbaum (Decision Tree)</h3>
+<p>
+	Machen Sie aus dieser Tabelle einen Entscheidungsbaum (decision tree), am einfachsten malen Sie sich diesen auf einem Stück Papier auf.&nbsp; Achten Sie darauf, dass es ein Binärbaum ist, mit Ja/Nein (yes/no) Entscheidungen.&nbsp;</p>
+<h3>
+	2. Schritt: Erstellung des Programms</h3>
+<p>
+	Orientieren Sie sich am Beispiel &quot;PilotCheckList&quot;, das demonstriert wie ein Entscheidungsbaum befüllt wird, wie man diesen auf der Konsole ausgibt (printTreeNicely), und wie man damit eine Benutzerbefragung durchführt (pilotWalkThrough).&nbsp; Versuchen Sie diesen Code zu verstehen und dann in der Klasse WildBienen ein Bestimmungsprogram für WildBienen zu schreiben.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/ArrayBasedBinaryTree.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 119px; float: right;" />Array based BinaryTree</h2>
+<p>
+	Unsere Implementierung für den BinaryTree verwendet eine Linked Binary Tree Struktur.&nbsp; Man kann BinaryTrees aber auch mit einem Array bzw. einer ArrayList abbilden.&nbsp; Dazu muss man sich lediglich die Skizze rechts ansehen.&nbsp; Dann erkennt man, dass es in jeder Generation n maximal 2<sup>n</sup> Knoten geben kann.&nbsp; Ausserdem erkennt man, dass man die Positionen der möglichen Kinder vorhersagen kann.&nbsp; Das ist alles was man braucht um die Datenstruktur umzusetzen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/TicTacToe.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 176px; float: right;" /><strong>Game Trees and Tic-Tac-Toe</strong></h2>
+<p>
+	Zunächst lesen wir den Artikel in der Wikipedia bzgl Game Trees [9].&nbsp; Danach sollten wir uns den noch interessanteren Artikel von Victor S.Adamchik zum gleichen Thema ansehen [10].&nbsp; Mit der Information, kann man sich jetzt überlegen wie man einen Game Tree für das Spiel Tic-Tac-Toe schreibt.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Research</h1>
+<p>
+	Auch in diesem Kapitel kann man wieder ein bischen was erforschen.</p>
+<p>
+	.</p>
+<h2>
+	Visualization</h2>
+<p>
+	Mit Jason Park&#39;s Algorithm Visualizer [11] lassen sich die verschiedensten Algorithmen und auch Datenstrukturen sehr schön visualisieren.&nbsp; Wir sollten uns mal die Beispiele zu Bäumen ansehen.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="images/722c137f-f7a9-43ca-a256-1ff5773bb17d.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 129px; float: right;" />QuadTree</h2>
+<p>
+	In vielen Spielen hat man es sehr häufig mit Kollisionserkennung zu tun.&nbsp; Z.B. in unserem Asteroids Spiel aus dem ersten Semester geht es darum Kollisionen mit Asteroiden zu erkennen.&nbsp; Aber auch im Agrar Beispiel ist Kollisionserkennung ganz wichtig.&nbsp; Vor allem bei sehr vielen Objekten kann das dazu führen dass unser Program super-langsam wird, wenn wir nicht die richtige Datenstruktur verwenden.&nbsp; In zwei Dimensionen ist das der QuadTree [12], in drei der Octree [13].&nbsp; Auch k-d Trees [14] werden in diesem Zusammenhang oft eingesetzt.&nbsp; Wir wollen uns ein bischen inn die Materie einlesen.</p>
+<p>
+	.</p>
+<h2>
+	<strong>Other Trees</strong></h2>
+<p>
+	Wie bereits angedeutet gibt es noch ganz viele andere Bäume.&nbsp; Z.B. sind da:</p>
+<ul>
+	<li>
+		AVL Trees</li>
+	<li>
+		Splay Trees</li>
+	<li>
+		(2,4) Trees</li>
+	<li>
+		Red-Black Trees</li>
+	<li>
+		B-Trees</li>
+</ul>
+<p>
+	Wir sollten uns mal zu all den Bäumen schlau machen, vor allem aber den Red-Black Trees und den AVL Trees.</p>
+<p>
+	Eine interessante Frage ist z.B., wann sollten wir einen Red-Black Tree, wann einen AVL Tree und wann eine B-Tree verwenden?</p>
+<ul>
+	<li>
+		Red-Black Trees und AVL Trees sind binäre Bäume,&nbsp; B-Trees hingegen können mehr als zwei Kinder pro Zweig haben, sind also nicht so tief.</li>
+	<li>
+		Red-Black Trees nehmen es mit dem Re-Balancing nicht so ernst, was Inserts und Deletes schneller sein lässt.</li>
+	<li>
+		AVL Trees sind etwas genauer mit dem Re-Balancing, was dazu führt, dass sie schneller beim Lesen sind.</li>
+</ul>
+<p>
+	.</p>
+<hr />
+<h1>
+	Fragen</h1>
+<ol>
+	<li>
+		Zeichnen Sie einen einfachen Baum. An diesem Beispiel zeigen Sie die folgende Begriffe:
+		<ul>
+			<li>
+				&nbsp;&nbsp;&nbsp; Root</li>
+			<li>
+				&nbsp;&nbsp;&nbsp; Internal Node</li>
+			<li>
+				&nbsp;&nbsp;&nbsp; External Node</li>
+			<li>
+				&nbsp;&nbsp;&nbsp; Ancestors</li>
+			<li>
+				&nbsp;&nbsp;&nbsp; Descendants</li>
+			<li>
+				&nbsp;&nbsp;&nbsp; Subtree<br />
+				&nbsp;</li>
+		</ul>
+	</li>
+	<li>
+		Ist der Post-Order Traversal Algorithmus ein rekursiver Algorithmus?<br />
+		&nbsp;</li>
+	<li>
+		Betrachten Sie den folgenden Baum und betrachten Sie den Knoten &#39;B&#39;:
+		<ul>
+			<li>
+				Was sind seine Ancestors?</li>
+			<li>
+				Was sind seine Descendants?</li>
+			<li>
+				Was ist die Depth des Knotens B?</li>
+			<li>
+				Was ist die Height des Baums?<br />
+				&nbsp;</li>
+		</ul>
+	</li>
+	<li>
+		Was ist der Unterschied zwischen einem binären Baum und einem gewöhnlichen Baum?<br />
+		&nbsp;</li>
+	<li>
+		Erklären Sie den Unterschied zwischen Pre-Order Traversal und Post-Order Traversal eines Baumes.<br />
+		&nbsp;</li>
+	<li>
+		Betrachten Sie den folgenden arithmetischen Ausdruck und zeichnen Sie den dazu gehörigen binären Baum.
+		<ul>
+			<li>
+				(2 * (a - 1) + (3 * b))</li>
+			<li>
+				(4 - (x - 1)) + (2 * y)</li>
+			<li>
+				( 6 &ndash; 3 ) * ( 4 % 5 ) + 6 )</li>
+			<li>
+				3 * ( ( 4 % 5 ) * ( 6 &ndash; 3 ) )<br />
+				&nbsp;</li>
+		</ul>
+	</li>
+	<li>
+		Zeichnen Sie den binären Suchbaum, der aus dem Einfügen der folgenden zehn Zahlen resultiert:
+		<ul>
+			<li>
+				{16, 24, 8, 30, 42, 25, 1, 9, 18, 29}.</li>
+			<li>
+				{24, 8, 16, 30, 1, 9, 42, 25, 18, 29}.</li>
+			<li>
+				{29, 18, 25, 42, 9, 1, 30, 16, 8, 24}.</li>
+		</ul>
+	</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	Referenzen</h1>
+<p>
+	Referenzen kommen und gehen.&nbsp; Hoffen wir, dass die hier etwas länger halten.&nbsp; Leider scheint der Website zum Buch &quot;Data Structures and Algorithms&quot; von&nbsp; Bruno R. Preiss im Moment nicht mehr erreichbar zu sein.&nbsp; Das Buch gibt&#39;s aber noch, hab&#39;s sofort gebraucht gekauft.</p>
+<p>
+	[1] <em>So You Need A Typeface</em> von Julian Hansen, <a href="http://www.julianhansen.com/#/zimmer/">www.julianhansen.com/#/zimmer/</a></p>
+<p>
+	[2] <em>Introduction of Decision Trees</em>, Bill Wilson, <a href="http://www.cse.unsw.edu.au/~billw/cs9414/notes/ml/06prop/id3/id3.html">http://www.cse.unsw.edu.au/~billw/cs9414/notes/ml/06prop/id3/id3.html</a></p>
+<p>
+	[3] <em>Choosing a programming language</em>, Brett Slatkin, <a href="http://www.onebigfluke.com/2016/01/choosing-a-programming-language.html">www.onebigfluke.com/2016/01/choosing-a-programming-language.html</a></p>
+<p>
+	[4] <em>Data Points: Visualization That Means Something</em>, Nathan Yau, John Wiley &amp; Sons, 2013</p>
+<p>
+	[5] <em>Tree for chess</em>, <a href="https://c1.staticflickr.com/5/4017/4391267493_ab44e3f827_b.jpg">https://c1.staticflickr.com/5/4017/4391267493_ab44e3f827_b.jpg</a></p>
+<p>
+	[6] <em>Abstract syntax tree</em>, <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">https://en.wikipedia.org/wiki/Abstract_syntax_tree</a></p>
+<p>
+	[7] <em>CSE 2231: Software II: Software Development and Design</em>, <a href="http://web.cse.ohio-state.edu/software/2231/web-sw2/extras/slide/21.Abstract-Syntax-Trees.pdf">http://web.cse.ohio-state.edu/software/2231/web-sw2/extras/slide/21.Abstract-Syntax-Trees.pdf</a></p>
+<p>
+	[8] <em>WILDBIENEN</em>, Initiative &quot;Deutschland summt!&quot;, <a href="http://www.deutschland-summt.de/?file=files/media_ds/pdfs/2017/Wildbienen_Folder_23-03-2017.pdf">http://www.deutschland-summt.de/?file=files/media_ds/pdfs/2017/Wildbienen_Folder_23-03-2017.pdf</a></p>
+<p>
+	[9] Game tree, <a href="https://en.wikipedia.org/w/index.php?title=Game_tree&amp;oldid=740804477">https://en.wikipedia.org/w/index.php?title=Game_tree&amp;oldid=740804477</a> (last visited Feb. 23, 2017).</p>
+<p>
+	[10] Game Trees, Victor S.Adamchik, <a href="http://www.cs.cmu.edu/~adamchik/15-121/lectures/Game%20Trees/Game%20Trees.html">www.cs.cmu.edu/~adamchik/15-121/lectures/Game%20Trees/Game%20Trees.html</a></p>
+<p>
+	[11] Algorithm Visualizer, Jason Park, <a href="http://algo-visualizer.jasonpark.me/">http://algo-visualizer.jasonpark.me/</a></p>
+<p>
+	[12] Why algorithms matter. Quad tree example, <a href="http://javaprogrammernotes.blogspot.de/2015/01/why-algorithms-matter-quad-tree-example.html">javaprogrammernotes.blogspot.de/2015/01/why-algorithms-matter-quad-tree-example.html</a></p>
+<p>
+	[13] Octree, <a href="https://en.wikipedia.org/wiki/Octree">https://en.wikipedia.org/wiki/Octree</a></p>
+<p>
+	[14] k-d tree, <a href="https://en.wikipedia.org/wiki/K-d_tree">https://en.wikipedia.org/wiki/K-d_tree</a></p>
+<p>
+	[15] Decision tree, <a href="https://en.wikipedia.org/wiki/Decision_tree">https://en.wikipedia.org/wiki/Decision_tree</a></p>
+<p>
+	[16] Encoding general trees as binary trees, <a href="http://en.wikipedia.org/wiki/Binary_tree">en.wikipedia.org/wiki/Binary_tree</a></p>
+<p>
+	[17] Abraham&#39;s family tree, <a href="https://en.wikipedia.org/wiki/Abraham%27s_family_tree">https://en.wikipedia.org/wiki/Abraham%27s_family_tree</a></p>
+<p>
+	[18] Data Structures and Algorithms with Object-Oriented Design Patterns in Java by Bruno R. Preiss</p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2021 <a href="http://www.lano.de">Ralph P. Lano</a>.  All rights reserved.
+</p>
+</div>
+</center>
+</div>
+</body>
+</html>
